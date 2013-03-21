@@ -1,0 +1,250 @@
+= Version History =
+2.0 (2012-07-12):
+
+- fixed: no_access forward to last page if can join
+- fixed: plugin settings reset (memcache issue)
+- fixed: error on advanced site update for super admins
+- fixed: problem with site email address
+- removed: sharing with subsite acls on main site
+
+2.0 beta 1 (2012-05-14):
+
+- first version for Elgg 1.8
+
+1.18 (2012-01-03):
+
+- added: groups.php core file for modifications
+- fixed: container_permissions_check for subsite admins
+- fixed: reset translation_editor cache on "upgrade all"
+- fixed: invite link on subsites
+- changed: email invitations for subsites are now stored and checked in lowercase
+
+1.17 (2011-11-15):
+
+- added: some stats in subsite admin listing, can be user for cleanup)
+- changed: robots indexing
+- changed: filtering of subsites (now tabbed)
+- changed: search listing view of subsites
+- changed: remove subsite only for mziemerink
+- removed: subsites listing for admins (used for management), now use default subsite listing
+
+1.16 (2011-10-05):
+
+- added: non public subsites will no longer be indexed by search robots
+- added: non subsite members will no longer be indexed by search robots
+- fixed: reset password not working for subsite admins
+- fixed: error when removing last subsite admin on subsite
+- changed: adminlinks for subsite admins
+- removed: profile/menu/actions extend for subsite admins => moved to admin links
+
+1.15 (2011-09-28):
+
+- fixed: support for 1.7.11
+	
+1.14 (2011-09-23):
+
+- added: if user joins a group on a subsite he/she can join, the user is added to the subsite
+- added: option to add users to subsite when you add them to a group on the subsite (admin option)
+- removed: privatize profile data function on site leave
+- removed: sync profile data function on site join
+- fixed: import not saving profile fields correctly
+- fixed: conflicting jQuery Ajax setup in usr_autocomplete field setup
+- fixed: bug in widget access hook on subsites
+- fixed: encoding error in group invite form
+- fixed: listing of group invitations
+	
+1.13 (2011-08-05):
+
+- added: option to get plugin settings from main site
+- added: option to configure plugin usersettings globaly 
+- added: support for user_support admin notification
+- changed: import/invite message now a long text (instead of plain text)
+- fixed: now hiding profile types (not supported)
+- fixed: subsite icon check if exists 
+- fixed: timelimit on import and invite actions
+
+1.12 (2011-07-15):
+
+- added: option to allow subsite custom profile fields
+- added: option to show navigation bar at top or bottom of a site
+- added: join form for subsite if you miss required profile fields
+- added: dutch translation
+- fixed: create username from email could result in not unique username 
+
+1.11 (2011-07-11):
+
+- added: Signle Sign On for cross domain (core sessions.php)
+- fixed: import from CSV now checks hidden entities
+- fixed: invite users from CSV now checks hidden entities
+- fixed: error in invite link from CSV
+
+1.10 (2011-07-08):
+
+- added: option for subsite admins to invite users by CSV upload
+- added: option to import users from a CSV (main admin only)
+- changed: invite to subsite by email mail handling
+
+1.9 (2011-07-05):
+
+- added: new subsite membership option => domain or approval
+- added: subsite security => main admins require same access as normail user
+- fixed: group invitations by mail accept form always shown
+
+1.8 (2011-06-27):
+
+- added: a * to search sql to allow for partial full text search
+- removed: group invite pages/action, are now handled by group_tools
+	
+1.7 (2011-06-17):
+
+- added: creation of a complete menu for menu_builder plugin for new subsites
+- changed: updated fancybox to 1.3.4
+- fixed: default caching, language and default access for new subsites
+
+1.6 (2011-06-10):
+
+- added: default on for plugins when creating a new subsite
+- added: notification to all subsite admins on a new join request
+- changed: admin link membership request counter in topbar on subsites is a separate link 
+- changed: added share_it to required plugins
+
+1.5 (2011-06-06):
+
+- added: hook on system boot to enable plugins on subsites based on main site plugin management configuration
+- added: runonce to cleanup old plugin management settings
+- added: javascript validation on subsite manage form
+- changed: write access hook, on main add all subsites, on subsite add just that subsite
+- fixed: membership request crashes on requests without an owner
+- fixed: cron causes overload of webserver
+- fixed: widgets access on subsites
+- fixed: update of caching in engine/start.php now works properly
+- removed: plugins from subsite manage form
+	
+1.4.1 (2011-05-19):
+
+- fixed: subsite analytics tracking when no analytics on subsite
+- fixed: apache error in /engine/lib/entities.php (line 1854)
+- fixed: invite by email for subsite, now join on login
+- fixed: Subsite class canJoin function
+
+1.4 (2011-05-03):
+
+- added: subsite pageview tracking with google analytics (configured on main site)
+- added: hook to extend the widget access list for index- and groupwidgets with subsite acl
+- added: include_self option to user_autocomplete
+
+1.3 (2011-04-21):
+
+- added: group invites by email
+- added: user search listing view
+- fixed: pagination group membership listing fails
+- fixed: strtolower on url when saving a subsite
+	
+1.2 (2011-04-04):
+
+- added: confirm on subsite leave action
+- added: no_access page when accessing content on a subsite you do not have access to
+- added: group membership overview now includes subsite groups (on main level)
+- added: group invitations overview now works for all invitations (even on subsite)
+- added: url handler for entities not on this (sub)site
+- changed: when leaving a subsite all group memberships on that site will also be removed
+- changed: group invite users now accepts all users
+- changed: right management, user can go to a group (is member) while not member of the subsite
+- fixed: request username/password now also find hidden users
+- fixed: group profile field not filled correctly
+- removed: event and function for group join, if not member of site
+
+1.1 (2011-03-24):
+
+- added: custom friendspicker view using autocomplete feature
+- added: generic user_autocomplete function/view
+- added: override of view for invitation to a group
+- added: options to enable/disable/forcepluginsettings in plugin listing
+- added: forgotten password/username based on email
+- changed: styling of subsite object views
+- changed: manage subsite plugins now show enabled counter
+- fixed: subsite admins can no longer leave their subsite
+- fixed: membership request page crash on unvalidated users (mantis #62)
+
+1.0 (2011-03-11):
+
+- added: support for Elgg 1.7.7 (updated core files)
+- added: listing of all administrators for admins
+- added: listing of subsite admins on subsite for subsite admins
+- added: link to 'My Subsites' in subsite navigation bar (only if you have 1 or more subsitememberships)
+- added: superadmins to manager all sites 
+- changed: caching mechanisme to be able to use ETAG caching when PHP is in CGI mode
+- changed: subsite admins are normal admins now, but their admin rights are limited to their own sites (mantis #52)
+- fixed: subsite admins not able to edit their own site details
+- fixed: email validation link for subsite not working
+- fixed: css of subsite navigation bar to remain the same on every subsite
+- fixed: register user on subsite now listens to site membership setting (mantis #52)
+- removed: join/leave action in subsite navigation bar 
+	
+0.6 (2011-01-24):
+
+- added: subsites show up in search results (on main website only)
+- changed: moved plugin_hooks to own file (/lib/plugin_hooks.php)
+- changed: moved elgg_events to own file (/lib/elgg_events.php)
+- changed: upgrade.php?all=1 now cleans up simplecache directory
+
+0.5.1 (2011-01-13):
+
+- fixed: drop down subsite selector not working on some template
+	
+0.5 (2011-01-05):
+
+- added: cron handler to allow cron on subsites (mantis #25)
+- changed: topbar no longer extended => changed to prepend of header_contents
+- changed: engine/lib/entities.php ElggEntity->get && ElggEntity->set to handle metadata better (mantis #24)
+- fixed: issue when validating account and logging in on subsite (mantis #24)
+	
+0.4 (2010-11-30):
+
+- added: copy plugin settings from main site to subsite (if not alreadey exists)
+- added: files and instructions for installation on 1.7.5
+- added: hook on create member relationship so join of group only works on sites you are member of
+- added: hook so user can share content on subsite with all subsite users
+- added: option to upgrade all sites at once
+- added: caching handling of profile icons
+- changed: subsite navigation topbar has his own view
+- fixed: new user are created on a subsite
+- fixed: plugin order to listen to main site
+
+0.3 (2010-10-04):
+
+- added: subsite managers can invite users to the subsite by username, displayname or email (also new users)
+- added: subsite member count to subsite listing view
+- added: page to inform people a user exists, but not on the current subsite
+- added: option to remove users from subsite
+- added: subsite manager topbar
+- added: extender views for subsite edit form
+- added: join subsite based on email domain
+- added: new metatags.php core file
+- changed: some view paths
+- changed: subsites are accessable for non-loggedin users (public content)
+- fixed: removal of users from subsite also for non members of the subsite
+- fixed: upload of subsite icon replaces all icons
+
+0.2 (2010-05-19):
+
+- added: updating cache when running upgrade.php
+- added: addUser, removeUser and isUser to Subsite class
+- added: add_user and remove_user subsite actions 
+- added: join/leave buttons on subsite object view
+- added: topbar menu with connected Subsites
+- added: page for regular users to select/link/connect subsites available to them
+- added: the ability to search for subsites
+- added: subsite admin membership approval
+- added: user subsite membership request
+- changed: access.php (get_access_sql_suffix)
+- changed: subsite access to allow membership options (open, request, invitation)
+- removed: access_overrule for subsite admins (solved in access.php)
+- fixed: simplecache/view.php not checking correctly if simplecache is enabled
+- fixed: subsites list on subsite
+- fixed: subsite create/edit auto join admins
+- fixed: subsite join acl
+	
+0.1:
+
+- first release
