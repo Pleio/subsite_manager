@@ -867,72 +867,71 @@
 	function subsite_manager_metastring_objects_get_hook($hook, $type, $returnvalue, $params){
 		$result = $returnvalue;
 		
-		$entity_guid = elgg_extract("guid", $params);
-		if(!empty($entity_guid)){
+		$entity_guids = elgg_extract("guids", $params);
+		if (!empty($entity_guids) && !is_array($entity_guids)) {
+			$entity_guids = array($entity_guids);
+		} elseif (empty($entity_guids)) {
+			$entity_guids = array();
+		}
+		
+		if ($entity_guid = elgg_extract("guid", $params)) {
+			$entity_guids[] = $entity_guid;
+		}
+		
+		if (!empty($entity_guids)) {
 			$site = elgg_get_site_entity();
-	
-			$metadata_site_guid = $site->getGUID();
 			
 			if(!isset($result["wheres"])){
 				$result["wheres"] = array();
 			}
 			
-			// can't use get_entity() because of deadloops
-			if($entity = get_entity_as_row($entity_guid)){
-				if($entity->type != "user"){
-					// default get metadata from the site of the entity
-					$metadata_site_guid = $entity->site_guid;
-					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ")";
-					$result["site_guids"] = false;
-				} elseif(subsite_manager_on_subsite()) {
-					$metadata_names = elgg_extract("metadata_names", $params);
-					
-					// users are special case
-					
-// 					if(!empty($metadata_names) && is_array($metadata_names) && (count($metadata_names) == 1)){
-// 						$metadata_name = $metadata_names[0];
-						
-// 						// metadata which sould always come from main site
-// 						$main_site_metadata = array("validated", "validation_method", "icontime", "x1", "x2", "y1", "y2");
-// 						if(in_array($metadata_name, $main_site_metadata)){
-// 							$metadata_site_guid = $site->getOwnerGUID();
-// 						}
-						
-// 						// Profile fields which should come from main site
-// 						global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
-// 						if(!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)){
-// 							if(array_key_exists($metadata_name, $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)){
-// 								$metadata_site_guid = $site->getOwnerGUID();
-// 							}
-// 						}
-// 					}
-
-					if(!empty($metadata_names) && is_array($metadata_names)){
-						global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
-
-						$global_metadata_fields = array(
-							// user validation
-							"validated", 
-							"validation_method",
-							// profile icon 
-							"icontime", 
-							"x1", 
-							"x2", 
-							"y1", 
-							"y2"
-						);
-						if(!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)){
-							$global_metadata_fields = array_merge($global_metadata_fields, array_keys($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS));
-						}
-						
-						$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
-						$global_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->getOwnerGUID() . ") AND n.string IN ('" . implode("', '", $global_metadata_fields) . "'))";
-
-						$result["wheres"][] = "(" . $local_wheres . " OR " . $global_wheres . ")";
+			foreach ($entity_guids as $entity_guid) {
+				// make sure we have a valid guid
+				$entity_guid = (int) $entity_guid;
+				if ($entity_guid <= 0) {
+					continue;
+				}
+				
+				// default to current site_guid
+				$metadata_site_guid = $site->getGUID();
+				
+				// can't use get_entity() because of deadloops
+				if ($entity = get_entity_as_row($entity_guid)) {
+					if ($entity->type != "user") {
+						// default get metadata from the site of the entity
+						$metadata_site_guid = $entity->site_guid;
+						$result["wheres"][] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
 						$result["site_guids"] = false;
+					} elseif(subsite_manager_on_subsite()) {
+						$metadata_names = elgg_extract("metadata_names", $params);
+						
+						if (!empty($metadata_names) && is_array($metadata_names)) {
+							global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
+	
+							$global_metadata_fields = array(
+								// user validation
+								"validated", 
+								"validation_method",
+								// profile icon 
+								"icontime", 
+								"x1", 
+								"x2", 
+								"y1", 
+								"y2"
+							);
+							if (!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)) {
+								$global_metadata_fields = array_merge($global_metadata_fields, array_keys($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS));
+							}
+							
+							$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
+							$global_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->getOwnerGUID() . ") AND n.string IN ('" . implode("', '", $global_metadata_fields) . "'))";
+	
+							$result["wheres"][] = "(n_table.entity_guid = " . $entity_guid . " AND (" . $local_wheres . " OR " . $global_wheres . "))";
+							$result["site_guids"] = false;
+						}
+					} else {
+						$result["wheres"][] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
 					}
-				} else {
-					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ")";
 				}
 			}
 		}

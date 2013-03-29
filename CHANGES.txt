@@ -1,4 +1,7 @@
 = Version History =
+x.x:
+- changed: made compatible with Elgg 1.8.14
+
 2.0 (2012-07-12):
 
 - fixed: no_access forward to last page if can join
