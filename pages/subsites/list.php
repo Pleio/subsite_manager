@@ -131,7 +131,15 @@
 	
 				$sites = elgg_get_entities_from_annotations($mem_options);
 	
-				$body = elgg_view_entity_list($sites, count($sites), $offset, $limit, false, false);
+				$list_options = array(
+					"count" => count($sites),
+					"offset" => $offset,
+					"limit" => $limit,
+					"full_view" => false,
+					"list_type_toggle" => false
+				);
+				
+				$body = elgg_view_entity_list($sites, $list_options);
 			}
 				
 			break;
