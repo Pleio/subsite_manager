@@ -902,6 +902,8 @@
 				$result["wheres"] = array();
 			}
 			
+			$metadata_wheres = array();
+			
 			foreach ($entity_guids as $entity_guid) {
 				// make sure we have a valid guid
 				$entity_guid = (int) $entity_guid;
@@ -917,7 +919,7 @@
 					if ($entity->type != "user") {
 						// default get metadata from the site of the entity
 						$metadata_site_guid = $entity->site_guid;
-						$result["wheres"][] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
+						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
 						$result["site_guids"] = false;
 					} elseif(subsite_manager_on_subsite()) {
 						$metadata_names = elgg_extract("metadata_names", $params);
@@ -943,13 +945,17 @@
 							$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
 							$global_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->getOwnerGUID() . ") AND n.string IN ('" . implode("', '", $global_metadata_fields) . "'))";
 	
-							$result["wheres"][] = "(n_table.entity_guid = " . $entity_guid . " AND (" . $local_wheres . " OR " . $global_wheres . "))";
+							$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (" . $local_wheres . " OR " . $global_wheres . "))";
 							$result["site_guids"] = false;
 						}
 					} else {
-						$result["wheres"][] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
+						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
 					}
 				}
+			}
+			
+			if ($metadata_wheres) {
+				$result["wheres"][] = "(" . implode(" OR ", $metadata_wheres) . ")";
 			}
 		}
 		
