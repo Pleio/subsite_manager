@@ -19,84 +19,70 @@
 		if(get_input("all") == "true"){
 			// update plugin order timestamp
 			datalist_set("plugin_order_last_update", time());
-			
+				
 			// find subsites and do stuff
 			$options = array(
-				"type" => "site",
-				"subtype" => Subsite::SUBTYPE,
-				"limit" => false
+					"type" => "site",
+					"subtype" => Subsite::SUBTYPE,
+					"limit" => false
 			);
-			
-			if($entities = elgg_get_entities($options)){
-				// this could take a while
-				set_time_limit(0);
 				
-				$viewtypes = elgg_get_config("view_types");
+			// this could take a while
+			set_time_limit(0);
 				
-				foreach($entities as $subsite){
-					// clear simplecache
-					$dir = get_config("dataroot") . "views_simplecache/" . $subsite->getGUID() . "/";
-					if (file_exists($dir) && ($handle = opendir($dir))) {
-						// remove files
-						while (false !== ($file = readdir($handle))) {
-							if (!is_dir($dir . $file)) {
-								unlink($dir . $file);
-							}
-						}
-						closedir($handle);
-					}
-					
-					if(!empty($viewtypes) && is_array($viewtypes)){
-						foreach ($viewtypes as $viewtype) {
-							datalist_set("sc_lastupdate_" . $viewtype . "_" . $subsite->getGUID(), 0);
-							datalist_set("sc_lastcached_" . $viewtype . "_" . $subsite->getGUID(), 0);
+			$batch = new ElggBatch("elgg_get_entities", $options);
+			$viewtypes = elgg_get_config("view_types");
+			$dataroot = elgg_get_config("dataroot");
+				
+			foreach($batch as $subsite){
+				// clear simplecache
+				$dir =  $dataroot . "views_simplecache/" . $subsite->getGUID() . "/";
+				if (file_exists($dir) && ($handle = opendir($dir))) {
+					// remove files
+					while (false !== ($file = readdir($handle))) {
+						if (!is_dir($dir . $file)) {
+							unlink($dir . $file);
 						}
 					}
-					
-					// clear filepath cache
-					$dir = get_config("dataroot") . "file_path_cache/" . $subsite->getGUID() . "/";
-					if (file_exists($dir) && ($handle = opendir($dir))) {
-						// remove files.
-						$return = true;
-						while (false !== ($file = readdir($handle))) {
-							if (!is_dir($dir . $file)) {
-								unlink($dir . $file);
-							}
-						}
-						closedir($handle);
-					}
-					
-					// cleanup cron cache
-					$cron_cache = get_config("dataroot") . "subsite_manager/" . $subsite->getGUID() . "/cron_cache.json";
-					if(file_exists($cron_cache)){
-						unlink($cron_cache);
-					}
-					
-					// reset translation editor cache
-					$sql = "DELETE FROM " . get_config("dbprefix") . "private_settings";
-					$sql .= " WHERE name LIKE 'te_last_update_%'";
-					$sql .= " AND entity_guid = " . $subsite->getGUID();
-					
-					delete_data($sql);
-					
-					// reset plugin order
-					$sql = "DELETE FROM " . get_config("dbprefix") . "private_settings";
-					$sql .= " WHERE name = 'plugin_order_last_update'";
-					$sql .= " AND entity_guid = " . $subsite->getGUID();
-					
-					delete_data($sql);
-					
-					// invalidate language cache
-					elgg_clear_language_cache($subsite->getGUID());
+					closedir($handle);
 				}
+		
+				if(!empty($viewtypes) && is_array($viewtypes)){
+					foreach ($viewtypes as $viewtype) {
+						datalist_set("sc_lastupdate_" . $viewtype . "_" . $subsite->getGUID(), 0);
+						datalist_set("sc_lastcached_" . $viewtype . "_" . $subsite->getGUID(), 0);
+					}
+				}
+		
+				// clear system cache
+				$system_cache = new ElggFileCache($dataroot . "system_cache/" . $subsite->getGUID() . "/");
+				$system_cache->clear();
+		
+				// cleanup cron cache
+				$cron_cache = $dataroot . "subsite_manager/" . $subsite->getGUID() . "/cron_cache.json";
+				if(file_exists($cron_cache)){
+					unlink($cron_cache);
+				}
+		
+				// reset translation editor cache
+				// can't use remove_private_setting because of 'name like' not 'name ='
+				$sql = "DELETE FROM " . get_config("dbprefix") . "private_settings";
+				$sql .= " WHERE name LIKE 'te_last_update_%'";
+				$sql .= " AND entity_guid = " . $subsite->getGUID();
+		
+				delete_data($sql);
+		
+				// reset plugin order
+				remove_private_setting($subsite->getGUID(), "plugin_order_last_update");
+		
 			}
 		}
 		
 		// force reorder of plugins on subsite
 		if (subsite_manager_on_subsite()) {
 			$site = elgg_get_site_entity();
-				
-			$site->setPrivateSetting("plugin_order_last_update", 0);
+		
+			remove_private_setting($site->getGUID(), "plugin_order_last_update");
 		}
 	}
 	
