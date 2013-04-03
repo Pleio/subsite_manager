@@ -764,27 +764,44 @@
 	* @return mixed
 	*/
 	function subsite_manager_access_read_hook($hook, $type, $returnvalue, $params){
+		static $read_cache;
 		$result = $returnvalue;
 		
-		$user_guid = elgg_extract("user_id", $params);
-		$site_guid = elgg_extract("site_id", $params);
+		$user_guid = (int) elgg_extract("user_id", $params);
+		$site_guid = (int) elgg_extract("site_id", $params);
 		
-		if(!empty($user_guid) && !empty($site_guid)){
-			$ia = elgg_get_ignore_access();
-			elgg_set_ignore_access(true);
+		if (!empty($user_guid) && !empty($site_guid)) {
+			if (!isset($read_cache)) {
+				$read_cache = array();
+			}
 			
-			if(($site = elgg_get_site_entity()) && ($site->getGUID() == $site_guid)){
-				if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-					
-					if($site->isUser($user_guid)){
-						if(($acl = $site->getACL()) && !in_array($acl, $result)){
-							$result[] = $acl;
+			$checksum = md5($user_guid . "-" . $site_guid);
+			
+			// check cache
+			if (!isset($read_cache[$checksum])) {
+				$read_cache[$checksum] = false;
+				
+				$ia = elgg_get_ignore_access();
+				elgg_set_ignore_access(true);
+				
+				if (($site = elgg_get_site_entity()) && ($site->getGUID() == $site_guid)) {
+					if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")) {
+						
+						if ($site->isUser($user_guid)) {
+							if (($acl = $site->getACL()) && !in_array($acl, $result)) {
+								$read_cache[$checksum] = $acl;
+							}
 						}
 					}
 				}
+				
+				elgg_set_ignore_access($ia);
 			}
 			
-			elgg_set_ignore_access($ia);
+			// get the result from cache
+			if ($read_cache[$checksum]) {
+				$result[] = $read_cache[$checksum];
+			}
 		}
 		
 		return $result;
