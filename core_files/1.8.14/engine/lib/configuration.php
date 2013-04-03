@@ -226,6 +226,8 @@ $DATALIST_CACHE = array();
 function datalist_get($name) {
 	global $CONFIG, $DATALIST_CACHE;
 
+	$firstrun = empty($DATALIST_CACHE);
+	
 	$name = trim($name);
 
 	// cannot store anything longer than 255 characters in db, so catch here
@@ -240,9 +242,10 @@ function datalist_get($name) {
 	}
 
 	// If memcache enabled then cache value in memcache
+
 	$value = null;
 	static $datalist_memcache;
-	if ((!$datalist_memcache) && (is_memcache_available())) {
+	if (!$firstrun && (!$datalist_memcache) && (is_memcache_available())) {
 		$datalist_memcache = new ElggMemcache('datalist_memcache');
 	}
 	if ($datalist_memcache) {
@@ -251,7 +254,7 @@ function datalist_get($name) {
 	if ($value !== null && $value !== false) {
 		return $value;
 	}
-
+	
 	// [Marcus Povey 20090217 : Now retrieving all datalist values on first
 	// load as this saves about 9 queries per page]
 	// This also causes OOM problems when the datalists table is large
