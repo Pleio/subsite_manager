@@ -8,6 +8,10 @@
  * @subpackage PrivateSettings
  */
 
+// Cache private settings
+global $PRIVATE_SETTINGS_CACHE;
+$PRIVATE_SETTINGS_CACHE = array();
+
 /**
  * Returns entities based upon private settings.  Also accepts all
  * options available to elgg_get_entities().  Supports
@@ -97,13 +101,10 @@ function elgg_get_entities_from_private_settings(array $options = array()) {
  * @since 1.8.0
  * @access private
  */
-function elgg_get_entity_private_settings_where_sql($table, $names = NULL, $values = NULL,
-$pairs = NULL, $pair_operator = 'AND', $name_prefix = '') {
-
+function elgg_get_entity_private_settings_where_sql($table, $names = NULL, $values = NULL, $pairs = NULL, $pair_operator = 'AND', $name_prefix = '') {
 	global $CONFIG;
 
 	// @todo short circuit test
-
 	$return = array (
 		'joins' => array (),
 		'wheres' => array(),
@@ -278,7 +279,7 @@ function get_private_setting($entity_guid, $name) {
 	$name = sanitise_string($name);
 
 	// check if you have access to the entity
-	if (!get_entity_as_row($entity_guid)) {
+	if (!elgg_get_ignore_access() && !get_entity_as_row($entity_guid)) {
 		return false;
 	}
 	
@@ -302,22 +303,31 @@ function get_private_setting($entity_guid, $name) {
  * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function get_all_private_settings($entity_guid) {
-	static $private_setting_cache;
+	global $PRIVATE_SETTINGS_CACHE;
+	static $private_setting_memcache;
 
 	$dbprefix = elgg_get_config("dbprefix");
 	$entity_guid = (int) $entity_guid;
 	
 	// check if you have access to the entity
-	if (!get_entity_as_row($entity_guid)) {
+	if (!elgg_get_ignore_access() && !get_entity_as_row($entity_guid)) {
 		return false;
 	}
 	
-	if(!isset($private_setting_cache) && is_memcache_available()){
-		$private_setting_cache = new ElggMemcache("private_settings");
+	// first check localy
+	if (isset($PRIVATE_SETTINGS_CACHE[$entity_guid])) {
+		return $PRIVATE_SETTINGS_CACHE[$entity_guid];
 	}
 	
-	if($private_setting_cache){
-		if($settings = $private_setting_cache->load($entity_guid)){
+	if(!isset($private_setting_memcache) && is_memcache_available()){
+		$private_setting_memcache = new ElggMemcache("private_settings");
+	}
+	
+	if($private_setting_memcache){
+		if($settings = $private_setting_memcache->load($entity_guid)){
+			// cache localy
+			$PRIVATE_SETTINGS_CACHE[$entity_guid] = $settings;
+			
 			if(!empty($settings)){
 				return $settings;
 			} else {
@@ -337,11 +347,14 @@ function get_all_private_settings($entity_guid) {
 		}
 	}
 	
-	if($private_setting_cache){
-		$private_setting_cache->save($entity_guid, $settings);
+	if($private_setting_memcache){
+		$private_setting_memcache->save($entity_guid, $settings);
 	}
 	
 	if(!empty($settings)){
+		// cache localy
+		$PRIVATE_SETTINGS_CACHE[$entity_guid] = $settings;
+		
 		return $settings;
 	}
 
@@ -363,7 +376,8 @@ function get_all_private_settings($entity_guid) {
  * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function set_private_setting($entity_guid, $name, $value) {
-	static $private_setting_cache;
+	global $PRIVATE_SETTINGS_CACHE;
+	static $private_setting_memcache;
 
 	$dbprefix = elgg_get_config("dbprefix");
 	$entity_guid = (int) $entity_guid;
@@ -375,8 +389,8 @@ function set_private_setting($entity_guid, $name, $value) {
 		return false;
 	}
 	
-	if(!isset($private_setting_cache) && is_memcache_available()){
-		$private_setting_cache = new ElggMemcache("private_settings");
+	if(!isset($private_setting_memcache) && is_memcache_available()){
+		$private_setting_memcache = new ElggMemcache("private_settings");
 	}
 	
 	$query = "INSERT INTO {$dbprefix}private_settings";
@@ -387,9 +401,15 @@ function set_private_setting($entity_guid, $name, $value) {
 	$result = insert_data($query);
 	
 	if($result !== false){
-		if($private_setting_cache){
+		// unset local cache
+		if(isset($PRIVATE_SETTINGS_CACHE[$entity_guid])) {
+			unset($PRIVATE_SETTINGS_CACHE[$entity_guid]);
+		}
+		
+		// unset memcache
+		if($private_setting_memcache){
 			// invalidate the settings in Memcache
-			$private_setting_cache->delete($entity_guid);
+			$private_setting_memcache->delete($entity_guid);
 		}
 	}
 
@@ -410,7 +430,8 @@ function set_private_setting($entity_guid, $name, $value) {
  * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function remove_private_setting($entity_guid, $name) {
-	static $private_setting_cache;
+	global $PRIVATE_SETTINGS_CACHE;
+	static $private_setting_memcache;
 
 	$dbprefix = elgg_get_config("dbprefix");
 	$entity_guid = (int) $entity_guid;
@@ -421,8 +442,8 @@ function remove_private_setting($entity_guid, $name) {
 		return false;
 	}
 	
-	if(!isset($private_setting_cache) && is_memcache_available()){
-		$private_setting_cache = new ElggMemcache("private_settings");
+	if(!isset($private_setting_memcache) && is_memcache_available()){
+		$private_setting_memcache = new ElggMemcache("private_settings");
 	}
 
 	$query = "DELETE FROM {$dbprefix}private_settings";
@@ -432,9 +453,15 @@ function remove_private_setting($entity_guid, $name) {
 	$result = delete_data($query);
 	
 	if($result !== false){
-		if($private_setting_cache){
+		// unset local cache
+		if(isset($PRIVATE_SETTINGS_CACHE[$entity_guid])) {
+			unset($PRIVATE_SETTINGS_CACHE[$entity_guid]);
+		}
+		
+		// unset memcache
+		if($private_setting_memcache){
 			// invalidate the settings in Memcache
-			$private_setting_cache->delete($entity_guid);
+			$private_setting_memcache->delete($entity_guid);
 		}
 	}
 
@@ -454,7 +481,8 @@ function remove_private_setting($entity_guid, $name) {
  * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function remove_all_private_settings($entity_guid) {
-	static $private_setting_cache;
+	global $PRIVATE_SETTINGS_CACHE;
+	static $private_setting_memcache;
 
 	$dbprefix = elgg_get_config("dbprefix");
 	$entity_guid = (int) $entity_guid;
@@ -464,8 +492,8 @@ function remove_all_private_settings($entity_guid) {
 		return false;
 	}
 	
-	if(!isset($private_setting_cache) && is_memcache_available()){
-		$private_setting_cache = new ElggMemcache("private_settings");
+	if(!isset($private_setting_memcache) && is_memcache_available()){
+		$private_setting_memcache = new ElggMemcache("private_settings");
 	}
 	
 	$query = "DELETE FROM {$dbprefix}private_settings";
@@ -474,9 +502,15 @@ function remove_all_private_settings($entity_guid) {
 	$result = delete_data($query);
 	
 	if($result !== false){
-		if($private_setting_cache){
+		// unset local cache
+		if(isset($PRIVATE_SETTINGS_CACHE[$entity_guid])) {
+			unset($PRIVATE_SETTINGS_CACHE[$entity_guid]);
+		}
+		
+		// unset memcache
+		if($private_setting_memcache){
 			// invalidate the settings in Memcache
-			$private_setting_cache->delete($entity_guid);
+			$private_setting_memcache->delete($entity_guid);
 		}
 	}
 	

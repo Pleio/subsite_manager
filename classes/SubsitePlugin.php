@@ -290,6 +290,9 @@
 				return $this->attributes[$name];
 			}
 		
+			// we can always access plugins, so don't check access
+			$ia = elgg_set_ignore_access(true);
+			
 			// No, so see if its in the private data store.
 			// get_private_setting() returns false if it doesn't exist
 			$result = $this->getPrivateSetting($name);
@@ -304,6 +307,9 @@
 				}
 			}
 		
+			// restore access settings
+			elgg_set_ignore_access($ia);
+			
 			return $result;
 		}
 		
