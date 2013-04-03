@@ -4,6 +4,14 @@
  */
 global $CONFIG;
 
+if(get_input("lastcached")){
+	$etag = $CONFIG->lastcached;
+	
+	header('Expires: ' . date('r',time() + 864000));
+	header("Pragma: public");
+	header("Cache-Control: public");
+}
+
 $language = $vars['language'];
 
 $translations = $CONFIG->translations['en'];
