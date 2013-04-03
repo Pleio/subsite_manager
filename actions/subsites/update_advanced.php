@@ -23,6 +23,7 @@
 	$allow_user_default_access = get_input("allow_user_default_access");
 	$allow_registration = get_input("allow_registration", false);
 	$walled_garden = get_input("walled_garden", false);
+	$api = get_input("api");
 	
 	$forward_url = REFERER;
 	
@@ -118,6 +119,14 @@
 			set_config("walled_garden", true, $subsite->getGUID());
 		} else {
 			set_config("walled_garden", false, $subsite->getGUID());
+		}
+		// webservices api
+		if(subsite_manager_is_superadmin_logged_in()){
+			if (!empty($api)) {
+				unset_config("disable_api", $subsite->getGUID());
+			} else {
+				set_config("disable_api", "disabled", $subsite->getGUID());
+			}
 		}
 		
 		// set navigation bar position

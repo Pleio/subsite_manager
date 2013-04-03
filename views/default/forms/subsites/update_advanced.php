@@ -186,6 +186,22 @@
 	));
 	$access .= "</div>";
 	
+	// webservices api
+	if(subsite_manager_is_superadmin_logged_in()){
+		$access .= "<div>" . elgg_echo("installation:disableapi") . "<br />";
+		$on = elgg_echo("installation:disableapi:label");
+		$disable_api = elgg_get_config("disable_api");
+		if ($disable_api) {
+			$on = (disable_api ?  "" : elgg_echo("installation:disableapi:label"));
+		}
+		$access .= elgg_view("input/checkboxes", array(
+			"options" => array(elgg_echo("installation:disableapi:label") => elgg_echo("installation:disableapi:label")),
+			"name" => "api",
+			"value" => $on,
+		));
+		$access .= "</div>";
+	}
+	
 	$form_data .= elgg_view_module("inline", elgg_echo("access"), $access);
 	
 	// buttons
