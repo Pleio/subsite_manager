@@ -590,7 +590,7 @@ function _elgg_load_site_config() {
 	
 	// needs to be set before system, init for links in html head
 	$viewtype = get_input('view', 'default');
-	$lastcached = datalist_get("sc_lastcached_$viewtype_" . $CONFIG->site->getGUID());
+	$lastcached = datalist_get("sc_lastcached_" . $viewtype . "_" . $CONFIG->site->getGUID());
 	$CONFIG->lastcache = $lastcached;
 	
 }

@@ -106,7 +106,7 @@ $viewtype = get_input('view', 'default');
 $site_guid = elgg_get_site_entity()->getGUID();
 
 // Subsite Manager - simple cache prefix
-$lastcached = datalist_get("sc_lastcached_$viewtype_" . $site_guid);
+$lastcached = datalist_get("sc_lastcached_" . $viewtype . "_" . $site_guid);
 $CONFIG->lastcache = $lastcached;
 
 // Load the plugins that are active

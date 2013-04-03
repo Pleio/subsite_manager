@@ -279,8 +279,8 @@ function elgg_regenerate_simplecache($viewtype = NULL) {
 			}
 		}
 
-		datalist_set("sc_lastupdate_$viewtype_" . $site->getGUID(), $lastcached);
-		datalist_set("sc_lastcached_$viewtype_" . $site->getGUID(), $lastcached);
+		datalist_set("sc_lastupdate_" . $viewtype . "_" . $site->getGUID(), $lastcached);
+		datalist_set("sc_lastcached_" . $viewtype . "_" . $site->getGUID(), $lastcached);
 	}
 
 	elgg_set_config('debug', $old_debug);
@@ -390,8 +390,8 @@ function elgg_invalidate_simplecache() {
 	}
 
 	foreach ($viewtypes as $viewtype) {
-		$return &= datalist_set("sc_lastupdate_$viewtype_" . $site->getGUID(), 0);
-		$return &= datalist_set("sc_lastcached_$viewtype_" . $site->getGUID(), 0);
+		$return &= datalist_set("sc_lastupdate_" . $viewtype . "_" . $site->getGUID(), 0);
+		$return &= datalist_set("sc_lastcached_" . $viewtype . "_" . $site->getGUID(), 0);
 	}
 
 	return $return;
@@ -435,11 +435,11 @@ function _elgg_cache_init() {
 	// Don't do it on upgrade because upgrade does it itself.
 	// @todo - move into function and perhaps run off init system event
 	if (!defined('UPGRADING')) {
-		$lastupdate = datalist_get("sc_lastupdate_$viewtype_" . $site->getGUID());
-		$lastcached = datalist_get("sc_lastcached_$viewtype_" . $site->getGUID());
+		$lastupdate = datalist_get("sc_lastupdate_" . $viewtype . "_" . $site->getGUID());
+		$lastcached = datalist_get("sc_lastcached_" . $viewtype . "_" . $site->getGUID());
 		if ($lastupdate == 0 || $lastcached < $lastupdate) {
 			elgg_regenerate_simplecache($viewtype);
-			$lastcached = datalist_get("sc_lastcached_$viewtype_" . $site->getGUID());
+			$lastcached = datalist_get("sc_lastcached_" . $viewtype . "_" . $site->getGUID());
 		}
 		$CONFIG->lastcache = $lastcached;
 	}
