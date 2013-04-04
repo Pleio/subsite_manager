@@ -92,6 +92,9 @@
 			if($site_plugin_order_update < $main_plugin_update){
 				// reorder of the plugins is needed
 				if($main_plugin_order = subsite_manager_get_main_plugin_order()){
+					// we need to trace an error, so add logging
+					error_log("SUBSITE MANAGER: reorder plugins: " . $site->name . "(" . $site_guid . ")");
+					
 					// make sure all plugins are there
 					elgg_generate_plugin_entities();
 					

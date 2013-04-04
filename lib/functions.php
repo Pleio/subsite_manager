@@ -688,6 +688,9 @@
 			$site_guid = $site->getGUID();
 		}
 		
+		// we need to trace an error, so log
+		error_log("SUBSITE MANAGER: get main plugin order: " . $site_guid);
+		
 		$options = array(
 			"type" => "object",
 			"subtype" => "plugin",

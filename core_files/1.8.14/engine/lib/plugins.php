@@ -441,6 +441,19 @@ function elgg_set_plugin_priorities(array $order) {
 		return false;
 	}
 
+	// we need to trace an error, so log
+	$site = elgg_get_site_entity();
+	error_log("ELGG: reordering plugins: " . $site->name . "(" . $site->getGUID() . ")");
+	if ($trace = debug_backtrace()) {
+		foreach($trace as $index => $level) {
+			if($index === 0){
+				continue;
+			}
+			error_log("  called from: " . $level["function"]);
+			break;
+		}
+	}
+	
 	$return = true;
 
 	// reindex to get standard counting. no need to increment by 10.
