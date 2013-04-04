@@ -21,8 +21,10 @@
  *
  * @global ElggStaticVariableCache|array $DB_QUERY_CACHE
  */
-global $DB_QUERY_CACHE;
+global $DB_QUERY_CACHE, $DB_QUERY_CACHE_COUNT, $DB_QUERY_CACHE_HITS;
 $DB_QUERY_CACHE = array();
+$DB_QUERY_CACHE_COUNT = 0;
+$DB_QUERY_CACHE_HITS = 0;
 
 /**
  * Queries to be executed upon shutdown.
@@ -64,6 +66,22 @@ $dblink = array();
  */
 global $dbcalls;
 $dbcalls = 0;
+
+/**
+ *  Subsite manager db query time logger
+ */
+global $SUBSITE_MANAGER_DB_TOTAL_TIME;
+$SUBSITE_MANAGER_DB_TOTAL_TIME = 0;
+/**
+ *  Subsite manager memcache time logger
+ */
+global $SUBSITE_MANAGER_MEMCACHE_TOTAL_TIME;
+$SUBSITE_MANAGER_MEMCACHE_TOTAL_TIME = 0;
+global $SUBSITE_MANAGER_MEMCACHE_TOTAL;
+$SUBSITE_MANAGER_MEMCACHE_TOTAL = 0;
+global $SUBSITE_MANAGER_MEMCACHE_ERROR_TOTAL;
+$SUBSITE_MANAGER_MEMCACHE_ERROR_TOTAL = 0;
+
 
 /**
  * Establish a connection to the database servser
@@ -252,7 +270,7 @@ function explain_query($query, $link) {
  * @access private
  */
 function execute_query($query, $dblink) {
-	global $dbcalls;
+	global $dbcalls, $SUBSITE_MANAGER_DB_TOTAL_TIME;
 
 	if ($query == NULL) {
 		throw new DatabaseException(elgg_echo('DatabaseException:InvalidQuery'));
@@ -264,8 +282,16 @@ function execute_query($query, $dblink) {
 
 	$dbcalls++;
 
+	// log the runtime of the query
+	$debug_start = microtime(true);
+	
+	
 	$result = mysql_query($query, $dblink);
 
+	$query_time = (microtime(true) - $debug_start);
+	// save to runtime of the query
+	$SUBSITE_MANAGER_DB_TOTAL_TIME += $query_time;
+	
 	if (mysql_errno($dblink)) {
 		throw new DatabaseException(mysql_error($dblink) . "\n\n QUERY: " . $query);
 	}
@@ -391,7 +417,7 @@ function get_data_row($query, $callback = "") {
  * @access private
  */
 function elgg_query_runner($query, $callback = null, $single = false) {
-	global $DB_QUERY_CACHE;
+	global $DB_QUERY_CACHE, $DB_QUERY_CACHE_COUNT, $DB_QUERY_CACHE_HITS;
 
 	// Since we want to cache results of running the callback, we need to
 	// need to namespace the query with the callback and single result request.
@@ -403,6 +429,7 @@ function elgg_query_runner($query, $callback = null, $single = false) {
 		$cached_query = $DB_QUERY_CACHE[$hash];
 
 		if ($cached_query !== FALSE) {
+			$DB_QUERY_CACHE_HITS++;
 			elgg_log("DB query $query results returned from cache (hash: $hash)", 'NOTICE');
 			return $cached_query;
 		}
@@ -437,8 +464,11 @@ function elgg_query_runner($query, $callback = null, $single = false) {
 
 	// Cache result
 	if ($DB_QUERY_CACHE) {
-		$DB_QUERY_CACHE[$hash] = $return;
-		elgg_log("DB query $query results cached (hash: $hash)", 'NOTICE');
+		$DB_QUERY_CACHE_COUNT++;
+		if($DB_QUERY_CACHE_COUNT < 500) {
+			$DB_QUERY_CACHE[$hash] = $return;
+			elgg_log("DB query $query results cached (hash: $hash)", 'NOTICE');
+		}
 	}
 
 	return $return;
@@ -456,7 +486,7 @@ function elgg_query_runner($query, $callback = null, $single = false) {
  * @access private
  */
 function insert_data($query) {
-	global $DB_QUERY_CACHE;
+	global $DB_QUERY_CACHE, $DB_QUERY_CACHE_COUNT;
 
 	elgg_log("DB query $query", 'NOTICE');
 	
@@ -466,6 +496,8 @@ function insert_data($query) {
 	if ($DB_QUERY_CACHE) {
 		/* @var ElggStaticVariableCache $DB_QUERY_CACHE */
 		$DB_QUERY_CACHE->clear();
+		$DB_QUERY_CACHE_COUNT = 0;
+		
 	}
 
 	elgg_log("Query cache invalidated", 'NOTICE');
@@ -488,7 +520,7 @@ function insert_data($query) {
  * @access private
  */
 function update_data($query) {
-	global $DB_QUERY_CACHE;
+	global $DB_QUERY_CACHE, $DB_QUERY_CACHE_COUNT;
 
 	elgg_log("DB query $query", 'NOTICE');
 
@@ -498,6 +530,7 @@ function update_data($query) {
 	if ($DB_QUERY_CACHE) {
 		/* @var ElggStaticVariableCache $DB_QUERY_CACHE */
 		$DB_QUERY_CACHE->clear();
+		$DB_QUERY_CACHE_COUNT = 0;
 		elgg_log("Query cache invalidated", 'NOTICE');
 	}
 
@@ -519,7 +552,7 @@ function update_data($query) {
  * @access private
  */
 function delete_data($query) {
-	global $DB_QUERY_CACHE;
+	global $DB_QUERY_CACHE, $DB_QUERY_CACHE_COUNT;
 
 	elgg_log("DB query $query", 'NOTICE');
 
@@ -529,6 +562,7 @@ function delete_data($query) {
 	if ($DB_QUERY_CACHE) {
 		/* @var ElggStaticVariableCache $DB_QUERY_CACHE */
 		$DB_QUERY_CACHE->clear();
+		$DB_QUERY_CACHE_COUNT = 0;
 		elgg_log("Query cache invalidated", 'NOTICE');
 	}
 

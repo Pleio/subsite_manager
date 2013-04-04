@@ -7,8 +7,13 @@
 	global $START_MICROTIME; 
 	global $SUBSITE_MANAGER_DB_TOTAL_TIME;
 	global $dbcalls;
+	global $DB_QUERY_CACHE_HITS;
 	global $COLDTRICK_DB_LOG;
-
+	global $SUBSITE_MANAGER_MEMCACHE_TOTAL_TIME;
+	global $SUBSITE_MANAGER_MEMCACHE_TOTAL;
+	global $SUBSITE_MANAGER_MEMCACHE_ERROR_TOTAL;
+	
+	echo "<div>";
 	echo "<input type='hidden' name='script_run_time' value='" . (microtime(true) - $START_MICROTIME) . "' />";
 	echo "<input type='hidden' name='script_db_time' value='" . $SUBSITE_MANAGER_DB_TOTAL_TIME . "' />";
 	echo "<input type='hidden' name='script_db_calls' value='" . $dbcalls . "' />";
@@ -17,9 +22,16 @@
 		$username = $user->username;
 		
 		if(in_array($username, array("jdalsem", "jeabakker"))){
-			echo "SCRIPT RUN TIME: " . (microtime(true) - $START_MICROTIME) . " <br />";
-			echo "DB RUN TIME: " . $SUBSITE_MANAGER_DB_TOTAL_TIME . " <br />";
-			echo "TOTAL QUERY COUNT: $dbcalls <br /><br />";
+			echo "Script runtime: " . (microtime(true) - $START_MICROTIME) . "<br />";
+			echo "Peak memory: " . number_format(memory_get_peak_usage(true), 0, ",", ".") . "<br />";
+			echo "DB runtime: " . $SUBSITE_MANAGER_DB_TOTAL_TIME . "<br />";
+			echo "DB query count: " . $dbcalls . "<br />";
+			echo "DB Query cache hits: " . $DB_QUERY_CACHE_HITS . "<br /><br />";
+			
+			echo "Memcache runtime: " . $SUBSITE_MANAGER_MEMCACHE_TOTAL_TIME . " <br />";
+			echo "Memcache count: " . $SUBSITE_MANAGER_MEMCACHE_TOTAL . "<br />";
+			echo "Memcache not found: " . $SUBSITE_MANAGER_MEMCACHE_ERROR_TOTAL . "<br /><br />";
+			
 			echo "SERVER: " . $_SERVER["SERVER_ADDR"] . "<br /><br />";
 				
 			echo "<input type='hidden' name='server' value='" . $_SERVER["SERVER_ADDR"] . "' />";
@@ -43,5 +55,8 @@
 					echo $key . " - " . $query . "<br />". "<br />";
 				}
 			}
+			
+			echo "<br /><br />";
 		}
 	}
+	echo "</div>";
