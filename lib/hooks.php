@@ -377,7 +377,22 @@
 			
 			$subsite = elgg_get_site_entity();
 			elgg_set_config("site_guid", $subsite->getOwnerGUID());
+			
+			// we need to check the system cache for updates on main site
+			$dataroot = elgg_get_config("dataroot");
+			$main_system_cache_location = $dataroot . "system_cache/" . $subsite->getOwnerGUID() . "/profile_manager_profile_fields_" . $subsite->getOwnerGUID();
+			$local_system_cache_location = $dataroot . "system_cache/" . $subsite->getGUID() . "/profile_manager_profile_fields_" . $subsite->getOwnerGUID();
 				
+			if (file_exists($main_system_cache_location) && file_exists($local_system_cache_location)) {
+				$main_time = filemtime($main_system_cache_location);
+				$local_time = filemtime($local_system_cache_location);
+			
+				if ($main_time >= $local_time) {
+					unlink($local_system_cache_location);
+				}
+			}
+				
+			// now get the fields
 			$main_fields = elgg_trigger_plugin_hook("profile:fields", "profile", null, array());
 				
 			// save fields for get/set metadata
@@ -412,7 +427,22 @@
 				
 			$subsite = elgg_get_site_entity();
 			elgg_set_config("site_guid", $subsite->getOwnerGUID());
+			
+			// we need to check the system cache for updates on main site
+			$dataroot = elgg_get_config("dataroot");
+			$main_system_cache_location = $dataroot . "system_cache/" . $subsite->getOwnerGUID() . "/profile_manager_group_fields_" . $subsite->getOwnerGUID();
+			$local_system_cache_location = $dataroot . "system_cache/" . $subsite->getGUID() . "/profile_manager_group_fields_" . $subsite->getOwnerGUID();
+			
+			if (file_exists($main_system_cache_location) && file_exists($local_system_cache_location)) {
+				$main_time = filemtime($main_system_cache_location);
+				$local_time = filemtime($local_system_cache_location);
+					
+				if ($main_time >= $local_time) {
+					unlink($local_system_cache_location);
+				}
+			}
 				
+			// now get the main fields
 			$main_fields = elgg_trigger_plugin_hook("profile:fields", "group", null, array());
 				
 			$result = array_merge($result, $main_fields);
