@@ -20,25 +20,26 @@
 	</div>
 	<div class="elgg-body profile-manager-actions">
 		<?php 
+		
 			// some actions aren't allowed on subsites
 			if(!subsite_manager_on_subsite()){
-				echo elgg_view("output/confirmlink", array("text" => elgg_echo("profile_manager:actions:reset"), "title" => elgg_echo("profile_manager:actions:reset:description"), "href" => $vars['url'] . "action/profile_manager/reset?type=group", "confirm" => elgg_echo("profile_manager:actions:reset:confirm"), "class" => "elgg-button elgg-button-action"));
+				echo elgg_view("output/confirmlink", array("text" => elgg_echo("reset"), "title" => elgg_echo("profile_manager:actions:reset:description"), "href" => $vars['url'] . "action/profile_manager/reset?type=group", "confirm" => elgg_echo("profile_manager:actions:reset:confirm"), "class" => "elgg-button elgg-button-action"));
 				echo elgg_view("output/confirmlink", array("text" => elgg_echo("profile_manager:actions:import:from_default"), "title" => elgg_echo("profile_manager:actions:import:from_default:description"), "href" => $vars['url'] . "action/profile_manager/importFromDefault?type=group", "confirm" => elgg_echo("profile_manager:actions:import:from_default:confirm"), "class" => "elgg-button elgg-button-action"));
 			}
 			
-			echo elgg_view("output/url", array("title" => elgg_echo("profile_manager:actions:export:description"),"text" => elgg_echo("profile_manager:actions:export"), "href" => $vars['url'] . "admin/appearance/export_fields?fieldtype=" . CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE, "class" => "elgg-button elgg-button-action"));
+			echo elgg_view("output/url", array("title" => elgg_echo("profile_manager:actions:export:description"),"text" => elgg_echo("profile_manager:actions:export"), "href" => "/admin/groups/export", "class" => "elgg-button elgg-button-action"));
 			
 			// some actions aren't allowed on subsites
 			if(!subsite_manager_on_subsite()){
 				echo elgg_view("output/confirmlink", array("text" => elgg_echo("profile_manager:actions:configuration:backup"), "href" => $vars['url'] . "action/profile_manager/configuration/backup?fieldtype=" . CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE, "confirm" => elgg_echo("profile_manager:actions:configuration:backup:description"), "class" => "elgg-button elgg-button-action"));
-				echo elgg_view("output/url", array("text" => elgg_echo("profile_manager:actions:configuration:restore"), "js" => "onclick=\"$('#restoreForm').toggle();\"", "class" => "elgg-button elgg-button-action")); 
-			
+				echo elgg_view("output/url", array("text" => elgg_echo("profile_manager:actions:configuration:restore"), "js" => "onclick=\"$('#restoreForm').toggle();\"", "class" => "elgg-button elgg-button-action"));
+				
 				$form_body = "<div>" . elgg_echo("profile_manager:actions:configuration:restore:description") . "</div>";
 				$form_body .= elgg_view("input/file", array("name" => "restoreFile"));
 				$form_body .= elgg_view("input/submit", array("value" => elgg_echo("profile_manager:actions:configuration:restore:upload")));
-	
+				
 				$form = elgg_view("input/form", array("action" => "action/profile_manager/configuration/restore?fieldtype=" .CUSTOM_PROFILE_FIELDS_GROUP_SUBTYPE, "id" => "restoreForm", "body" => $form_body, "enctype" => "multipart/form-data"));
-	
+				
 				echo $form;
 			}
 		?>
