@@ -1,5 +1,5 @@
 = Version History =
-x.x:
+2.1 (2013-04-05):
 - changed: made compatible with Elgg 1.8.14
 - fixed: deprecated notice in pages/subsites/list.php
 
