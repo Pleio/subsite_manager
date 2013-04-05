@@ -64,56 +64,46 @@
 </script>
 <?php
 		}
-	}
-	
-	
-	
-	// load piwik analytics
-	
-	
-	
-	
-	$plugin_options = array(
-			"type" => "object",
-			"subtype" => "plugin",
-			"site_guid" => $main_site->getGUID(),
-			"relationship" => "active_plugin",
-			"relationship_guid" => $main_site->getGUID(),
-			"inverse_relationship" => true,
-			"limit" => 1,
-			"joins" => array("JOIN " . get_config("dbprefix") . "objects_entity oe ON e.guid = oe.guid"),
-			"wheres" => array("oe.title = 'phloor_analytics_piwik'")
-	);
-	
-	$old_ia = elgg_set_ignore_access(true);
-	$plugins = elgg_get_entities_from_relationship($plugin_options);
-	elgg_set_ignore_access($old_ia);
-	
-	if($plugins){
 		
-		if(isset($main_site->phloor_analytics_piwik_settings)) {
-			$params = json_decode($main_site->phloor_analytics_piwik_settings, true);
-		}
+		// Piwik tracking
+		$piwik_url = $plugin->piwik_url;
+		$piwik_site_id = (int) $plugin->piwik_site_id;
 		
-		$js_url = $params['path_to_piwik'] . "piwik.js";
-		elgg_register_js('phloor-piwik-lib', $js_url, 'footer', 500);
-		elgg_load_js('phloor-piwik-lib');
-		
-		?>
+		if (!empty($piwik_url) && !empty($piwik_site_id)) {
+			$load_js = true;
+			$paq = "_paq";
+			if(elgg_is_active_plugin("analytics") && ($local_piwik_site_id = elgg_get_plugin_setting("piwik_site_id", "analytics"))){
+				$paq = "_paq2";
+				$load_js = false;
+			}
+			if($piwik_site_id !== $local_piwik_site_id){
+					
+				// validate piwik url
+				if (((stripos($piwik_url, "https://") === 0) || (stripos($piwik_url, "http://") === 0)) && (substr($piwik_url, -1, 1) === "/")) {
+					?>
 			<!-- Piwik --> 
-			<script type="text/javascript">
-			$(document).ready(function() {
-				try {
-					var piwikTracker_global = Piwik.getTracker("<?php echo $params['path_to_piwik']; ?>piwik.php", <?php echo $params['site_guid']; ?>);
-					piwikTracker_global.trackPageView();
-					piwikTracker_global.enableLinkTracking();
-				} catch( err ) {}
-			});
-			</script>
-			<!-- End Piwik Tracking Code -->
-		<?php 
-	}	
-	
-	// restore access
-	elgg_set_ignore_access($ignore_access);
+			<script type="text/javascript"> 
+				var <?php echo $paq; ?> = _paq || []; 
+			
+				(function() { 
+					var u = "<?php echo $piwik_url; ?>";
+					<?php echo $paq; ?>.push(['setSiteId', <?php echo $piwik_site_id; ?>]);
+					<?php echo $paq; ?>.push(['setTrackerUrl', u + 'piwik.php']);
+					<?php echo $paq; ?>.push(['trackPageView']);
+					<?php echo $paq; ?>.push(['enableLinkTracking']);
+			
+					var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0]; 
+					g.type = 'text/javascript'; 
+					g.defer = true; 
+					g.async = true; 
+					g.src = u + 'piwik.js'; 
+					s.parentNode.insertBefore(g,s); 
+				})();
+			 </script> 
+			<!-- End Piwik Code -->
+					<?php 
+				}
+			}
+		}
+	}
 	
