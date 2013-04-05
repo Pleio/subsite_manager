@@ -110,9 +110,6 @@ function elgg_get_entity_private_settings_where_sql($table, $names = NULL, $valu
 		'wheres' => array(),
 	);
 
-	$return['joins'][] = "JOIN {$CONFIG->dbprefix}private_settings ps on
-		{$table}.guid = ps.entity_guid";
-
 	$wheres = array();
 
 	// get names wheres
@@ -157,10 +154,13 @@ function elgg_get_entity_private_settings_where_sql($table, $names = NULL, $valu
 	}
 
 	if ($names_where && $values_where) {
+		$return['joins'][] = "JOIN {$CONFIG->dbprefix}private_settings ps on {$table}.guid = ps.entity_guid";
 		$wheres[] = "($names_where AND $values_where)";
 	} elseif ($names_where) {
+		$return['joins'][] = "JOIN {$CONFIG->dbprefix}private_settings ps on {$table}.guid = ps.entity_guid";
 		$wheres[] = "($names_where)";
 	} elseif ($values_where) {
+		$return['joins'][] = "JOIN {$CONFIG->dbprefix}private_settings ps on {$table}.guid = ps.entity_guid";
 		$wheres[] = "($values_where)";
 	}
 
