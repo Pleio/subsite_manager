@@ -32,7 +32,7 @@
 				
 				$show_on_register = "";
 				$mandatory = "";
-				if(array_key_exists($name, $current_configuration)){
+				if(!empty($current_configuration) && array_key_exists($name, $current_configuration)){
 					$show_on_register = $current_configuration[$name]["show_on_register"];
 					$mandatory = $current_configuration[$name]["mandatory"];
 				}
