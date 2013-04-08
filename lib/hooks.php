@@ -1459,7 +1459,7 @@
 				$site_guids = elgg_extract("site_guids", $params);
 				
 				if($site_guids !== false){
-					if($site_guid === null){
+					if($site_guids === null){
 						$site_guids = array();
 					} elseif(!is_array($site_guids)){
 						$site_guids = array($site_guids); 

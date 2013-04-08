@@ -1,4 +1,7 @@
 = Version History =
+x.x:
+- fixed: PHP notice undeclared variable
+
 2.1 (2013-04-05):
 - changed: made compatible with Elgg 1.8.14
 - fixed: deprecated notice in pages/subsites/list.php
