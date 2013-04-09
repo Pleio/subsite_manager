@@ -952,32 +952,28 @@
 						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
 						$result["site_guids"] = false;
 					} elseif(subsite_manager_on_subsite()) {
-						$metadata_names = elgg_extract("metadata_names", $params);
-						
-						if (!empty($metadata_names) && is_array($metadata_names)) {
-							global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
-	
-							$global_metadata_fields = array(
-								// user validation
-								"validated", 
-								"validation_method",
-								// profile icon 
-								"icontime", 
-								"x1", 
-								"x2", 
-								"y1", 
-								"y2"
-							);
-							if (!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)) {
-								$global_metadata_fields = array_merge($global_metadata_fields, array_keys($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS));
-							}
-							
-							$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
-							$global_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->getOwnerGUID() . ") AND n.string IN ('" . implode("', '", $global_metadata_fields) . "'))";
-	
-							$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (" . $local_wheres . " OR " . $global_wheres . "))";
-							$result["site_guids"] = false;
+						global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
+
+						$global_metadata_fields = array(
+							// user validation
+							"validated", 
+							"validation_method",
+							// profile icon 
+							"icontime", 
+							"x1", 
+							"x2", 
+							"y1", 
+							"y2"
+						);
+						if (!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)) {
+							$global_metadata_fields = array_merge($global_metadata_fields, array_keys($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS));
 						}
+						
+						$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
+						$global_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->getOwnerGUID() . ") AND n.string IN ('" . implode("', '", $global_metadata_fields) . "'))";
+
+						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (" . $local_wheres . " OR " . $global_wheres . "))";
+						$result["site_guids"] = false;
 					} else {
 						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
 					}
