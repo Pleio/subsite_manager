@@ -5,6 +5,7 @@ x.x:
 - fixed: PHP undefined index warnings in web_services.php
 - fixed: error in subsite profile field configuration
 - fixed: wrong handling of metastring based objects hook
+- fixed: page owner not found in Tidypics
 
 2.1 (2013-04-05):
 - changed: made compatible with Elgg 1.8.14
