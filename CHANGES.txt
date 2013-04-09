@@ -1,5 +1,6 @@
 = Version History =
 x.x:
+- changed: temporary fix to copy Piwik setting from phloor_analytics_piwik to analytics
 - fixed: PHP notice undeclared variable
 - fixed: PHP warning in content_stats widget
 - fixed: PHP undefined index warnings in web_services.php

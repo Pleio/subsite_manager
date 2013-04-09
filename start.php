@@ -105,6 +105,8 @@
 		// user hover menu
 		elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'subsite_manager_user_hover_menu');
 		
+		// temporary restore Piwik settings
+		subsite_manager_fix_piwik_settings();
 	}
 	
 	function subsite_manager_pagesetup(){

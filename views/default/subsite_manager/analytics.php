@@ -40,6 +40,7 @@
 
 		if(!empty($trackID) && ($trackID != $main_trackID)){
 ?>
+<!-- Google Analytics from Pleio -->
 <script type="text/javascript">
 
 	<?php 
@@ -62,6 +63,7 @@
 	<?php } ?>
 
 </script>
+<!-- End Google Analytics -->
 <?php
 		}
 		
@@ -80,28 +82,45 @@
 					
 				// validate piwik url
 				if (((stripos($piwik_url, "https://") === 0) || (stripos($piwik_url, "http://") === 0)) && (substr($piwik_url, -1, 1) === "/")) {
+					
+					if ($load_js) {
 					?>
-			<!-- Piwik --> 
-			<script type="text/javascript"> 
-				var <?php echo $paq; ?> = _paq || []; 
-			
-				(function() { 
-					var u = "<?php echo $piwik_url; ?>";
-					<?php echo $paq; ?>.push(['setSiteId', <?php echo $piwik_site_id; ?>]);
-					<?php echo $paq; ?>.push(['setTrackerUrl', u + 'piwik.php']);
-					<?php echo $paq; ?>.push(['trackPageView']);
-					<?php echo $paq; ?>.push(['enableLinkTracking']);
-			
-					var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0]; 
-					g.type = 'text/javascript'; 
-					g.defer = true; 
-					g.async = true; 
-					g.src = u + 'piwik.js'; 
-					s.parentNode.insertBefore(g,s); 
-				})();
-			 </script> 
-			<!-- End Piwik Code -->
+						<!-- Piwik from Pleio --> 
+						<script type="text/javascript"> 
+							var <?php echo $paq; ?> = _paq || []; 
+						
+							(function() { 
+								var u = "<?php echo $piwik_url; ?>";
+								<?php echo $paq; ?>.push(['setSiteId', <?php echo $piwik_site_id; ?>]);
+								<?php echo $paq; ?>.push(['setTrackerUrl', u + 'piwik.php']);
+								<?php echo $paq; ?>.push(['trackPageView']);
+								<?php echo $paq; ?>.push(['enableLinkTracking']);
+						
+								var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0]; 
+								g.type = 'text/javascript'; 
+								g.defer = true; 
+								g.async = true; 
+								g.src = u + 'piwik.js'; 
+								s.parentNode.insertBefore(g,s); 
+							})();
+						 </script> 
+						<!-- End Piwik Code -->
+					<?php
+					} else {
+					?>
+						<!-- Piwik from Pleio --> 
+						<script type="text/javascript" src="<?php echo $piwik_url; ?>piwik.js"></script>
+						<script type="text/javascript"> 
+							try {
+								var piwikTracker = Piwik.getTracker("<?php echo $piwik_url; ?>piwik.php", <?php echo $piwik_site_id; ?>);
+								piwikTracker.trackPageView();
+							} catch( err ) {
+								console.log(err);
+							}
+						 </script> 
+						<!-- End Piwik Code -->
 					<?php 
+					}
 				}
 			}
 		}
