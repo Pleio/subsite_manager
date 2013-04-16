@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
 
@@ -211,7 +211,7 @@
 	
 	/**
 	 * This hook allows for editing the page menu just before is is drawn, no more menu items will be added
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $entity
 	 * @param mixed $return_value
@@ -226,13 +226,13 @@
 			
 			if(!subsite_manager_is_superadmin_logged_in()){
 				$allowed_menu_items = array(
-					"dashboard", 
-					"users", 
-					"users:online", 
-					"users:newest", 
-					"users:admins", 
-					"users:membership", 
-					"users:invite", 
+					"dashboard",
+					"users",
+					"users:online",
+					"users:newest",
+					"users:admins",
+					"users:membership",
+					"users:invite",
 					"users:invitations",
 					"statistics",
 					"statistics:overview",
@@ -247,7 +247,7 @@
 					"plugins",
 					"widgets",
 					"widgets:manage",
-					"widgets:default", // widget manager 
+					"widgets:default", // widget manager
 					"appearance:default_widgets", // core
 					"settings",
 					"settings:basic",
@@ -357,8 +357,8 @@
 	}
 	
 	/**
-	 * merge user profile fields from main site with subsite fields 
-	 * 
+	 * merge user profile fields from main site with subsite fields
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param mixed $returnvalue
@@ -487,15 +487,15 @@
 			
 			// check if we need to run crons on subsites
 			$cron_periods = array(
-// 				"reboot", 
-// 				"minute", 
-// 				"fiveminute", 
-// 				"fifteenmin", 
-// 				"halfhour", 
-// 				"hourly", 
-				"daily", 
-				"weekly", 
-				"monthly", 
+// 				"reboot",
+// 				"minute",
+// 				"fiveminute",
+// 				"fifteenmin",
+// 				"halfhour",
+// 				"hourly",
+				"daily",
+				"weekly",
+				"monthly",
 				"yearly"
 			);
 				
@@ -565,14 +565,14 @@
 			$entity = elgg_extract("entity", $params);
 			
 			if(elgg_instanceof($entity, "site", Subsite::SUBTYPE)){
-				return true;	
-			}	
+				return true;
+			}
 		}
 	}
 	
 	/**
 	 * Allow subsites to be found when searching
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param mixed $returnvalue
@@ -620,7 +620,7 @@
 	/**
 	 * Allow subsite admins to edit entities on their own site
 	 * And reset the password of a user on their site
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param boolean $returnvalue
@@ -658,7 +658,7 @@
 	/**
 	 * Check if the user can write to the container entity
 	 * Restores write access to subsite admins similar to @see elgg_override_permissions()
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param boolean $returnvalue
@@ -683,7 +683,7 @@
 	
 	/**
 	 * Add/remove ACL's to the users write access list
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param mixed $returnvalue
@@ -708,7 +708,7 @@
 						);
 
 						if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-							$result[$site->getACL()] = $site->name;
+							$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
 						}
 						
 						$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
@@ -723,7 +723,7 @@
 							);
 							
 							if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-								$result[$site->getACL()] = $site->name;
+								$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
 							}
 							
 							$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
@@ -744,7 +744,7 @@
 					} else {
 						// or on a subsite, so add the subsite ACL to the list
 						if($acl = $site->getACL()){
-							$result[$acl] = $site->name;
+							$result[$acl] = elgg_echo("members") . " " . $site->name;
 						}
 						
 						// check if ACCESS_PUBLIC has been disabled
@@ -784,7 +784,7 @@
 	/**
 	* Add the subsite ACL to the read access list if on a subsite.
 	* On main site they are provided by Elgg core
-	* 
+	*
 	* Subsite ACL's have a site_guid of main site
 	*
 	* @param string $hook
@@ -902,7 +902,7 @@
 	
 	/**
 	* Change the options to get metadata
-	* 
+	*
 	* User metadata can come from a different site then current site
 	*
 	* @param string $hook
@@ -956,13 +956,13 @@
 
 						$global_metadata_fields = array(
 							// user validation
-							"validated", 
+							"validated",
 							"validation_method",
-							// profile icon 
-							"icontime", 
-							"x1", 
-							"x2", 
-							"y1", 
+							// profile icon
+							"icontime",
+							"x1",
+							"x2",
+							"y1",
 							"y2"
 						);
 						if (!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)) {
@@ -1017,7 +1017,7 @@
 	
 	/**
 	 * Create metadata on the correct site
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param int $returnvalue
@@ -1041,13 +1041,13 @@
 
 					$global_metadata_fields = array(
 						// user validation
-						"validated", 
+						"validated",
 						"validation_method",
-						// profile icon 
-						"icontime", 
-						"x1", 
-						"x2", 
-						"y1", 
+						// profile icon
+						"icontime",
+						"x1",
+						"x2",
+						"y1",
 						"y2"
 					);
 					if(!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)){
@@ -1141,8 +1141,8 @@
 					foreach($category as $key => $field){
 						if($field->show_on_register !== "yes"){
 							if($main_register_fields && array_key_exists($field->metadata_name, $main_register_fields)){
-								// do nothing	
-							} else { 
+								// do nothing
+							} else {
 								unset($main_cat_fields["fields"][$cat_key][$key]);
 							}
 						}
@@ -1238,7 +1238,7 @@
 	
 	/**
 	 * Allow full views of objects and public(open) groups to be indexed by search engines
-	 * 
+	 *
 	 * @param unknown_type $hook
 	 * @param unknown_type $entity_type
 	 * @param unknown_type $return_value
@@ -1289,7 +1289,7 @@
 	
 	/**
 	 * Hook to overrule the default active users done by Elgg core
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $entity_type
 	 * @param mixed $return_value
@@ -1412,7 +1412,7 @@
 	
 	/**
 	 * Modify the access sql suffix
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param string $return_value
@@ -1438,7 +1438,7 @@
 	
 	/**
 	 * Modify the $options used by elgg_get_entities()
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param mixed $return_value
@@ -1458,7 +1458,7 @@
 					if($site_guids === null){
 						$site_guids = array();
 					} elseif(!is_array($site_guids)){
-						$site_guids = array($site_guids); 
+						$site_guids = array($site_guids);
 					}
 					
 					$site_guids[] = $site->getOwnerGUID();
@@ -1472,7 +1472,7 @@
 	
 	/**
 	 * Modify the forward() location
-	 * 
+	 *
 	 * @param string $hook
 	 * @param string $type
 	 * @param string $return_value
@@ -1498,7 +1498,7 @@
 		}
 		
 		return $result;
-	} 
+	}
 	
 	function subsite_manager_messages_route_hook($hook, $type, $return_value, $params){
 		$result = $return_value;

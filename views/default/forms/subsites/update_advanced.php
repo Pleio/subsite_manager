@@ -1,4 +1,4 @@
-<?php 
+<?php
 	global $SUBSITE_MANAGER_SUBSITE_CATEGORIES;
 	
 	$subsite = elgg_get_site_entity();
@@ -25,7 +25,7 @@
 	$default_access_options = array(
 		ACCESS_PRIVATE => elgg_echo("PRIVATE"),
 		ACCESS_FRIENDS => elgg_echo("access:friends:label"),
-		$subsite->getACL() => $subsite->name,
+		$subsite->getACL() => elgg_echo("members") . " " . $subsite->name,
 		ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN")
 	);
 	if($subsite->hasPublicACL()){
@@ -69,7 +69,7 @@
 	
 	$has_public_acl = elgg_extract("has_public_acl", $sticky_vars, $subsite->hasPublicACL());
 	if($has_public_acl === true){
-		$has_public_acl = "yes"; 
+		$has_public_acl = "yes";
 	} elseif($has_public_acl === false){
 		$has_public_acl = "no";
 	}
