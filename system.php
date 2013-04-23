@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	require_once(dirname(__FILE__) . "/lib/functions.php");
 
@@ -102,7 +102,7 @@
 					
 					$site->setPrivateSetting("plugin_order_last_update", time());
 					
-					elgg_register_event_handler("plugins_boot", "system", "elgg_filepath_cache_reset", 100);
+					elgg_register_event_handler("plugins_boot", "system", "elgg_reset_system_cache", 100);
 					elgg_register_event_handler("plugins_boot", "system", "elgg_invalidate_simplecache", 200);
 				}
 			}
@@ -149,23 +149,22 @@
 			$activate_plugins = array_unique($activate_plugins);
 				
 			// enable plugins that should be active
-			if(!empty($activate_plugins)){
+			if (!empty($activate_plugins)) {
 				// check for new plugin entities
 				elgg_generate_plugin_entities();
 				
 				set_time_limit(0);
 				$plugins = elgg_get_plugins('any');
 				
-				foreach($plugins as $plugin){
-					if(in_array($plugin->getID(), $activate_plugins)){
+				foreach ($plugins as $plugin) {
+					if (in_array($plugin->getID(), $activate_plugins)) {
 						try {
 							$plugin->activate();
-						} catch (Exception $e){
-						}	
+						} catch (Exception $e) {}
 					}
 				}
-
-				elgg_register_event_handler("plugins_boot", "system", "elgg_filepath_cache_reset", 100);
+				
+				elgg_register_event_handler("plugins_boot", "system", "elgg_reset_system_cache", 100);
 				elgg_register_event_handler("plugins_boot", "system", "elgg_invalidate_simplecache", 200);
 			}
 			
