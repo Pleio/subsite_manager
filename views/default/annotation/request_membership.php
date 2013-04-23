@@ -1,11 +1,12 @@
-<?php 
+<?php
 
 	$annotation = $vars["annotation"];
+	$site = elgg_get_site_entity();
 	
 	$hidden = access_get_show_hidden_status();
 	access_show_hidden_entities(true);
 	
-	if($owner = $annotation->getOwnerEntity()){
+	if (($owner = $annotation->getOwnerEntity()) && !$site->isUser($owner->getGUID())) {
 		$icon = elgg_view_entity_icon($owner, "small");
 		
 		$info = elgg_view_menu("annotation", array(

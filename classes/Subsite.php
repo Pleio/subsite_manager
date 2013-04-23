@@ -421,8 +421,11 @@
 				// add the user to the ACL
 				add_user_to_access_collection($user_guid, $this->getACL());
 				
-				// remove optionally available invitations for this site
+				// remove optional invitations for this site
 				$this->removeInvitation($user_guid);
+				
+				// remove optional membership requests
+				$this->removeMembershipRequests($user_guid);
 				
 				// update member_count
 				$this->getMembers(array("count" => true, "force_update_member_count" => true));
@@ -441,6 +444,7 @@
 			if(!empty($user_guid)){
 				// check if this user is not an admin of this site
 				if(!$this->isAdmin($user_guid)){
+					// remove the user from the subsite ACL
 					remove_user_from_access_collection($user_guid, $this->getACL());
 					
 					$result = parent::removeUser($user_guid);
@@ -470,6 +474,9 @@
 							$group->leave($user);
 						}
 					}
+					
+					// remove optional membership requests
+					$this->removeMembershipRequests($user_guid);
 				}
 			}
 			
@@ -729,7 +736,12 @@
 						
 						notify_user($user_guid, $this->guid, $subject, $msg, null, "email");
 						
-						$result = $annotation->delete();
+						// fail save remove, should happen in $site->addUser()
+						$annotation->delete();
+						$this->removeMembershipRequests($user_guid);
+						
+						// always ok
+						$result = true;
 					}
 				}
 			}
@@ -750,10 +762,36 @@
 					notify_user($user_guid, $this->guid, $subject, $msg, null, "email");
 					
 					$result = $annotation->delete();
+					
+					// cleanup other requests
+					$this->removeMembershipRequests($user_guid);
 				}
 			}
 			
 			return $result;
+		}
+		
+		protected function removeMembershipRequests($user_guid = 0) {
+			$user_guid = sanitise_int($user_guid, false);
+			
+			if (empty($user_guid)) {
+				$user_guid = elgg_get_logged_in_user_guid();
+			}
+			
+			if (!empty($user_guid)) {
+				$annotation_options = array(
+					"annotation_name" => "request_membership",
+					"guid" => $this->getGUID(),
+					"annotation_owner_guid" => $user_guid,
+					"limit" => false
+				);
+				
+				if ($annotations = elgg_get_annotations($annotation_options)) {
+					foreach ($annotations as $annotation) {
+						$annotation->delete();
+					}
+				}
+			}
 		}
 		
 		public function validateEmailDomain($user_guid = 0, $email_address = ""){
