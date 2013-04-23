@@ -11,6 +11,8 @@ x.x:
 - fixed: wrong handling of metastring based objects hook
 - fixed: page owner not found in Tidypics
 - fixed: cleanup of all membership requests on accept/decline
+- fixed: problem with incomplete CSS/JS on subsite create
+- fixed: problem with some plugins not activating on subsite create
 
 2.1 (2013-04-05):
 - changed: made compatible with Elgg 1.8.14

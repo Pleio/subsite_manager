@@ -180,9 +180,9 @@ function elgg_generate_plugin_entities() {
 
 /**
  * Cache a reference to this plugin by its ID
- * 
+ *
  * @param ElggPlugin $plugin
- * 
+ *
  * @access private
  */
 function _elgg_cache_plugin_by_id(ElggPlugin $plugin) {
@@ -602,10 +602,12 @@ function elgg_get_calling_plugin_id($mainfilename = false) {
  * @access private
  */
 function elgg_get_plugins_provides($type = null, $name = null) {
+	global $SUBSITE_MANAGER_PLUGINS_BOOT;
+	
 	static $provides = null;
 	$active_plugins = elgg_get_plugins('active');
 
-	if (!isset($provides)) {
+	if (!isset($provides) || !empty($SUBSITE_MANAGER_PLUGINS_BOOT)) {
 		$provides = array();
 
 		foreach ($active_plugins as $plugin) {

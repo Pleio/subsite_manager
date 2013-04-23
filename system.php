@@ -70,6 +70,7 @@
 	
 	function subsite_manager_boot_system_plugins_event_handler($event, $type, $object){
 		global $CONFIG;
+		global $SUBSITE_MANAGER_PLUGINS_BOOT;
 		
 		// needs to be set for links in html head
 		$viewtype = get_input('view', 'default');
@@ -102,8 +103,8 @@
 					
 					$site->setPrivateSetting("plugin_order_last_update", time());
 					
-					elgg_register_event_handler("plugins_boot", "system", "elgg_reset_system_cache", 100);
-					elgg_register_event_handler("plugins_boot", "system", "elgg_invalidate_simplecache", 200);
+					elgg_register_event_handler("ready", "system", "elgg_reset_system_cache", 100);
+					elgg_register_event_handler("ready", "system", "elgg_invalidate_simplecache", 200);
 				}
 			}
 			
@@ -154,6 +155,8 @@
 				elgg_generate_plugin_entities();
 				
 				set_time_limit(0);
+				$SUBSITE_MANAGER_PLUGINS_BOOT = true;
+				
 				$plugins = elgg_get_plugins('any');
 				
 				foreach ($plugins as $plugin) {
@@ -164,8 +167,10 @@
 					}
 				}
 				
-				elgg_register_event_handler("plugins_boot", "system", "elgg_reset_system_cache", 100);
-				elgg_register_event_handler("plugins_boot", "system", "elgg_invalidate_simplecache", 200);
+				$SUBSITE_MANAGER_PLUGINS_BOOT = false;
+				
+				elgg_register_event_handler("ready", "system", "elgg_reset_system_cache", 100);
+				elgg_register_event_handler("ready", "system", "elgg_invalidate_simplecache", 200);
 			}
 			
 			// restore access settings
