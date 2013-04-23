@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	global $CONFIG;
 
@@ -54,8 +54,7 @@
 				set_config("language", $lan, $site->getGUID());
 				
 				// set default access
-				$default_access = get_config("default_access", $CONFIG->site_guid);
-				set_config("default_access", $default_access, $site->getGUID());
+				set_config("default_access", $site->getACL(), $site->getGUID());
 				
 				// default allow registration
 				set_config("allow_registration", true, $site->getGUID());

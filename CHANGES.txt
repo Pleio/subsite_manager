@@ -1,7 +1,8 @@
 = Version History =
 x.x:
 - changed: temporary fix to copy Piwik setting from phloor_analytics_piwik to analytics
-- chnaged: subsite acl display name now contains more text
+- changed: subsite acl display name now contains more text
+- changed: new subsite now have their default access set to the subsite level
 - fixed: PHP notice undeclared variable
 - fixed: PHP warning in content_stats widget
 - fixed: PHP undefined index warnings in web_services.php
