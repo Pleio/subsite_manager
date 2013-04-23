@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	class Subsite extends ElggSite {
 		const SUBTYPE = "subsite";
@@ -21,7 +21,7 @@
 			$this->attributes["subtype"] = self::SUBTYPE;
 			$this->attributes["access_id"] = ACCESS_PUBLIC;
 			$this->attributes["owner_guid"] = $CONFIG->site_guid;
-			$this->attributes["container_guid"] = $CONFIG->site_guid; 
+			$this->attributes["container_guid"] = $CONFIG->site_guid;
 		}
 		
 		public function save(){
@@ -268,7 +268,7 @@
 				
 				if($admins = $this->getAdminGuids()){
 					notify_user($admins, $this->getGUID(), $subject, $message, null, "email");
-				}				
+				}
 			}
 			
 			return $result;
@@ -380,7 +380,7 @@
 								if($this->hasInvitation($user_guid, $user->email)){
 									$result = true;
 								}
-								break;	
+								break;
 						}
 						
 						if(!$result && $this->hasInvitation($user_guid, $user->email)){
@@ -547,23 +547,23 @@
 		public function hasInvitation($user_guid = 0, $email_address = ""){
 			$result = false;
 			
-			if(empty($user_guid) && empty($email_address) && isloggedin()){
+			if (empty($user_guid) && empty($email_address) && elgg_is_logged_in()) {
 				$user_guid = elgg_get_logged_in_user_guid();
-				$email_address = get_loggedin_user()->email;
-			}	
+				$email_address = elgg_get_logged_in_user_entity()->email;
+			}
 			
-			if(!empty($user_guid)){
+			if (!empty($user_guid)) {
 				$result = check_entity_relationship($user_guid, "membership_invitation", $this->guid);
 			}
 			
-			if(!$result && !empty($email_address)){
+			if (!$result && !empty($email_address)) {
 				// check if an invitation exists based on email_address
 				// make sure we use lowercase email adres, for better checks
 				$email_address = strtolower($email_address);
 				
 				$invitations = $this->getPrivateSetting("membership_invitation");
-				if(!empty($invitations)){
-					$invitations = explode(",",$invitations);
+				if (!empty($invitations)) {
+					$invitations = explode(",", $invitations);
 					$result = in_array($email_address, $invitations);
 				}
 			}
@@ -576,8 +576,8 @@
 			
 			// get users
 			$options = array(
-				"relationship" => "membership_invitation", 
-				"relationship_guid" => $this->guid, 
+				"relationship" => "membership_invitation",
+				"relationship_guid" => $this->guid,
 				"inverse_relationship" => true,
 				"limit" => 500,
 				"site_guids" => false,
@@ -604,10 +604,10 @@
 			$result = false;
 			
 			$allowed_memberships = array(
-				self::MEMBERSHIP_OPEN, 
-				self::MEMBERSHIP_APPROVAL, 
-				self::MEMBERSHIP_INVITATION, 
-				self::MEMBERSHIP_DOMAIN, 
+				self::MEMBERSHIP_OPEN,
+				self::MEMBERSHIP_APPROVAL,
+				self::MEMBERSHIP_INVITATION,
+				self::MEMBERSHIP_DOMAIN,
 				self::MEMBERSHIP_DOMAIN_APPROVAL
 			);
 			
@@ -759,9 +759,9 @@
 		public function validateEmailDomain($user_guid = 0, $email_address = ""){
 			$result = false;
 			
-			if(($this->getMembership() == self::MEMBERSHIP_DOMAIN) || ($this->getMembership() == self::MEMBERSHIP_DOMAIN_APPROVAL)){
-				if(empty($user_guid)){
-					$user = get_loggedin_user();
+			if (($this->getMembership() == self::MEMBERSHIP_DOMAIN) || ($this->getMembership() == self::MEMBERSHIP_DOMAIN_APPROVAL)) {
+				if (empty($user_guid)) {
+					$user = elgg_get_logged_in_user_entity();
 				} else {
 					$user = get_user($user_guid);
 				}
@@ -769,30 +769,30 @@
 				$domains = $this->domains;
 				$domains = strtolower($domains); // need to be lowercase
 				
-				if(!empty($domains)){
+				if (!empty($domains)) {
 					$domains = explode(",", str_replace(" ", "", $domains));
 					
 					if(!is_array($domains)){
 						$domains = array($domains);
 					}
 				
-					if(!empty($user)){
+					if (!empty($user)) {
 						// check user's email
 						$email = $user->email;
 						$email = strtolower($email); // need to be lowercase
 						
 						list($dummy, $u_domain) = explode("@", $email);
 						
-						if(in_array($u_domain, $domains)){
+						if (in_array($u_domain, $domains)) {
 							$result = true;
 						} else {
-							foreach($domains as $domain){
+							foreach ($domains as $domain) {
 								$domain = trim($domain);
 								
-								if(substr($domain, 0, 1) == "."){
+								if (substr($domain, 0, 1) == ".") {
 									$len = strlen($domain);
 									
-									if(substr($u_domain, -($len)) == $domain){
+									if (substr($u_domain, -($len)) == $domain) {
 										$result = true;
 										break;
 									}
@@ -802,20 +802,20 @@
 					}
 					
 					// check given email address
-					if(!$result && !empty($email_address)){
-						if(validate_email_address($email_address)){
+					if (!$result && !empty($email_address)) {
+						if (validate_email_address($email_address)) {
 							list($dummy, $u_domain) = explode("@", $email_address);
 							
-							if(in_array($u_domain, $domains)){
+							if (in_array($u_domain, $domains)) {
 								$result = true;
 							} else {
-								foreach($domains as $domain){
+								foreach ($domains as $domain) {
 									$domain = trim($domain);
 									
-									if(substr($domain, 0, 1) == "."){
+									if (substr($domain, 0, 1) == ".") {
 										$len = strlen($domain);
 										
-										if(substr($u_domain, -$len) == $domain){
+										if (substr($u_domain, -$len) == $domain) {
 											$result = true;
 											break;
 										}
