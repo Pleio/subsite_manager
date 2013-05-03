@@ -17,6 +17,7 @@ x.x:
 - fixed: problem with incomplete CSS/JS on subsite create
 - fixed: problem with some plugins not activating on subsite create
 - fixed: livesearch now limits groups to the current site
+- fixed: IE8 user hover layout
 - removed: Elgg 1.8.3 core files in preparation for Elgg 1.8.15
 
 2.1 (2013-04-05):
