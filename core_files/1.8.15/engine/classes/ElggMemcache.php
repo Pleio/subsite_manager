@@ -28,6 +28,14 @@ class ElggMemcache extends ElggSharedMemoryCache {
 	private $version = 0;
 
 	/**
+	 * Namespace variable used to keep various bits of the cache
+	 * separate.
+	 *
+	 * @var string
+	 */
+	private $namespace;
+	
+	/**
 	 * Connect to memcache.
 	 *
 	 * @param string $namespace The namespace for this cache to write to -
@@ -164,10 +172,21 @@ class ElggMemcache extends ElggSharedMemoryCache {
 	 * @return mixed
 	 */
 	public function load($key, $offset = 0, $limit = null) {
+		global $SUBSITE_MANAGER_MEMCACHE_TOTAL_TIME, $SUBSITE_MANAGER_MEMCACHE_TOTAL, $SUBSITE_MANAGER_MEMCACHE_ERROR_TOTAL;
+		
 		$key = $this->makeMemcacheKey($key);
 
+		$SUBSITE_MANAGER_MEMCACHE_TOTAL++;
+		// log start time
+		$debug_start = microtime(true);
+		
 		$result = $this->memcache->get($key);
+		// log end time for total
+		$memcache_time = (microtime(true) - $debug_start);
+		$SUBSITE_MANAGER_MEMCACHE_TOTAL_TIME += $memcache_time;
+		
 		if ($result === false) {
+			$SUBSITE_MANAGER_MEMCACHE_ERROR_TOTAL++;
 			elgg_log("MEMCACHE: FAILED TO LOAD $key", 'ERROR');
 		}
 
@@ -199,5 +218,34 @@ class ElggMemcache extends ElggSharedMemoryCache {
 		return true;
 
 		// @todo Namespaces as in #532
+	}
+	
+	/**
+	 * Set the namespace of this cache.
+	 * This is useful for cache types (like memcache or static variables) where there is one large
+	 * flat area of memory shared across all instances of the cache.
+	 *
+	 * @param string $namespace Namespace for cache
+	 *
+	 * @return void
+	 */
+	public function setNamespace($namespace = "default") {
+		global $CONFIG;
+		$prefix = "";
+	
+		if(!empty($CONFIG->memcache_prefix)) {
+			$prefix = $CONFIG->memcache_prefix;
+		}
+	
+		$this->namespace = $prefix . $namespace;
+	}
+	
+	/**
+	 * Get the namespace currently defined.
+	 *
+	 * @return string
+	 */
+	public function getNamespace() {
+		return $this->namespace;
 	}
 }
