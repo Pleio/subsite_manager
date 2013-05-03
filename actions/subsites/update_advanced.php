@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	admin_gatekeeper();
 	
@@ -6,7 +6,7 @@
 	elgg_make_sticky_form("subsites_update");
 	
 	// get input
-	$url = get_input("url");
+	$url = rtrim(get_input("url", "", false), "/") . "/";
 	$category = get_input("category");
 	$topbar_icon = get_resized_image_from_uploaded_file("icon", 16, 16, true);
 	$remove_icon = get_input("remove_icon");

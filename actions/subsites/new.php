@@ -12,7 +12,7 @@
 	// get input
 	$name = get_input("name");
 	$description = get_input("description");
-	$url = get_input("url");
+	$url = rtrim(get_input("url", "", false), "/") . "/";
 	$category = get_input("category");
 	
 	$membership = get_input("membership");
