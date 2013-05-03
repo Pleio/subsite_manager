@@ -5,15 +5,13 @@
 	<version>2.1</version>
 	<description>Manage Subsites</description>
 	<website>http://www.coldtrick.com/</website>
-	<copyright>(C) ColdTrick IT Solutions 2009 - 2012</copyright>
+	<copyright>(C) ColdTrick IT Solutions 2009 - 2013</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<requires>
 		<type>elgg_release</type>
 		<version>1.8.14</version>
 	</requires>
-	
-	<activate_on_install>true</activate_on_install>
 	
 	<category>ColdTrick</category>
 	<category>Pleio</category>
