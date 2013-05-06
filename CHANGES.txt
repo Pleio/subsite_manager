@@ -1,5 +1,5 @@
 = Version History =
-x.x:
+2.2 (2013-05-06):
 - added: Elgg 1.8.15 core files
 - added: Memcache namespace prefix and stats logging
 - changed: temporary fix to copy Piwik setting from phloor_analytics_piwik to analytics
