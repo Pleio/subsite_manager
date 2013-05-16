@@ -124,7 +124,7 @@
 			// cleanup most admin menu items
 			foreach($return as $index => $menu_item){
 				// echo $menu_item->getName() . "|";
-				if(($menu_item->getSection() == "admin") && !in_array($menu_item->getName(), array("resetpassword"))){
+				if(($menu_item->getSection() == "admin") && !in_array($menu_item->getName(), array("resetpassword", "waternet_workorder_manager"))){
 					unset($return[$index]);
 				}
 			}

@@ -1,5 +1,10 @@
 = Version History =
+x.x:
+
+- changed: user_hover menu admin section supports waternet_workorders
+
 2.2 (2013-05-06):
+
 - added: Elgg 1.8.15 core files
 - added: Memcache namespace prefix and stats logging
 - changed: temporary fix to copy Piwik setting from phloor_analytics_piwik to analytics
@@ -21,6 +26,7 @@
 - removed: Elgg 1.8.3 core files in preparation for Elgg 1.8.15
 
 2.1 (2013-04-05):
+
 - changed: made compatible with Elgg 1.8.14
 - fixed: deprecated notice in pages/subsites/list.php
 
