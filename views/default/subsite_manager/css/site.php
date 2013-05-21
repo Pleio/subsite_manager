@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$graphics_folder =  elgg_get_site_url() . "mod/subsite_manager/_graphics/";
 ?>
 
@@ -72,7 +72,7 @@ a.subsite-manager-account-dropdown-button:hover {
 	background: #CCC;
 	color: white;
 	text-decoration: none;
-}	
+}
 
 a.subsite-manager-account-dropdown-button:after {
     content: " ▼";
@@ -88,18 +88,14 @@ a.subsite-manager-account-dropdown-button:after {
 }
 
 .subsite-manager-account-dropdown {
-	width: 300px;
-	padding: 1px;
-	z-index: 9001;
-}
-
-.subsite-manager-account-dropdown .elgg-body > div {
+	width: 350px;
 	padding: 15px;
+	z-index: 9001;
 }
 
 .subsite-manager-account-dropdown .elgg-avatar {
 	border: 1px solid #CCC;
-	padding: 1px;
+	padding: 5px;
 	float: left;
 	margin-right: 10px;
 }
@@ -139,7 +135,7 @@ a.subsite-manager-account-dropdown-button:after {
 .subsite-manager-subsite-dropdown ul li {
 	border-style: solid;
 	border-width: 0 1px 1px;
-	border-color: #BDBDBD;	
+	border-color: #BDBDBD;
 }
 
 .subsite-manager-subsite-dropdown ul li a{

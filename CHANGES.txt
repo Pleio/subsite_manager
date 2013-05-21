@@ -2,6 +2,7 @@
 x.x:
 
 - changed: user_hover menu admin section supports waternet_workorders
+- changed: topbar user dropdown now has two more links and is wider
 
 2.2 (2013-05-06):
 
