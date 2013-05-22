@@ -51,20 +51,24 @@
 		if (elgg_is_active_plugin("groups")) {
 			$invite_count = "";
 			
-			$options = elgg_get_entities_from_relationship(array(
+			$options = array(
 				"type" => "group",
 				"relationship" => "invited",
 				"relationship_guid" => $user->getGUID(),
-				"inverse_relationship" => TRUE,
-				"count" => true,
-			));
+				"inverse_relationship" => true,
+				"count" => true
+			);
+			if (!subsite_manager_on_subsite()) {
+				$options["site_guids"] = false;
+			}
+			
 			if ($count = elgg_get_entities_from_relationship($options)) {
-				$request_count = " [" . $count . "]";
+				$invite_count = " [" . $count . "]";
 			}
 			
 			echo elgg_view("output/url", array(
 				"href" => "groups/invitations/" . $user->username,
-				"text" => elgg_echo("groups:invitations") . $request_count,
+				"text" => elgg_echo("groups:invitations") . $invite_count,
 				"title" => elgg_echo("groups:invitations"),
 				"is_trusted" => true
 			));
