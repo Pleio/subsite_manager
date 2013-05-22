@@ -204,6 +204,31 @@
 					}
 				}
 			}
+		} elseif (elgg_in_context("groups") && ($user = elgg_get_logged_in_user_entity()) && !subsite_manager_on_subsite()) {
+			if (!empty($result) && is_array($result)) {
+				
+				$options = array(
+					"type" => "group",
+					"relationship" => "invited",
+					"relationship_guid" => $user->getGUID(),
+					"inverse_relationship" => TRUE,
+					"count" => true,
+					"site_guids" => false
+				);
+				
+				if ($invite_count = elgg_get_entities_from_relationship($options)) {
+					// need to adjust the group invite counter
+					foreach($result as $section => &$menu_items) {
+						if (!empty($menu_items) && is_array($menu_items)) {
+							foreach($menu_items as $index => &$menu_item) {
+								if ($menu_item->getName() == "groups:user:invites") {
+									$menu_item->setText(elgg_echo("groups:invitations:pending", array($invite_count)));
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		
 		return $result;
