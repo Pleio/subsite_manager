@@ -109,7 +109,7 @@
 		}
 		
 		// setup walled garden
-		if (!empty($allow_registration) && ($membership != Subsite::MEMBERSHIP_INVITATION)) {
+		if (!empty($allow_registration)) {
 			set_config("allow_registration", true, $subsite->getGUID());
 		} else {
 			set_config("allow_registration", false, $subsite->getGUID());

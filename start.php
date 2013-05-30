@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	// load libary files
 	require_once(dirname(__FILE__) . "/lib/functions.php");
@@ -92,6 +92,10 @@
 			
 			// main profile fields on subsite
 			elgg_extend_view("admin/appearance/profile_fields", "subsite_manager/extends/admin/profile_fields");
+			
+			// login box register link
+			elgg_extend_view("forms/login", "subsite_manager/extends/forms/login_prepend", 1);
+			elgg_extend_view("forms/login", "subsite_manager/extends/forms/login_append", 9999999999);
 		}
 		
 		// remove extension in header because SM places it in topbar

@@ -1,4 +1,9 @@
 = Version History =
+
+x.x:
+
+- changed: invitation only sites can now have a register page but no link to it
+
 2.2.1 (2013-05-22):
 
 - changed: user_hover menu admin section supports waternet_workorders
