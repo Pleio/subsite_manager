@@ -1765,3 +1765,16 @@
 		}
 	}
 	
+	/**
+	 * Prevent a user from registering on a site
+	 *
+	 * @param string $hook
+	 * @param string $type
+	 * @param bool $returnvalue
+	 * @param array $params
+	 * @return boolean
+	 */
+	function subsite_manager_block_user_registration($hook, $type, $returnvalue, $params) {
+		return false;
+	}
+	

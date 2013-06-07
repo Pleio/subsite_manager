@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	function subsite_manager_make_admin_handler($event, $type, $entity){
 		
@@ -88,7 +88,7 @@
 	
 	/**
 	 * Create a default menu for new Subsites
-	 * 
+	 *
 	 * @param string $event
 	 * @param string $object_type
 	 * @param Subsite $object
@@ -336,7 +336,7 @@
 									unset($SUBSITE_MANAGER_INVITED_GROUPS[$index]);
 								}
 							}
-						}		
+						}
 					}
 				}
 				
@@ -377,6 +377,16 @@
 								}
 							}
 							break;
+						case Subsite::MEMBERSHIP_INVITATION:
+							// user should have been invited, so remove from subsite
+							$site->removeUser($object->getGUID());
+						
+							// make sure the user knows why registration failed
+							register_error(elgg_echo("subsite_manager:subsites:no_access:invitation"));
+						
+							// register a plugin hook to cleanup the user
+							elgg_register_plugin_hook_handler("register", "user", "subsite_manager_block_user_registration");
+							break;
 					}
 				}
 				
@@ -390,7 +400,7 @@
 	
 	/**
 	 * A plugin has been activated/deactivated or the settings have changed, reset cron cache file (only on subsite)
-	 * 
+	 *
 	 * @param string $event
 	 * @param string $object_type
 	 * @param ElggEntity $object
@@ -408,7 +418,7 @@
 	
 	/**
 	 * actions related to the login of a user
-	 * 
+	 *
 	 * @param unknown_type $event
 	 * @param unknown_type $object_type
 	 * @param unknown_type $object
@@ -442,7 +452,7 @@
 	
 	/**
 	 * Add the user to a subsite in case of open subsite or if the admin says so
-	 * 
+	 *
 	 * @param string $event
 	 * @param string $type
 	 * @param mixed $params
