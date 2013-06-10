@@ -1775,6 +1775,10 @@
 	 * @return boolean
 	 */
 	function subsite_manager_block_user_registration($hook, $type, $returnvalue, $params) {
+		// need to show all users in order to be able to delete it
+		access_show_hidden_entities(true);
+		
+		// make sure registration fails, so the user gets removed
 		return false;
 	}
 	
