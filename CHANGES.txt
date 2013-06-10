@@ -3,6 +3,7 @@
 x.x:
 
 - fixed: user can no longer register on an invitation only site without invitation
+- fixed: no information when no members found
 - changed: invitation only sites can now have a register page but no link to it
 
 2.2.1 (2013-05-22):
