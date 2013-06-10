@@ -42,6 +42,11 @@ switch ($vars['page']) {
 		break;
 }
 
+if(empty($content)) {
+	$content = elgg_echo("notfound");
+}
+
+
 $params = array(
 	'content' => $content,
 	'sidebar' => elgg_view('members/sidebar'),

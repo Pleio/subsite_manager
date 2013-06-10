@@ -47,7 +47,11 @@ if ($vars['search_type'] == 'tag') {
 		'joins' => array("JOIN {$db_prefix}users_entity u ON e.guid=u.guid"),
 		'wheres' => array("(u.name LIKE \"%{$name}%\" OR u.username LIKE \"%{$name}%\")"),
 	);
-	$content .= elgg_list_entities_from_relationship($params);
+	$content = elgg_list_entities_from_relationship($params);
+}
+
+if(empty($content)) {
+	$content = elgg_echo("notfound");
 }
 
 $params = array(
