@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	/**
 	 * Shows the main admins and all Subsite admins per Subsite
@@ -74,7 +74,7 @@
 			$subsite_list .= elgg_view_module("info", $subsite->name, $temp_list);
 			
 			// invalidate cache
-			invalidate_cache_for_entity($subsite->getGUID());
+			_elgg_invalidate_cache_for_entity($subsite->getGUID());
 		}
 	} else {
 		$subsite_list = elgg_echo("notfound");

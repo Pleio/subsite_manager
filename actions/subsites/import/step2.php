@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	admin_gatekeeper();
 	
@@ -88,7 +88,7 @@
 									
 									// notify user
 									$subject = elgg_echo("subsite_manager:import:notify:new:subject", array($site->name));
-									$msg = elgg_echo("subsite_manager:import:notify:new:message", array( 
+									$msg = elgg_echo("subsite_manager:import:notify:new:message", array(
 										$user->name,
 										$site->name,
 										$site->url,
@@ -100,7 +100,7 @@
 									notify_user($user->getGUID(), $site->getGUID(), $subject, $msg, null, "email");
 									
 									// cache cleanup
-									invalidate_cache_for_entity($user->getGUID());
+									_elgg_invalidate_cache_for_entity($user->getGUID());
 								}
 							} catch (Exception $e){}
 						}
@@ -125,7 +125,7 @@
 								notify_user($user->getGUID(), $site->getGUID(), $subject, $msg, null, "email");
 									
 								// cache cleanup
-								invalidate_cache_for_entity($user->getGUID());
+								_elgg_invalidate_cache_for_entity($user->getGUID());
 							}
 						}
 					}
