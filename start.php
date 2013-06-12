@@ -202,7 +202,7 @@
 	// access
 	elgg_register_plugin_hook_handler("permissions_check", "all", "subsite_manager_permissions_check_hook");
 	elgg_register_plugin_hook_handler("container_permissions_check", "all", "subsite_manager_container_permissions_check_hook");
-	elgg_register_plugin_hook_handler("access:collections:write", "user", "subsite_manager_access_write_hook");
+	elgg_register_plugin_hook_handler("access:collections:write", "all", "subsite_manager_access_write_hook", 999999);
 	elgg_register_plugin_hook_handler("access:collections:read", "user", "subsite_manager_access_read_hook");
 	elgg_register_plugin_hook_handler("permissions_check:metadata", "site", "subsite_manager_permissions_check_metadata");
 	elgg_register_plugin_hook_handler("access:get_sql_suffix", "user", "subsite_manager_access_get_sql_suffix_hook");

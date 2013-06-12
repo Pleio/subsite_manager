@@ -756,16 +756,31 @@
 						}
 					}
 				} else {
+					/**
+					 * 2013-06-12: reordering access list
+					 *
+					 * the list should look like:
+					 * - private
+					 * - friends
+					 * - collections (not enabled)
+					 * - group (optional)
+					 * - subsite (optional)
+					 * - logged in
+					 * - public
+					 *
+					 */
+					
+					// put group access in the right place
+					if (($group = elgg_get_page_owner_entity()) && elgg_instanceof($group, "group")) {
+						if (isset($result[$group->group_acl])) {
+							unset($result[$group->group_acl]);
+							$result[$group->group_acl] = elgg_echo("groups:group") . ": " . $group->name;
+						}
+					}
+					
 					// are we on main site?
 					if(!elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
 						// 2012-07-11: no longer share with subsite acls on main site
-// 						if($sites = subsite_manager_get_user_subsites($user_guid)){
-// 							foreach($sites as $subsite){
-// 								if($acl = $subsite->getACL()){
-// 									$result[$acl] = $subsite->name;
-// 								}
-// 							}
-// 						}
 					} else {
 						// or on a subsite, so add the subsite ACL to the list
 						if($acl = $site->getACL()){
@@ -776,6 +791,18 @@
 						if(!$site->hasPublicACL()){
 							unset($result[ACCESS_PUBLIC]);
 						}
+					}
+					
+					// put logged in access in the right place
+					if (isset($result[ACCESS_LOGGED_IN])) {
+						unset($result[ACCESS_LOGGED_IN]);
+						$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
+					}
+					
+					// put public access in the right place
+					if (isset($result[ACCESS_PUBLIC])) {
+						unset($result[ACCESS_PUBLIC]);
+						$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
 					}
 				}
 			}
