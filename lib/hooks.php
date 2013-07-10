@@ -669,8 +669,13 @@
 					}
 				}
 				
-				// check if we are resetting the user's password
-				if(elgg_instanceof($entity, "user", null, "ElggUser") && (get_input("action") == "admin/user/resetpassword")){
+				// check if we are executing allowed actions
+				$allowed_actions = array(
+					"admin/user/resetpassword",
+					"werkorder/toggle_planner",
+					"werkorder/toggle_manager"
+				);
+				if(elgg_instanceof($entity, "user", null, "ElggUser") && (in_array(get_input("action"), $allowed_actions))){
 					// check if the user is an admin of the current site and the entity (user) is a member of this site
 					if($site->isAdmin($user->getGUID()) && $site->isUser($entity->getGUID())){
 						return true;
