@@ -1058,7 +1058,17 @@
 					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
 					$result["site_guids"] = false;
 				} else {
-					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
+					$message_board = false;
+					$annotations_names = elgg_extract("annotations_names", $params);
+					
+					if(is_array($annotations_names) && ($annotations_names[0] == "messageboard")) {
+						$message_board = true;
+					}
+					
+					if(!$message_board) {
+						// only filter if not messageboard annotations get
+						$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
+					}
 					$result["site_guids"] = false;
 				}
 			}
