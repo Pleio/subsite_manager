@@ -7,6 +7,7 @@ x.x:
 - fixed: using a non existing function invalidate_cache_for_entity
 - changed: invitation only sites can now have a register page but no link to it
 - changed: order of the access list from least to most access
+- changed: activity page title now matches document title
 
 2.2.1 (2013-05-22):
 
