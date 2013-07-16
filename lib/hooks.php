@@ -124,7 +124,7 @@
 			// cleanup most admin menu items
 			foreach($return as $index => $menu_item){
 				// echo $menu_item->getName() . "|";
-				if(($menu_item->getSection() == "admin") && !in_array($menu_item->getName(), array("resetpassword", "waternet_workorder_manager"))){
+				if(($menu_item->getSection() == "admin") && !in_array($menu_item->getName(), array("resetpassword", "waternet_workorder_manager", "waternet_workorder_planner"))){
 					unset($return[$index]);
 				}
 			}
@@ -669,8 +669,13 @@
 					}
 				}
 				
-				// check if we are resetting the user's password
-				if(elgg_instanceof($entity, "user", null, "ElggUser") && (get_input("action") == "admin/user/resetpassword")){
+				// check if we are executing allowed actions
+				$allowed_actions = array(
+					"admin/user/resetpassword",
+					"werkorder/toggle_planner",
+					"werkorder/toggle_manager"
+				);
+				if(elgg_instanceof($entity, "user", null, "ElggUser") && (in_array(get_input("action"), $allowed_actions))){
 					// check if the user is an admin of the current site and the entity (user) is a member of this site
 					if($site->isAdmin($user->getGUID()) && $site->isUser($entity->getGUID())){
 						return true;
@@ -1058,7 +1063,17 @@
 					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
 					$result["site_guids"] = false;
 				} else {
-					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
+					$message_board = false;
+					$annotations_names = elgg_extract("annotations_names", $params);
+					
+					if(is_array($annotations_names) && ($annotations_names[0] == "messageboard")) {
+						$message_board = true;
+					}
+					
+					if(!$message_board) {
+						// only filter if not messageboard annotations get
+						$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
+					}
 					$result["site_guids"] = false;
 				}
 			}
