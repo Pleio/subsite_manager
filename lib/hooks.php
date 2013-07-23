@@ -514,7 +514,7 @@
 			$cron_periods = array(
 // 				"reboot",
 // 				"minute",
-// 				"fiveminute",
+				"fiveminute",
 // 				"fifteenmin",
 // 				"halfhour",
 // 				"hourly",
