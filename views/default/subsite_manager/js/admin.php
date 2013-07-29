@@ -1,4 +1,8 @@
 <?php ?>
+//<script>
+
+elgg.provide('elgg.subsite_manager');
+
 function subsite_manager_autocomplete_format_item(row, pos, items, search) {
 	var result = "";
 	
@@ -39,3 +43,26 @@ function subsite_manager_autocomplete_format_result(row, elem_id, input_name) {
 
 	$('#' + elem_id + '_autocomplete_results').append(result);
 }
+
+elgg.subsite_manager.init = function() {
+	$('#subsite-manager-newest-users-check-all').live('click', function(){
+		var checked = $(this).attr('checked') == 'checked';
+
+		$('#subsite-manager-newest-users-bulk-action .elgg-body').find('input[type=checkbox]').attr('checked', checked);
+	});
+
+	$('#subsite-manager-newest-users-bulk-action .subsite-manager-newest-users-submit').live('click', function(event){
+		if (!event.isDefaultPrevented()) {
+			// check if there are selected users
+			if ($('#subsite-manager-newest-users-bulk-action .elgg-body').find('input[type=checkbox]:checked').length < 1) {
+				return false;
+			}
+
+			$('#subsite-manager-newest-users-bulk-action').attr('action', $(this).attr('href')).submit();
+		}
+
+		event.preventDefault();
+	});
+}
+
+elgg.register_hook_handler('init', 'system', elgg.subsite_manager.init);
