@@ -277,6 +277,7 @@
 					"settings",
 					"settings:basic",
 					"settings:advanced",
+					"settings:pleio_api",
 				);
 				
 				// loop through menu sections
