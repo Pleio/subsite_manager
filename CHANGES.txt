@@ -2,12 +2,15 @@
 
 x.x:
 
+- added: bulk delete listing/action for super admins to remove users
 - fixed: user can no longer register on an invitation only site without invitation
 - fixed: no information when no members found
 - fixed: using a non existing function invalidate_cache_for_entity
+- fixed: pleio_api admin settings menu item not visible
 - changed: invitation only sites can now have a register page but no link to it
 - changed: order of the access list from least to most access
 - changed: activity page title now matches document title
+- changed:'activated the fiveminute cron on all subsites, needed for the pleio_api plugin
 
 2.2.1 (2013-05-22):
 

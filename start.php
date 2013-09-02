@@ -59,6 +59,7 @@
 		// extend CSS
 		elgg_extend_view("css/elgg", "subsite_manager/css/site");
 		elgg_extend_view("css/admin", "subsite_manager/css/autocomplete");
+		elgg_extend_view("css/admin", "subsite_manager/css/admin");
 		elgg_extend_view("css/ie7", "subsite_manager/css/ie7");
 		
 		// extend JS
@@ -289,4 +290,7 @@
 	elgg_register_action("plugins/disable_all", dirname(__FILE__) . "/actions/plugins/disable_all.php", "admin");
 	
 	elgg_register_action("subsite_manager/main_profile_fields", dirname(__FILE__) . "/actions/main_profile_fields.php", "admin");
+	
+	elgg_register_action("subsite_manager/newest_users/bulk_action", dirname(__FILE__) . "/actions/bulk_action/dummy.php", "admin");
+	elgg_register_action("subsite_manager/bulk_action/user_delete", dirname(__FILE__) . "/actions/bulk_action/user_delete.php", "admin");
 	

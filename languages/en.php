@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$english = array(
 	
@@ -196,7 +196,7 @@ you have been joined to the site %s, to visit the site please click on this link
 		
 		'subsite_manager:subsites:join:validate_domain:subject' => "E-mail validation for %s",
 		'subsite_manager:subsites:join:validate_domain:message' => "Dear %s,
-you requested to join %s. 
+you requested to join %s.
 
 This requires e-mail domain validation. Please click this link to join:
 %s
@@ -371,6 +371,11 @@ To visit the Subsite follow this link:
 		'subsite_manager:profile_fields:global:title' => "Manage global profile fields",
 		'subsite_manager:profile_fields:global:description' => "The following profile fields are managed from the main level. You can configure a limited set of options on these fields.",
 		
+		// bulk actions
+		// newest users
+		'subsite_manager:newest_users:bulk_action:check_all' => "Select all",
+		'subsite_manager:newest_users:bulk_action:created' => "Account created: %s",
+		
 		// actions
 		// general errors
 		'subsite_manager:action:error:input' => "Invalid input, please check the form",
@@ -460,6 +465,9 @@ To visit the Subsite follow this link:
 		// main profile fields configuration
 		'subsite_manager:action:main_profile_fields:success' => "Configuration saved successfully",
 		'subsite_manager:action:main_profile_fields:error:save' => "Something went wrong while saving the configuration",
+		
+		// bulk actions
+		'subsite_manager:action:bulk_action:dummy' => "Please select a bulk action to perform",
 		'' => "",
 	);
 	
