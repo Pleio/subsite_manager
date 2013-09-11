@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	// load google analytics
 
@@ -10,10 +10,7 @@
 		$gaq = "_gaq2";
 	}
 
-	// ignore access
-	$ignore_access = elgg_get_ignore_access();
-	elgg_set_ignore_access(true);
-	
+	// get the main site plugin for settings
 	$main_site = elgg_get_site_entity()->getOwnerEntity();
 	
 	$plugin_options = array(
@@ -43,7 +40,7 @@
 <!-- Google Analytics from Pleio -->
 <script type="text/javascript">
 
-	<?php 
+	<?php
 		echo "var " . $gaq . " = _gaq || [];\n";
 		echo $gaq . ".push(['_setAccount', '" . $trackID . "']);\n";
 		if(!empty($domain)) {
@@ -53,7 +50,7 @@
 		echo $gaq . ".push(['_setSiteSpeedSampleRate', 20]);\n";
 		echo $gaq . ".push(['_trackPageview']);\n";
 		
-		if($load_js){ 
+		if($load_js){
 	?>
 	(function() {
 		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -85,41 +82,41 @@
 					
 					if ($load_js) {
 					?>
-						<!-- Piwik from Pleio --> 
-						<script type="text/javascript"> 
-							var <?php echo $paq; ?> = _paq || []; 
+						<!-- Piwik from Pleio -->
+						<script type="text/javascript">
+							var <?php echo $paq; ?> = _paq || [];
 						
-							(function() { 
+							(function() {
 								var u = "<?php echo $piwik_url; ?>";
 								<?php echo $paq; ?>.push(['setSiteId', <?php echo $piwik_site_id; ?>]);
 								<?php echo $paq; ?>.push(['setTrackerUrl', u + 'piwik.php']);
 								<?php echo $paq; ?>.push(['trackPageView']);
 								<?php echo $paq; ?>.push(['enableLinkTracking']);
 						
-								var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0]; 
-								g.type = 'text/javascript'; 
-								g.defer = true; 
-								g.async = true; 
-								g.src = u + 'piwik.js'; 
-								s.parentNode.insertBefore(g,s); 
+								var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+								g.type = 'text/javascript';
+								g.defer = true;
+								g.async = true;
+								g.src = u + 'piwik.js';
+								s.parentNode.insertBefore(g,s);
 							})();
-						 </script> 
+						 </script>
 						<!-- End Piwik Code -->
 					<?php
 					} else {
 					?>
-						<!-- Piwik from Pleio --> 
+						<!-- Piwik from Pleio -->
 						<script type="text/javascript" src="<?php echo $piwik_url; ?>piwik.js"></script>
-						<script type="text/javascript"> 
+						<script type="text/javascript">
 							try {
 								var piwikTracker = Piwik.getTracker("<?php echo $piwik_url; ?>piwik.php", <?php echo $piwik_site_id; ?>);
 								piwikTracker.trackPageView();
 							} catch( err ) {
 								console.log(err);
 							}
-						 </script> 
+						 </script>
 						<!-- End Piwik Code -->
-					<?php 
+					<?php
 					}
 				}
 			}
