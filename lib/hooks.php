@@ -259,6 +259,7 @@
 					"users:membership",
 					"users:invite",
 					"users:invitations",
+					"users:export",
 					"statistics",
 					"statistics:overview",
 					"administer_utilities",
