@@ -8,6 +8,7 @@ x.x:
 - fixed: using a non existing function invalidate_cache_for_entity
 - fixed: pleio_api admin settings menu item not visible
 - fixed: access bug in analytics view
+- fixed: css/js caching issues
 - changed: invitation only sites can now have a register page but no link to it
 - changed: order of the access list from least to most access
 - changed: activity page title now matches document title

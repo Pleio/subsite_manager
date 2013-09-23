@@ -103,8 +103,7 @@
 					
 					$site->setPrivateSetting("plugin_order_last_update", time());
 					
-					elgg_register_event_handler("ready", "system", "elgg_reset_system_cache", 100);
-					elgg_register_event_handler("ready", "system", "elgg_invalidate_simplecache", 200);
+					elgg_register_event_handler("ready", "system", "subsite_manager_ready_system_handler", 100);
 				}
 			}
 			
@@ -169,8 +168,7 @@
 				
 				$SUBSITE_MANAGER_PLUGINS_BOOT = false;
 				
-				elgg_register_event_handler("ready", "system", "elgg_reset_system_cache", 100);
-				elgg_register_event_handler("ready", "system", "elgg_invalidate_simplecache", 200);
+				elgg_register_event_handler("ready", "system", "subsite_manager_ready_system_handler", 100);
 			}
 			
 			// restore access settings

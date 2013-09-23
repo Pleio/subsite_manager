@@ -107,7 +107,7 @@ if (file_exists($filename)) {
 	require_once(dirname(dirname(__FILE__)) . "/start.php");
 
 	global $CONFIG;
-	if (!isset($CONFIG->views->simplecache[$view])) {
+	if (!in_array($view, $CONFIG->views->simplecache)) {
 		header("HTTP/1.1 404 Not Found");
 		exit;
 	}

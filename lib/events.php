@@ -478,3 +478,17 @@
 			}
 		}
 	}
+	
+	/**
+	 * This event will be triggered when plugin are reordered in in 'boot' 'system'
+	 *
+	 * @param string $event
+	 * @param string $type
+	 * @param mixed $entity
+	 */
+	function subsite_manager_ready_system_handler($event, $type, $entity) {
+		
+		elgg_reset_system_cache();
+		elgg_invalidate_simplecache();
+		
+	}
