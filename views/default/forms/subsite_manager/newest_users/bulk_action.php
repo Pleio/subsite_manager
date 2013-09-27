@@ -62,7 +62,7 @@
 		
 		$delete_user = elgg_view("output/confirmlink", array(
 			"text" => elgg_echo("delete"),
-			"href" => "action/admin/user/delete?user_guid=" . $user->getGUID(),
+			"href" => "action/admin/user/delete?guid=" . $user->getGUID(),
 			"confirm" => elgg_echo("deleteconfirm"),
 			"is_trusted" => true
 		));
