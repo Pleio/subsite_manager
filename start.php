@@ -250,6 +250,7 @@
 	elgg_register_plugin_hook_handler("admin_notify", "user_support", "subsite_manager_user_support_admins_hook");
 	
 	elgg_register_plugin_hook_handler("interested_users:options", "all", "subsite_manager_object_notification_user_options_hook");
+	
 	// events
 	elgg_register_event_handler("make_admin", "user", "subsite_manager_make_admin_handler");
 	elgg_register_event_handler("remove_admin", "user", "subsite_manager_remove_admin_handler");
@@ -264,6 +265,8 @@
 	elgg_register_event_handler("login", "user", "subsite_manager_login_event_handler");
 	
 	elgg_register_event_handler("join", "group", "subsite_manager_group_join_handler");
+	
+	elgg_register_event_handler("delete", "annotation", "subsite_manager_delete_annotation_handler");
 	
 	// actions
 	elgg_register_action("subsites/new", dirname(__FILE__) . "/actions/subsites/new.php", "admin");

@@ -263,115 +263,46 @@
 	}
 	
 	function subsite_manager_create_event_handler($event, $object_type, $object){
-		global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
 		
-		if(subsite_manager_on_subsite()){
+		if (subsite_manager_on_subsite()) {
 			$site = elgg_get_site_entity();
 			
-			if($object instanceof ElggExtender){
-				$dbprefix = get_config("dbprefix");
-				$sql = "";
-				
-				switch($object->getClassName()){
-					case "ElggAnnotation":
-// 						$sql = "UPDATE " . $dbprefix . "annotations SET site_guid=" . $site->getGUID() . " WHERE id=" . $object->id;
-						break;
-					case "ElggMetadata":
-// 						static $cleanup_run_once;
-// 						if(!isset($cleanup_run_once)){
-// 							$cleanup_run_once = array();
-// 						}
-						
-// 						if(in_array($object->name, array("validated", "validated_method", "icontime", "x1", "x2", "y1", "y2")) && get_user($object->entity_guid)){
-// 							// cleanup the old metadata before we move the new data
-// 							if(!in_array($object->name, $cleanup_run_once)){
-// 								$cleanup_run_once[] = $object->name;
-// 								remove_metadata($object->entity_guid, $object->name, "", $site->getOwnerGUID());
-// 							}
-							
-// 							// this metadata should always be on main site
-// 							$sql = "UPDATE " . $dbprefix . "metadata SET site_guid=" . $site->getOwnerGUID() . " WHERE id=" . $object->id;
-// 						} elseif(!empty($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && is_array($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS)){
-// 							// check if this is main site profile data
-// 							if(array_key_exists($object->name, $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS) && get_user($object->entity_guid)){
-// 								// cleanup the old metadata before we move the new data
-// 								if(!in_array($object->name, $cleanup_run_once)){
-// 									$cleanup_run_once[] = $object->name;
-// 									remove_metadata($object->entity_guid, $object->name, "", $site->getOwnerGUID());
-// 								}
-								
-// 								// profile field from main site
-// 								$sql = "UPDATE " . $dbprefix . "metadata SET site_guid=" . $site->getOwnerGUID() . " WHERE id=" . $object->id;
-// 							}
-// 						}
-						break;
-				}
-				
-				if(!empty($sql)){
-					return update_data($sql);
-				}
-			} elseif($object instanceof ElggUser){
+			if ($object instanceof ElggUser) {
 				// check for invited groups
 				global $SUBSITE_MANAGER_INVITED_GROUPS;
-				
-				if(elgg_is_active_plugin("group_tools")){
-					$options = array(
-							'type' => "group",
-							'relationship' => 'member',
-							'relationship_guid' => $object->getGUID(),
-							'inverse_relationship' => FALSE,
-							"limit" => FALSE
-					);
-					
-					if($current_groups = elgg_get_entities_from_relationship($options)){
-						$SUBSITE_MANAGER_INVITED_GROUPS = array();
-						
-						foreach($current_groups as $group){
-							$SUBSITE_MANAGER_INVITED_GROUPS[] = $group->getGUID();
-						}
-						if($auto_join = elgg_get_plugin_setting("auto_join", "group_tools")){
-							$auto_join_group_guids = string_to_tag_array($auto_join);
-							foreach($SUBSITE_MANAGER_INVITED_GROUPS as $index => $group_guid){
-								if(in_array($group_guid, $auto_join_group_guids)){
-									unset($SUBSITE_MANAGER_INVITED_GROUPS[$index]);
-								}
-							}
-						}
-					}
-				}
 				
 				if ($site->hasInvitation($object->getGUID(), $object->email)) {
 					// you were invited so all is good
 					$site->addUser($object->getGUID());
 				} else {
 					// check if the user is allowed on this site and add the user to main site
-					switch($site->getMembership()){
+					switch ($site->getMembership()) {
 						case Subsite::MEMBERSHIP_APPROVAL:
 							// user should have requested membership, so remove from subsite and request membership
 							$site->removeUser($object->getGUID());
 							
-							if(empty($SUBSITE_MANAGER_INVITED_GROUPS)){
+							if (empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
 								$site->requestMembership(elgg_echo("subsite_manager:create:user:request_membership"), $object->getGUID());
 								system_message(elgg_echo("subsite_manager:create:user:message:request_membership"));
 							}
 							break;
 						case Subsite::MEMBERSHIP_DOMAIN:
 							// user registration only for allowed domain, so check if correct
-							if(!$site->validateEmailDomain($object->getGUID(), $object->email)){
+							if (!$site->validateEmailDomain($object->getGUID(), $object->email)) {
 								// domain of the user was not valid
 								$site->removeUser($object->getGUID());
 								
-								if(empty($SUBSITE_MANAGER_INVITED_GROUPS)){
+								if (empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
 									system_message(elgg_echo("subsite_manager:create:user:message:domain"));
 								}
 							}
 							break;
 						case Subsite::MEMBERSHIP_DOMAIN_APPROVAL:
 							// user registration by email domain or request if not match
-							if(!$site->validateEmailDomain($object->getGUID(), $object->email)){
+							if (!$site->validateEmailDomain($object->getGUID(), $object->email)) {
 								$site->removeUser($object->getGUID());
 								
-								if(empty($SUBSITE_MANAGER_INVITED_GROUPS)){
+								if (empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
 									$site->requestMembership(elgg_echo("subsite_manager:create:user:request_membership"), $object->getGUID());
 									system_message(elgg_echo("subsite_manager:create:user:message:request_membership"));
 								}
@@ -492,3 +423,27 @@
 		elgg_invalidate_simplecache();
 		
 	}
+	
+	/**
+	 * Log the groups a user was invited for
+	 *
+	 * @param string $event
+	 * @param string $type
+	 * @param ElggAnnotation $object
+	 */
+	function subsite_manager_delete_annotation_handler($event, $type, $object) {
+		
+		if (!empty($object) && ($object instanceof ElggAnnotation)) {
+			
+			if ($object->name == "email_invitation") {
+				global $SUBSITE_MANAGER_INVITED_GROUPS;
+				
+				if (!isset($SUBSITE_MANAGER_INVITED_GROUPS)) {
+					$SUBSITE_MANAGER_INVITED_GROUPS = array();
+				}
+				
+				$SUBSITE_MANAGER_INVITED_GROUPS[] = $object->getOwnerGUID();
+			}
+		}
+	}
+	

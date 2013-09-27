@@ -460,7 +460,7 @@
 						"limit" => false,
 						"site_guid" => $this->getGUID()
 					);
-						
+					
 					// exclude invited groups
 					global $SUBSITE_MANAGER_INVITED_GROUPS;
 					if(!empty($SUBSITE_MANAGER_INVITED_GROUPS)){
