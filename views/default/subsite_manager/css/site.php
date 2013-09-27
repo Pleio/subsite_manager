@@ -1,5 +1,7 @@
 <?php
 	$graphics_folder =  elgg_get_site_url() . "mod/subsite_manager/_graphics/";
+	
+	if (elgg_get_config("navigation_bar_position") != "disabled") {
 ?>
 
 /* Topbar Changes */
@@ -157,6 +159,12 @@ a.subsite-manager-account-dropdown-button:after {
 	left: 0;
 }
 /* end subsites dropdown */
+
+<?php } else { ?>
+.elgg-page-topbar {
+	display: none;
+}
+<?php } ?>
 
 #subsite-manager-no-access {
 	margin: 0 auto;

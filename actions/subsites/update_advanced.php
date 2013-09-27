@@ -136,6 +136,9 @@
 			// clear sticky form
 			elgg_clear_sticky_form("subsites_update");
 			
+			// reset cache
+			elgg_invalidate_simplecache();
+			
 			system_message(elgg_echo("admin:configuration:success"));
 		} else {
 			register_error(elgg_echo("admin:configuration:fail"));

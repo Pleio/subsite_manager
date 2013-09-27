@@ -103,9 +103,7 @@
 		elgg_unextend_view('page/elements/header', 'search/header');
 
 		// extend head for logged in users
-		if(elgg_is_logged_in()){
-			elgg_extend_view('page/elements/head', 'subsite_manager/topbar_fix');
-		}
+		elgg_extend_view('page/elements/head', 'subsite_manager/topbar_fix');
 		
 		// user hover menu
 		elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'subsite_manager_user_hover_menu');

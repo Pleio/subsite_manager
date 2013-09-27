@@ -3,6 +3,7 @@
 x.x:
 
 - added: bulk delete listing/action for super admins to remove users
+- added: option to disable subsite topbar
 - fixed: user can no longer register on an invitation only site without invitation
 - fixed: no information when no members found
 - fixed: using a non existing function invalidate_cache_for_entity

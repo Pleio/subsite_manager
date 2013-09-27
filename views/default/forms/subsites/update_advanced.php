@@ -34,7 +34,8 @@
 	
 	$navigation_bar_options = array(
 		"top" => elgg_echo("top"),
-		"bottom" => elgg_echo("bottom")
+		"bottom" => elgg_echo("bottom"),
+		"disabled" => elgg_echo("disable")
 	);
 	
 	if(elgg_is_sticky_form("subsites_update")){
