@@ -137,6 +137,10 @@
 		'subsite_manager:update:limit_admins:label' => "Limit main site admins",
 		'subsite_manager:update:limit_admins:description' => "Main site admins can only join based on the same rules as normal users.",
 	
+		'subsite_manager:subsites:update:disable_htmlawed:label' => "Disable HTML filtering for admins",
+		'subsite_manager:subsites:update:disable_htmlawed' => "Disable HTML filtering for admin to allow more spicialized HTML",
+		'subsite_manager:subsites:update:disable_htmlawed:description' => "WARNING: when checked admins can inject any HTML code. This could currupt your site",
+		
 		// Subsite - admins
 		'subsite_manager:subsites:admins:main_admins' => "Main administrators",
 		'subsite_manager:subsites:admins:subsite_admins' => "Subsite administrators",

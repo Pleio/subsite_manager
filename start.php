@@ -110,6 +110,11 @@
 		
 		// temporary restore Piwik settings
 		subsite_manager_fix_piwik_settings();
+		
+		// do we need to disable htmlawed for admins
+		if (elgg_is_admin_logged_in() && elgg_get_config("disable_htmlawed")) {
+			elgg_unregister_plugin_hook_handler("validate", "input", "htmlawed_filter_tags");
+		}
 	}
 	
 	function subsite_manager_pagesetup(){

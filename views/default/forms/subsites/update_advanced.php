@@ -57,6 +57,13 @@
 		$remove_icon = array();
 	}
 	
+	$disable_htmlawed = elgg_extract("disable_htmlawed", $sticky_vars, elgg_get_config("disable_htmlawed"));
+	if (!empty($disable_htmlawed)) {
+		$disable_htmlawed = array("checked" => "checked");
+	} else {
+		$disable_htmlawed = array();
+	}
+	
 	$membership = elgg_extract("membership", $sticky_vars, $subsite->getMembership());
 	$visibility = elgg_extract("visibility", $sticky_vars, sanitise_int($subsite->getVisibility()));
 	$domains = elgg_extract("domains", $sticky_vars, $subsite->domains);
@@ -110,6 +117,14 @@
 	$general .= "<br />";
 	$general .= elgg_view("input/dropdown", array("name" => "navigation_bar_position", "value" => $navigation_bar_postition, "options_values" => $navigation_bar_options));
 	$general .= "<div class='elgg-subtext'>" . elgg_echo("subsite_manager:navigation_bar_position:description") . "</div>";
+	$general .= "</div>";
+	
+	$general .= "<div>";
+	$general .= "<label>" . elgg_echo("subsite_manager:subsites:update:disable_htmlawed:label") . "</label>";
+	$general .= "<br />";
+	$general .= elgg_view("input/checkbox", array("name" => "disable_htmlawed", "value" => "1", "class" => "mrs") + $disable_htmlawed);
+	$general .= elgg_echo("subsite_manager:subsites:update:disable_htmlawed");
+	$general .= "<div class='elgg-subtext'>" . elgg_echo("subsite_manager:subsites:update:disable_htmlawed:description") . "</div>";
 	$general .= "</div>";
 	
 	// add general part to form

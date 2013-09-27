@@ -11,6 +11,7 @@
 	$topbar_icon = get_resized_image_from_uploaded_file("icon", 16, 16, true);
 	$remove_icon = get_input("remove_icon");
 	$navigation_bar_position = get_input("navigation_bar_position", "top");
+	$disable_htmlawed = (int) get_input("disable_htmlawed");
 	
 	$membership = get_input("membership");
 	$visibility = get_input("visibility");
@@ -131,6 +132,9 @@
 		
 		// set navigation bar position
 		set_config("navigation_bar_position", $navigation_bar_position, $subsite->getGUID());
+		
+		// save the htmlawed setting
+		set_config("disable_htmlawed", $disable_htmlawed, $subsite->getGUID());
 		
 		if($subsite->save()){
 			// clear sticky form

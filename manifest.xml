@@ -13,6 +13,12 @@
 		<version>1.8.15</version>
 	</requires>
 	
+	<requires>
+		<type>priority</type>
+		<plugin>htmlawed</plugin>
+		<priority>after</priority>
+	</requires>
+	
 	<category>ColdTrick</category>
 	<category>Pleio</category>
 </plugin_manifest>
