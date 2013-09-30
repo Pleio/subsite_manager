@@ -1,6 +1,6 @@
 = Version History =
 
-x.x:
+2.3 (2013-09-30):
 
 - added: bulk delete listing/action for super admins to remove users
 - added: option to disable subsite topbar
