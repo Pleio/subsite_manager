@@ -13,6 +13,7 @@ x.x:
 - fixed: css/js caching issues
 - fixed: new users invited for an autojoin group are not a member of the group after registration
 - fixed: able to view a group on a different (sub)site
+- fixed: caching of wrong plugin on subsites
 - changed: invitation only sites can now have a register page but no link to it
 - changed: order of the access list from least to most access
 - changed: activity page title now matches document title

@@ -1,10 +1,62 @@
-<?php 
+<?php
 
 	class SubsitePlugin extends ElggPlugin {
 		protected $fallback_plugin;
 		
-		// Plugin settings
+		/**
+		 * Loads the plugin by GUID or path.
+		 *
+		 * @warning Unlike other ElggEntity objects, you cannot null instantiate
+		 *          ElggPlugin. You must point it to an actual plugin GUID or location.
+		 *
+		 * @param mixed $plugin The GUID of the ElggPlugin object or the path of the plugin to load.
+		 *
+		 * @throws PluginException
+		 */
+		public function __construct($plugin) {
+			if (!$plugin) {
+				throw new PluginException(elgg_echo("PluginException:NullInstantiated"));
+			}
 		
+			// ElggEntity can be instantiated with a guid or an object.
+			// @todo plugins w/id 12345
+			if (is_numeric($plugin) || is_object($plugin)) {
+				ElggObject::__construct($plugin);
+				$this->path = elgg_get_plugins_path() . $this->getID();
+			} else {
+				$plugin_path = elgg_get_plugins_path();
+		
+				// not a full path, so assume an id
+				// use the default path
+				if (strpos($plugin, $plugin_path) !== 0) {
+					$plugin = $plugin_path . $plugin;
+				}
+		
+				// path checking is done in the package
+				$plugin = sanitise_filepath($plugin);
+				$this->path = $plugin;
+				$path_parts = explode("/", rtrim($plugin, "/"));
+				$plugin_id = array_pop($path_parts);
+				$this->pluginID = $plugin_id;
+		
+				// check if we're loading an existing plugin
+				$existing_plugin = elgg_get_plugin_from_id($this->pluginID);
+				$existing_guid = null;
+		
+				if ($existing_plugin) {
+					$existing_guid = $existing_plugin->guid;
+				}
+		
+				// load the rest of the plugin
+				ElggObject::__construct($existing_guid);
+			}
+		
+			if ($this->site_guid == elgg_get_site_entity()->getGUID()) {
+				_elgg_cache_plugin_by_id($this);
+			}
+		}
+		
+		// Plugin settings
 		/**
 		 * Returns an array of all settings saved for this plugin.
 		 *
