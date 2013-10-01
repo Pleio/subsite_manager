@@ -263,6 +263,8 @@
 	
 	elgg_register_plugin_hook_handler("interested_users:options", "all", "subsite_manager_object_notification_user_options_hook");
 	
+	elgg_register_plugin_hook_handler("staff_gatekeeper:options", "user_support", "subsite_manager_user_support_staff_hook");
+	
 	// events
 	elgg_register_event_handler("make_admin", "user", "subsite_manager_make_admin_handler");
 	elgg_register_event_handler("remove_admin", "user", "subsite_manager_remove_admin_handler");

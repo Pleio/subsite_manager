@@ -1,5 +1,9 @@
 = Version History =
 
+x.x:
+
+- added: support for user support staff members
+
 2.3 (2013-09-30):
 
 - added: bulk delete listing/action for super admins to remove users
