@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$session_id = base64_decode($_GET["sid"]);
 	
@@ -20,6 +20,17 @@
 		
 		if($validate === $new_validate){
 			$valid = true;
+			
+			// check for attributes
+			if (isset($_SESSION["sm_saml_attributes"]) && isset($_SESSION["sm_saml_source"])) {
+				$user = elgg_get_logged_in_user_entity();
+				$source = $_SESSION["sm_saml_source"];
+				$saml_attributes = $_SESSION["sm_saml_attributes"];
+			
+				if (!empty($user)) {
+					simplesaml_save_authentication_attributes($user, $source, $saml_attributes);
+				}
+			}
 			
 			$forward_url = get_input("forward");
 		}

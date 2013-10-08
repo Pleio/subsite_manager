@@ -378,6 +378,15 @@
 					}
 				}
 			}
+			
+			// simplesaml work around
+			if (!subsite_manager_on_subsite()) {
+				// we need to rewrite this in order to work around a 'feature'
+				if (isset($_SESSION["saml_attributes"]) && isset($_SESSION["saml_source"])) {
+					$_SESSION["sm_saml_attributes"] = $_SESSION["saml_attributes"];
+					$_SESSION["sm_saml_source"] = $_SESSION["saml_source"];
+				}
+			}
 		}
 	}
 	
