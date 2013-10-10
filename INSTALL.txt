@@ -1,2 +1,7 @@
 = Instructions =
-ToDo: write a new Installation file
+
+After installing the plugin, copy the contents of the mod/subsite_manager/core_files/[version]/ over your Elgg installation.
+
+Subsite Manager should enable itself.
+
+Run upgrade.php.
