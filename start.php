@@ -119,6 +119,18 @@
 	
 	function subsite_manager_pagesetup(){
 		
+		// validate the page_owner
+		$page_owner = elgg_get_page_owner_entity();
+		if (!empty($page_owner) && elgg_instanceof($page_owner, "group")) {
+			$site = elgg_get_site_entity();
+				
+			if ($page_owner->site_guid != $site->getGUID()) {
+				// you're viewing a group of a different (sub)site
+				system_message(elgg_echo("changebookmark"));
+				forward($page_owner->getURL());
+			}
+		}
+		
 		// validate access to the site
 		subsite_manager_validate_subsite_access();
 		
@@ -250,6 +262,8 @@
 	elgg_register_plugin_hook_handler("admin_notify", "user_support", "subsite_manager_user_support_admins_hook");
 	
 	elgg_register_plugin_hook_handler("interested_users:options", "all", "subsite_manager_object_notification_user_options_hook");
+	
+	elgg_register_plugin_hook_handler("staff_gatekeeper:options", "user_support", "subsite_manager_user_support_staff_hook");
 	
 	// events
 	elgg_register_event_handler("make_admin", "user", "subsite_manager_make_admin_handler");

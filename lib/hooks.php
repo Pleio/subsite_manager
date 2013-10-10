@@ -122,9 +122,16 @@
 		if (elgg_is_admin_logged_in() && subsite_manager_on_subsite() && $site->isUser($user->getGUID())){
 			
 			// cleanup most admin menu items
-			foreach($return as $index => $menu_item){
+			$allowed_menu_items = array(
+				"resetpassword",
+				"waternet_workorder_manager",
+				"waternet_workorder_planner",
+				"user_support_staff"
+			);
+			
+			foreach ($return as $index => $menu_item) {
 				// echo $menu_item->getName() . "|";
-				if(($menu_item->getSection() == "admin") && !in_array($menu_item->getName(), array("resetpassword", "waternet_workorder_manager", "waternet_workorder_planner"))){
+				if (($menu_item->getSection() == "admin") && !in_array($menu_item->getName(), $allowed_menu_items)) {
 					unset($return[$index]);
 				}
 			}
@@ -1824,5 +1831,27 @@
 		
 		// make sure registration fails, so the user gets removed
 		return false;
+	}
+	
+	/**
+	 * User support staff must be made staff members on the current site
+	 *
+	 * @param string $hook
+	 * @param string $type
+	 * @param array $returnvalue
+	 * @param array $params
+	 * @return array
+	 */
+	function subsite_manager_user_support_staff_hook($hook, $type, $returnvalue, $params) {
+		$result = $returnvalue;
+	
+		if (!empty($result) && is_array($result)) {
+			$support_staff_id = add_metastring("support_staff");
+			$site = elgg_get_site_entity();
+				
+			$result["wheres"] = array("(md.name_id = " . $support_staff_id . " AND md.site_guid = " . $site->getGUID() . ")");
+		}
+	
+		return $result;
 	}
 	
