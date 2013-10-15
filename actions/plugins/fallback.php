@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$guid = (int) get_input("guid");
 	
@@ -7,6 +7,7 @@
 			if(($plugin = get_entity($guid)) && elgg_instanceof($plugin, "object", "plugin", "ElggPlugin")){
 				if($plugin->unsetAllSettings()){
 					system_message(elgg_echo("subsite_manager:actions:plugins:fallback:success"));
+					elgg_invalidate_simplecache();
 				} else {
 					register_error(elgg_echo("subsite_manager:actions:plugins:fallback:error:unset"));
 				}
