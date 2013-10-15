@@ -124,6 +124,9 @@
 				$private_setting_cache->delete($this->guid);
 			}
 			
+			// unvalidate cache to reset to default behaviour
+			elgg_invalidate_simplecache();
+			
 			return $result;
 		}
 		
