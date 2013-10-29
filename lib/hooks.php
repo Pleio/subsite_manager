@@ -1327,7 +1327,7 @@
 			$vars = elgg_extract("vars", $params);
 			
 			if(!empty($vars)){
-				if(elgg_extract("full", $vars, false)){
+				if(elgg_extract("full_view", $vars, false) && elgg_extract("entity", $vars, false)){
 					if($page_owner = elgg_get_page_owner_entity()){
 						if(!elgg_instanceof($page_owner, "group", null, "ElggGroup") || (elgg_instanceof($page_owner, "group", null, "ElggGroup") && $page_owner->isPublicMembership())){
 							$SUBSITE_MANAGER_INDEX_ALLOWED = true;
