@@ -1505,7 +1505,7 @@
 			// check if the owner is a subsite admin
 			if(subsite_manager_on_subsite() && ($site = elgg_get_site_entity()) && ($site->isAdmin($owner))){
 				// extend sql to allow access to all content in this site
-				$result .= " OR (" . $table_prefix . "site_guid IN (0, " . $site->getGUID() . "))";
+				$result = "(" . $result . " OR (" . $table_prefix . "site_guid IN (0, " . $site->getGUID() . ")))";
 			}
 		}
 		
