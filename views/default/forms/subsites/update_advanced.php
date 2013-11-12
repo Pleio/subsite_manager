@@ -63,6 +63,13 @@
 	} else {
 		$disable_htmlawed = array();
 	}
+
+	$enable_frontpage_indexing = elgg_extract("enable_frontpage_indexing", $sticky_vars, elgg_get_config("enable_frontpage_indexing"));
+	if (!empty($enable_frontpage_indexing)) {
+		$enable_frontpage_indexing = array("checked" => "checked");
+	} else {
+		$enable_frontpage_indexing = array();
+	}
 	
 	$membership = elgg_extract("membership", $sticky_vars, $subsite->getMembership());
 	$visibility = elgg_extract("visibility", $sticky_vars, sanitise_int($subsite->getVisibility()));
@@ -125,6 +132,13 @@
 	$general .= elgg_view("input/checkbox", array("name" => "disable_htmlawed", "value" => "1", "class" => "mrs") + $disable_htmlawed);
 	$general .= elgg_echo("subsite_manager:subsites:update:disable_htmlawed");
 	$general .= "<div class='elgg-subtext'>" . elgg_echo("subsite_manager:subsites:update:disable_htmlawed:description") . "</div>";
+	$general .= "</div>";
+
+	$general .= "<div>";
+	$general .= "<label>" . elgg_echo("subsite_manager:subsites:update:enable_frontpage_indexing:label") . "</label>";
+	$general .= "<br />";
+	$general .= elgg_view("input/checkbox", array("name" => "enable_frontpage_indexing", "value" => "1", "class" => "mrs") + $enable_frontpage_indexing);
+	$general .= elgg_echo("subsite_manager:subsites:update:enable_frontpage_indexing");
 	$general .= "</div>";
 	
 	// add general part to form

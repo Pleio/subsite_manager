@@ -1,7 +1,5 @@
 <?php
 
-	admin_gatekeeper();
-	
 	// make a sticky form in case of an error
 	elgg_make_sticky_form("subsites_update");
 	
@@ -12,6 +10,7 @@
 	$remove_icon = get_input("remove_icon");
 	$navigation_bar_position = get_input("navigation_bar_position", "top");
 	$disable_htmlawed = (int) get_input("disable_htmlawed");
+	$enable_frontpage_indexing = (int) get_input("enable_frontpage_indexing");
 	
 	$membership = get_input("membership");
 	$visibility = get_input("visibility");
@@ -28,12 +27,12 @@
 	
 	$forward_url = REFERER;
 	
-	if(($subsite = elgg_get_site_entity()) && (elgg_instanceof($subsite, "site", Subsite::SUBTYPE, "Subsite"))){
+	if (($subsite = elgg_get_site_entity()) && (elgg_instanceof($subsite, "site", Subsite::SUBTYPE, "Subsite"))) {
 		
 		// set a new url
-		if(!empty($url) && ($subsite->url != $url)){
+		if (!empty($url) && ($subsite->url != $url)) {
 			// only by super admins
-			if(subsite_manager_is_superadmin_logged_in()){
+			if (subsite_manager_is_superadmin_logged_in()) {
 				$valid = true;
 				
 				if(!(stristr($url, "http://") || stristr($url, "https://")) || (substr($url, -1) != "/")){
@@ -58,10 +57,10 @@
 		// set site category
 		$subsite->category = $category;
 		
-		if(!empty($remove_icon)){
+		if (!empty($remove_icon)) {
 			// remove current icon
 			$subsite->removeIcon();
-		} elseif(!empty($topbar_icon)){
+		} elseif (!empty($topbar_icon)) {
 			// upload new icon
 			$tiny = get_resized_image_from_uploaded_file("icon", 25, 25, true);
 			$small = get_resized_image_from_uploaded_file("icon", 40, 40, true);
@@ -82,20 +81,20 @@
 		$subsite->setMembership($membership);
 		$subsite->setVisibility($visibility);
 		
-		if(($membership == Subsite::MEMBERSHIP_DOMAIN) || ($membership == Subsite::MEMBERSHIP_DOMAIN_APPROVAL)){
+		if (($membership == Subsite::MEMBERSHIP_DOMAIN) || ($membership == Subsite::MEMBERSHIP_DOMAIN_APPROVAL)) {
 			$subsite->domains = $domains;
 		} else {
 			unset($subsite->domains);
 		}
 		
-		if(!empty($limit_admins)){
+		if (!empty($limit_admins)) {
 			$subsite->limit_admins = true;
 		} else {
 			unset($subsite->limit_admins);
 		}
 		
 		// has public acl available
-		if($has_public_acl == "yes"){
+		if ($has_public_acl == "yes") {
 			$subsite->setPublicACL(true);
 		} else {
 			$subsite->setPublicACL(false);
@@ -103,7 +102,7 @@
 		
 		// set default access
 		set_config("default_access", $default_access, $subsite->getGUID());
-		if(!empty($allow_user_default_access)){
+		if (!empty($allow_user_default_access)) {
 			set_config("allow_user_default_access", true, $subsite->getGUID());
 		} else {
 			set_config("allow_user_default_access", false, $subsite->getGUID());
@@ -122,7 +121,7 @@
 			set_config("walled_garden", false, $subsite->getGUID());
 		}
 		// webservices api
-		if(subsite_manager_is_superadmin_logged_in()){
+		if (subsite_manager_is_superadmin_logged_in()) {
 			if (!empty($api)) {
 				unset_config("disable_api", $subsite->getGUID());
 			} else {
@@ -135,8 +134,11 @@
 		
 		// save the htmlawed setting
 		set_config("disable_htmlawed", $disable_htmlawed, $subsite->getGUID());
+
+		// save the frontpage indexing
+		set_config("enable_frontpage_indexing", $enable_frontpage_indexing, $subsite->getGUID());
 		
-		if($subsite->save()){
+		if ($subsite->save()) {
 			// clear sticky form
 			elgg_clear_sticky_form("subsites_update");
 			
