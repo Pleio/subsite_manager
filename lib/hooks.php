@@ -1375,8 +1375,7 @@
 	function subsite_manager_find_active_users_hook($hook, $entity_type, $return_value, $params){
 		$result = false;
 		
-// 		$seconds = (int) elgg_extract("seconds", $params, 600);
-		$seconds = 60;
+		$seconds = (int) elgg_extract("seconds", $params, 600);
 		
 		$limit = (int) elgg_extract("limit", $params, 10);
 		$offset = (int) elgg_extract("offset", $params, 0);
