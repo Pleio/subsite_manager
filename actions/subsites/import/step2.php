@@ -77,10 +77,10 @@
 											if(!empty($value)){
 												if(is_array($value)){
 													foreach ($value as $v){
-														create_metadata($user->getGUID(), $metadata_name, $v, "text", $user->getGUID(), ACCESS_LOGGED_IN, true, $site_guid);
+														create_metadata($user->getGUID(), $metadata_name, $v, "text", $user->getGUID(), ACCESS_PRIVATE, true, $site_guid);
 													}
 												} else {
-													create_metadata($user->getGUID(), $metadata_name, $value, "text", $user->getGUID(), ACCESS_LOGGED_IN, false, $site_guid);
+													create_metadata($user->getGUID(), $metadata_name, $value, "text", $user->getGUID(), ACCESS_PRIVATE, false, $site_guid);
 												}
 											}
 										}
