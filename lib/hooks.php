@@ -1327,7 +1327,7 @@
 			$vars = elgg_extract("vars", $params);
 			
 			if(!empty($vars)){
-				if(elgg_extract("full", $vars, false)){
+				if(elgg_extract("full_view", $vars, false) && elgg_extract("entity", $vars, false)){
 					if($page_owner = elgg_get_page_owner_entity()){
 						if(!elgg_instanceof($page_owner, "group", null, "ElggGroup") || (elgg_instanceof($page_owner, "group", null, "ElggGroup") && $page_owner->isPublicMembership())){
 							$SUBSITE_MANAGER_INDEX_ALLOWED = true;
@@ -1375,8 +1375,7 @@
 	function subsite_manager_find_active_users_hook($hook, $entity_type, $return_value, $params){
 		$result = false;
 		
-// 		$seconds = (int) elgg_extract("seconds", $params, 600);
-		$seconds = 60;
+		$seconds = (int) elgg_extract("seconds", $params, 600);
 		
 		$limit = (int) elgg_extract("limit", $params, 10);
 		$offset = (int) elgg_extract("offset", $params, 0);
@@ -1505,7 +1504,7 @@
 			// check if the owner is a subsite admin
 			if(subsite_manager_on_subsite() && ($site = elgg_get_site_entity()) && ($site->isAdmin($owner))){
 				// extend sql to allow access to all content in this site
-				$result .= " OR (" . $table_prefix . "site_guid IN (0, " . $site->getGUID() . "))";
+				$result = "(" . $result . " OR (" . $table_prefix . "site_guid IN (0, " . $site->getGUID() . ")))";
 			}
 		}
 		

@@ -141,6 +141,9 @@
 		'subsite_manager:subsites:update:disable_htmlawed' => "Disable HTML filtering for admin to allow more specialized HTML",
 		'subsite_manager:subsites:update:disable_htmlawed:description' => "WARNING: when checked admins can inject any HTML code. This could currupt your site",
 		
+		'subsite_manager:subsites:update:enable_frontpage_indexing:label' => "Indexing",
+		'subsite_manager:subsites:update:enable_frontpage_indexing' => "Enable indexing of the frontpage by search bots",
+			
 		// Subsite - admins
 		'subsite_manager:subsites:admins:main_admins' => "Main administrators",
 		'subsite_manager:subsites:admins:subsite_admins' => "Subsite administrators",
