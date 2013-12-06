@@ -270,6 +270,8 @@
 			if ($object instanceof ElggUser) {
 				// check for invited groups
 				global $SUBSITE_MANAGER_INVITED_GROUPS;
+				// check if we are importing users
+				global $SUBSITE_MANAGER_IMPORTING_USERS;
 				
 				if ($site->hasInvitation($object->getGUID(), $object->email)) {
 					// you were invited so all is good
@@ -281,7 +283,7 @@
 							// user should have requested membership, so remove from subsite and request membership
 							$site->removeUser($object->getGUID());
 							
-							if (empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
+							if (empty($SUBSITE_MANAGER_INVITED_GROUPS) && empty($SUBSITE_MANAGER_IMPORTING_USERS)) {
 								$site->requestMembership(elgg_echo("subsite_manager:create:user:request_membership"), $object->getGUID());
 								system_message(elgg_echo("subsite_manager:create:user:message:request_membership"));
 							}
@@ -292,7 +294,7 @@
 								// domain of the user was not valid
 								$site->removeUser($object->getGUID());
 								
-								if (empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
+								if (empty($SUBSITE_MANAGER_INVITED_GROUPS) && empty($SUBSITE_MANAGER_IMPORTING_USERS)) {
 									system_message(elgg_echo("subsite_manager:create:user:message:domain"));
 								}
 							}
@@ -302,7 +304,7 @@
 							if (!$site->validateEmailDomain($object->getGUID(), $object->email)) {
 								$site->removeUser($object->getGUID());
 								
-								if (empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
+								if (empty($SUBSITE_MANAGER_INVITED_GROUPS) && empty($SUBSITE_MANAGER_IMPORTING_USERS)) {
 									$site->requestMembership(elgg_echo("subsite_manager:create:user:request_membership"), $object->getGUID());
 									system_message(elgg_echo("subsite_manager:create:user:message:request_membership"));
 								}
@@ -313,7 +315,9 @@
 							$site->removeUser($object->getGUID());
 						
 							// make sure the user knows why registration failed
-							register_error(elgg_echo("subsite_manager:subsites:no_access:invitation"));
+							if (empty($SUBSITE_MANAGER_IMPORTING_USERS)) {
+								register_error(elgg_echo("subsite_manager:subsites:no_access:invitation"));
+							}
 						
 							// register a plugin hook to cleanup the user
 							elgg_register_plugin_hook_handler("register", "user", "subsite_manager_block_user_registration");

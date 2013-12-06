@@ -4,6 +4,7 @@ x.x:
 
 - added: support for user support staff members
 - fixed: saving SAML attributes on login
+- fixed: too many notifications while importing users
 
 2.3 (2013-09-30):
 

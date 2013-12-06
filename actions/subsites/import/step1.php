@@ -1,7 +1,5 @@
-<?php 
+<?php
 
-	admin_gatekeeper();
-	
 	$forward_url = REFERER;
 	
 	if(($csv = get_uploaded_file("csv")) && !empty($csv)){
