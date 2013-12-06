@@ -134,6 +134,9 @@
 					}
 				}
 				
+				// done with importing, so unset flag
+				$SUBSITE_MANAGER_IMPORTING_USERS = false;
+				
 				// restore hidden users
 				access_show_hidden_entities($hidden);
 				
