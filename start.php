@@ -68,6 +68,12 @@
 		
 		elgg_extend_view("page/elements/foot", "subsite_manager/stats");
 		
+		// change the plugin views
+		elgg_extend_view("object/plugin/full", "subsite_manager/plugin_manager/prepend", 400);
+		elgg_extend_view("plugin_manager/categories", "subsite_manager/plugin_manager/categories", 400);
+		elgg_register_plugin_hook_handler("view", "object/plugin/full", "subsite_manager_plugin_view_hook");
+		elgg_register_plugin_hook_handler("action_button", "plugin", "subsite_manager_plugin_action_button_hook");
+		
 		// only on main site
 		if(!subsite_manager_on_subsite()){
 			// subsites are searchable

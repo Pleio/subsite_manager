@@ -3,6 +3,7 @@
 x.x:
 
 - added: support for user support staff members
+- added: support for plugin manager
 - fixed: saving SAML attributes on login
 - fixed: too many notifications while importing users
 

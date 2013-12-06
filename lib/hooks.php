@@ -1854,3 +1854,60 @@
 		return $result;
 	}
 	
+	/**
+	 * Depending who and where you are, the plugin view is different
+	 *
+	 * @param string	$hook			What hook is fired
+	 * @param string	$type			Of what type
+	 * @param string	$returnvalue	The default return value
+	 * @param array		$params			Provided parameters
+	 * @return string
+	 */
+	function subsite_manager_plugin_view_hook($hook, $type, $returnvalue, $params) {
+		$result = $returnvalue;
+	
+		// restrict the displayed plugin for subsite admins (on subsites)
+		if (subsite_manager_on_subsite() && !subsite_manager_is_superadmin_logged_in()) {
+				
+			if (!empty($params) && is_array($params)) {
+				$vars = elgg_extract("vars", $params);
+				$entity = elgg_extract("entity", $vars);
+	
+				if (!empty($entity) && elgg_instanceof($entity, "object", "plugin")) {
+					if (!subsite_manager_show_plugin($entity)) {
+						$result = "<div class='hidden'></div>";
+					}
+				}
+			}
+		}
+	
+		return $result;
+	}
+	
+	/**
+	 *	Change the display of the plugin action button (activate/deactivate)
+	 *
+	 * @param string	$hook			What hook is fired
+	 * @param string	$type			Of what type
+	 * @param string	$returnvalue	The default return value
+	 * @param array		$params			Provided parameters
+	 * @return string
+	 */
+	function subsite_manager_plugin_action_button_hook($hook, $type, $returnvalue, $params) {
+		$result = $returnvalue;
+	
+		if (!empty($params) && is_array($params)) {
+			$entity = elgg_extract("entity", $params);
+				
+			if (!empty($entity) && elgg_instanceof($entity, "object", "plugin")) {
+				$enabled_everywhere = subsite_manager_check_global_plugin_setting($entity->getID(), "enabled_everywhere");
+	
+				if ($enabled_everywhere) {
+					$result = "<div style='width:20px;height:16px'></div>";
+				}
+			}
+		}
+	
+		return $result;
+	}
+	
