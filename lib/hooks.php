@@ -1900,9 +1900,9 @@
 			$entity = elgg_extract("entity", $params);
 				
 			if (!empty($entity) && elgg_instanceof($entity, "object", "plugin")) {
-				$enabled_everywhere = subsite_manager_check_global_plugin_setting($entity->getID(), "enabled_everywhere");
-	
-				if ($enabled_everywhere) {
+				$global_enabled_plugins = subsite_manager_get_global_enabled_plugins();
+				
+				if (!empty($global_enabled_plugins) && is_array($global_enabled_plugins) && in_array($entity->getID(), $global_enabled_plugins)) {
 					$result = "<div style='width:20px;height:16px'></div>";
 				}
 			}
