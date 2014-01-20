@@ -489,7 +489,11 @@ To visit the Subsite follow this link:
 	
 	// bulk actions
 	'subsite_manager:action:bulk_action:dummy' => "Please select a bulk action to perform",
-	'' => "",
+	
+	// river widget
+	'widget:river_widget:edit:site_selection' => "Activity from site",
+	'widget:river_widget:edit:site_selection:current' => "Current site",
+	'widget:river_widget:edit:site_selection:all' => "All my sites",
 );
 	
 add_translation("en", $english);
