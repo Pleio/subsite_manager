@@ -271,6 +271,8 @@ You can manage request here:
 
 Your membership request to join the Subsite %s was declined.
 
+%s
+
 This is an automated message, please don't reply",
 		
 	'subsite_manager:subsite:request_membership:approve:subject' => "Your membership request was approved",

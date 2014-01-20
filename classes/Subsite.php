@@ -765,15 +765,18 @@ class Subsite extends ElggSite {
 		return $result;
 	}
 	
-	public function declineMembershipRequest($annotation_id){
+	public function declineMembershipRequest($annotation_id, $notify_message = "") {
 		$result = false;
 		
-		if($annotation = elgg_get_annotation_from_id($annotation_id)){
-			if(($annotation->name == "request_membership") && ($annotation->entity_guid == $this->guid)){
+		if ($annotation = elgg_get_annotation_from_id($annotation_id)) {
+			if (($annotation->name == "request_membership") && ($annotation->entity_guid == $this->guid)) {
 				$user_guid = $annotation->owner_guid;
 				
 				$subject = elgg_echo("subsite_manager:subsite:request_membership:decline:subject");
-				$msg = elgg_echo("subsite_manager:subsite:request_membership:decline:message", array($this->name));
+				$msg = elgg_echo("subsite_manager:subsite:request_membership:decline:message", array(
+					$this->name,
+					$notify_message
+				));
 				
 				notify_user($user_guid, $this->guid, $subject, $msg, null, "email");
 				

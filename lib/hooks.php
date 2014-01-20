@@ -344,10 +344,10 @@
 	function subsite_manager_annotation_menu_handler($hook, $entity, $return_value, $params){
 		$result = $return_value;
 		
-		if(subsite_manager_on_subsite() && elgg_in_context("admin")){
-			if($annotation = elgg_extract("annotation", $params)){
-				if($annotation->name == "request_membership"){
-					if($user = get_user($annotation->owner_guid)){
+		if (subsite_manager_on_subsite() && elgg_in_context("admin")) {
+			if ($annotation = elgg_extract("annotation", $params)) {
+				if ($annotation->name == "request_membership") {
+					if ($user = get_user($annotation->owner_guid)) {
 						$result[] = ElggMenuItem::factory(array(
 							"name" => "approve",
 							"text" => elgg_echo("subsite_manager:approve"),
@@ -360,7 +360,8 @@
 							"name" => "decline",
 							"text" => elgg_echo("subsite_manager:decline"),
 							"href" => "action/subsites/membership/decline?annotation_id=" . $annotation->id,
-							"confirm" => elgg_echo("subsite_manager:request_membership:decline:confirm"),
+							"rel" => elgg_echo("subsite_manager:request_membership:decline:confirm"),
+							"is_action" => true,
 							"priority" => 20
 						));
 					}
