@@ -153,7 +153,8 @@
 					"name" => "subsite_manager_remove_user",
 					"text" => elgg_echo("subsite_manager:subsites:remove_user"),
 					"href" => "action/subsites/remove_user?user_guid=" . $user->getGUID(),
-					"confirm" => elgg_echo("question:areyousure"),
+					"rel" => elgg_echo("subsite_manager:subsite:remove_user:confirm"),
+					"is_action" => true,
 					"section" => "admin"
 				);
 				$return[] = ElggMenuItem::factory($menu_options);

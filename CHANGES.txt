@@ -4,6 +4,7 @@ x.x:
 
 - added: support for user support staff members
 - added: support for plugin manager
+- added: notification when a site administrator removes a user from the site 
 - fixed: saving SAML attributes on login
 - fixed: too many notifications while importing users
 
