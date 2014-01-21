@@ -79,6 +79,9 @@
 			// subsites are searchable
 			elgg_register_entity_type("site", Subsite::SUBTYPE);
 			
+			// reregister widget so you can have multiple
+			elgg_register_widget_type('river_widget', elgg_echo('river:widget:title'), elgg_echo('river:widget:description'), "all", true);
+			
 			// (featured) subsites widget
 			elgg_register_widget_type("subsites", elgg_echo("subsite_manager:widgets:subsites:title"), elgg_echo("subsite_manager:widgets:subsites:description"), "index", true);
 		} else {
