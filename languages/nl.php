@@ -1,5 +1,26 @@
 <?php
-$dutch = array (
+$language = array (
+  'subsite_manager:subsite:remove_user:confirm' => 'Weet je zeker dat je deze gebruiker wilt verwijderen van de site?\nOptioneel kun je uitleggen waarom de gebruiker is verwijderd.',
+  'subsite_manager:subsite:remove_user:subject' => 'Je lidmaatschap van de deelsite %s is ingetrokken.',
+  'subsite_manager:subsite:remove_user:message' => 'Hallo, %s
+
+De deelsite beheerder %s heeft je lidmaatschap van de deelsite %s ingetrokken.
+
+%s',
+  'subsite_manager:subsites:update:enable_frontpage_indexing:label' => 'Indexering',
+  'subsite_manager:subsites:update:enable_frontpage_indexing' => 'Mag de index pagina worden geïndexeerd door zoekmachines',
+  'subsite_manager:subsite:request_membership:decline:message' => 'Hallo,
+
+Uw verzoek om lid te worden van de deelsite %s is geweigerd.
+
+%s
+
+Dit is een automatisch bericht, gelieve niet te reageren',
+  'subsite_manager:actions:subsites:join:validate_domain:error:domain' => 'Het domein van het opgegeven e-mail adres is niet geldig op deze deelsite',
+  'subsite_manager:actions:subsites:join:validate_domain:success' => 'Er is een e-mail verstuurd naar je e-mail adres, controleer je inbox',
+  'widget:river_widget:edit:site_selection' => 'Activiteit van de site',
+  'widget:river_widget:edit:site_selection:current' => 'Huidige site',
+  'widget:river_widget:edit:site_selection:all' => 'Al mijn sites',
   'item:site:subsite' => 'Deelsites',
   'subsite_manager:continue' => 'Voortzetten',
   'subsite_manager:sample' => 'Voorbeeld',
@@ -188,11 +209,6 @@ U kunt hier de aanvraag beheren:
   'subsite_manager:request_membership:approve:confirm' => 'Weet u zeker dat u deze gebruiker toegang wilt geven tot de deelsite',
   'subsite_manager:request_membership:decline:confirm' => 'Weet u zeker dat u deze gebruiker toegang wilt weigeren tot de deelsite',
   'subsite_manager:subsite:request_membership:decline:subject' => 'Uw aanvraag om lid te worden werd geweigerd',
-  'subsite_manager:subsite:request_membership:decline:message' => 'Hallo,
-
-Uw verzoek om lid te worden van de deelsite %s is geweigerd.
-
-Dit is een automatisch bericht, gelieve niet te reageren',
   'subsite_manager:subsite:request_membership:approve:subject' => 'Uw aanvraag om lid te worden werd goedgekeurd',
   'subsite_manager:subsite:request_membership:approve:message' => 'Hallo,
 
@@ -333,4 +349,4 @@ Voor een bezoek aan de deelsite volg deze link:
   'subsite_manager:action:bulk_action:dummy' => 'Selecteer een bulkactie uit te voeren',
   'admin:users:admins' => 'Beheerders',
 );
-add_translation("nl", $dutch);
+add_translation("nl", $language);
