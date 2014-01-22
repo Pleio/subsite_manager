@@ -58,7 +58,8 @@ if (elgg_in_context('dashboard') && !subsite_manager_on_subsite()) {
 		echo elgg_view("input/dropdown", array(
 				"name" => "params[activity_site_guid]",
 				"value" => $vars['entity']->activity_site_guid,
-				"options_values" => $pulldown_options
+				"options_values" => $pulldown_options,
+				"style" => "width: 100px"
 			));
 		echo "</div>";
 	}
