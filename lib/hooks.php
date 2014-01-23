@@ -126,7 +126,8 @@
 				"resetpassword",
 				"waternet_workorder_manager",
 				"waternet_workorder_planner",
-				"user_support_staff"
+				"user_support_staff",
+				"entity_tools:admin"
 			);
 			
 			foreach ($return as $index => $menu_item) {
