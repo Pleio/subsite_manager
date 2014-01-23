@@ -437,8 +437,8 @@ To visit the Subsite follow this link:
 	'subsite_manager:actions:subsites:join:request_approval:success' => "You've successfully requested membership. You'll be notified when it has been approved.",
 	
 	// subsites - join - validate domain
-	'subsite_manager:actions:subsites:join:validate_domain:error:domain' => "",
-	'subsite_manager:actions:subsites:join:validate_domain:success' => "",
+	'subsite_manager:actions:subsites:join:validate_domain:error:domain' => "The domain of the provided e-mail address isn't valid on this subsite",
+	'subsite_manager:actions:subsites:join:validate_domain:success' => "An e-mail has been sent to you e-mail address, please check your inbox",
 	
 	// manage plugins
 	'subsite_manager:action:plugins:manage:success' => "New plugin settings saved successfully",
