@@ -121,8 +121,10 @@
 		subsite_manager_fix_piwik_settings();
 		
 		// do we need to disable htmlawed for admins
-		if (elgg_is_admin_logged_in() && elgg_get_config("disable_htmlawed")) {
-			elgg_unregister_plugin_hook_handler("validate", "input", "htmlawed_filter_tags");
+		if (elgg_get_config("disable_htmlawed")) {
+			if (elgg_is_admin_logged_in() || elgg_in_context("static")) {
+				elgg_unregister_plugin_hook_handler("validate", "input", "htmlawed_filter_tags");
+			}
 		}
 	}
 	
@@ -201,6 +203,13 @@
 		
 		if(in_array($context, array("profile", "friends", "friendsof"))){
 			elgg_unregister_plugin_hook_handler("output:before", "layout", "elgg_views_add_rss_link");
+		}
+		
+		// do we need to disable htmlawed for admins
+		if (elgg_get_config("disable_htmlawed")) {
+			if (elgg_is_admin_logged_in() || elgg_in_context("static")) {
+				elgg_unregister_plugin_hook_handler("validate", "input", "htmlawed_filter_tags");
+			}
 		}
 	}
 
