@@ -529,7 +529,7 @@
 				"fiveminute",
 // 				"fifteenmin",
 // 				"halfhour",
-// 				"hourly",
+				"hourly",
 				"daily",
 				"weekly",
 				"monthly",
