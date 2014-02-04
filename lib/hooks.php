@@ -1027,6 +1027,8 @@
 							// user validation
 							"validated",
 							"validation_method",
+							// official validator
+							"validated_official",
 							// profile icon
 							"icontime",
 							"x1",
