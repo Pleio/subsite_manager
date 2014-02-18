@@ -1903,3 +1903,62 @@
 		return $result;
 	}
 	
+	/**
+	 * Make sure the correct site administrators are notified for security tools updates, not all admins
+	 *
+	 * @param string     $hook        notify_admins
+	 * @param string     $type        security_tools
+	 * @param ElggUser[] $returnvalue default admins to be notified (this is too many)
+	 * @param array      $params      some more information to bas the result set on
+	 *
+	 * @return ElggUser[]
+	 */
+	function subsite_manager_notify_admins_security_tools_hook($hook, $type, $returnvalue, $params) {
+		$result = array();
+	
+		if (!empty($params) && is_array($params)) {
+			$user = elgg_extract("user", $params);
+				
+			if (subsite_manager_on_subsite()) {
+				// get subsite admins
+				$site = elgg_get_site_entity();
+	
+				$user_guids = $site->getAdminGuids();
+				if (!empty($user_guids)) {
+						
+					foreach ($user_guids as $user_guid) {
+						if ($user_guid != $user->getGUID()) {
+							$admin = get_user($user_guid);
+								
+							if (!empty($admin)) {
+								$result[] = $admin;
+							}
+						}
+					}
+				}
+			} else {
+				// get main admins
+				$options = array(
+					"type" => "user",
+					"limit" => false,
+					"private_setting_name_value_pairs" => array(
+						"name" => "superadmin",
+						"value" => true
+					),
+					"joins" => array("JOIN " . get_config("dbprefix") . "users_entity ue ON ue.guid = e.guid"),
+					"wheres" => array(
+						"(ue.admin = 'yes')",
+						"(e.guid <> " . $user->getGUID() . ")"
+					),
+				);
+	
+				$admins = elgg_get_entities_from_private_settings($options);
+				if (!empty($admins)) {
+					$result = $admins;
+				}
+			}
+		}
+	
+		return $result;
+	}
+	

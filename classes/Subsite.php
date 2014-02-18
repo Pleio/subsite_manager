@@ -290,51 +290,67 @@ class Subsite extends ElggSite {
 		return $result;
 	}
 
-	public function makeAdmin($user_guid = 0){
+	public function makeAdmin($user_guid = 0) {
 		$result = false;
-
-		if(empty($user_guid)){
+		
+		if (empty($user_guid)) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
-
-		if(!empty($user_guid)){
-			if(!($admin_guids = $this->getAdminGuids())){
+		
+		if (!empty($user_guid)) {
+			$admin_guids = $this->getAdminGuids();
+			if (empty($admin_guids)) {
 				$admin_guids = array();
+			} elseif (!is_array($admin_guids)) {
+				$admin_guids = array($admin_guids);
 			}
-
-			if(!in_array($user_guid, $admin_guids)){
-				$admin_guids[] = $user_guid;
-
-				$result = $this->setAdminGuids($admin_guids);
+			
+			if (!in_array($user_guid, $admin_guids)) {
+				// addition for security tools
+				$new_admin = get_user($user_guid);
+				if (elgg_trigger_event("make_admin", "user", $new_admin)) {
+					
+					$admin_guids[] = $user_guid;
+					
+					$result = $this->setAdminGuids($admin_guids);
+				}
 			} else {
 				$result = true;
 			}
 		}
-
+		
 		return $result;
 	}
 
-	public function removeAdmin($user_guid = 0){
+	public function removeAdmin($user_guid = 0) {
 		$result = false;
 
-		if(empty($user_guid)){
+		if (empty($user_guid)) {
 			$user_guid = elgg_get_logged_in_user_guid();
 		}
-
-		if(!empty($user_guid)){
-			if(!($admin_guids = $this->getAdminGuids())){
+		
+		if (!empty($user_guid)) {
+			$admin_guids = $this->getAdminGuids();
+			if (empty($admin_guids)) {
 				$admin_guids = array();
+			} elseif (!is_array($admin_guids)) {
+				$admin_guids = array($admin_guids);
 			}
-
-			if(($key = array_search($user_guid, $admin_guids)) !== false){
-				unset($admin_guids[$key]);
-
-				$result = $this->setAdminGuids($admin_guids);
+			
+			$key = array_search($user_guid, $admin_guids);
+			if ($key !== false) {
+				// addition for security tools
+				$old_admin = get_user($user_guid);
+				if (elgg_trigger_event("remove_admin", "user", $old_admin)) {
+					unset($admin_guids[$key]);
+					
+					$result = $this->setAdminGuids($admin_guids);
+				}
 			} else {
 				$result = true;
 			}
 		}
-
+		
 		return $result;
 	}
 
