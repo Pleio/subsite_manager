@@ -6,8 +6,22 @@ x.x:
 - added: support for plugin manager
 - added: notification when a site administrator removes a user from the site
 - added: personal message when declining membership request 
+- added: Dutch translation
+- added: entity to the check if you are currently viewing content that can be indexed
+- added: option to enable indexing of the frontpage
+- added: user entity statistics
+- added: site selection to river widget
+- added: entity_tools menu item to allowed admin user hover menu items
+- added: support for security tools admin notifications
 - fixed: saving SAML attributes on login
 - fixed: too many notifications while importing users
+- fixed: invalidate cache on plugin settings fallback
+- fixed: online is active latest 10 minutes (default)
+- fixed: plugin button in some cases still visible
+- fixed: enabled hourly cron on subsites (required for newsletter plugin)
+- changed: create metadata with private access level when importing users on Subsites
+- changed: added official validator metadata to global metadata
+- removed: annotation limitations for user entities
 
 2.3 (2013-09-30):
 
