@@ -1062,33 +1062,18 @@
 	function subsite_manager_metastring_objects_get_hook_annotations($hook, $type, $returnvalue, $params){
 		$result = $returnvalue;
 		
-		if($entity_guid = elgg_extract("guid", $params)){
-			$site = elgg_get_site_entity();
-			$annotation_site_guid = $site->getGUID();
-			
-			if(!isset($result["wheres"])){
+		if ($entity_guid = elgg_extract("guid", $params)) {
+			if (!isset($result["wheres"])) {
 				$result["wheres"] = array();
 			}
 			
-			if($entity = get_entity_as_row($entity_guid)){
-				if($entity->type != "user"){
+			if ($entity = get_entity_as_row($entity_guid)) {
+				$result["site_guids"] = false;
+				
+				if ($entity->type != "user") {
 					$annotation_site_guid = $entity->site_guid;
 					
 					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
-					$result["site_guids"] = false;
-				} else {
-					$message_board = false;
-					$annotations_names = elgg_extract("annotations_names", $params);
-					
-					if(is_array($annotations_names) && ($annotations_names[0] == "messageboard")) {
-						$message_board = true;
-					}
-					
-					if(!$message_board) {
-						// only filter if not messageboard annotations get
-						$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
-					}
-					$result["site_guids"] = false;
 				}
 			}
 		}
