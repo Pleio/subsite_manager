@@ -290,7 +290,15 @@ class Subsite extends ElggSite {
 		return $result;
 	}
 
-	public function makeAdmin($user_guid = 0) {
+	/**
+	 * Assign a user as administrator to this Subsite
+	 *
+	 * @param number $user_guid the guid of the user to assign
+	 * @param string $initial   is this action taken during the initial creation of the site. Added to prevent problems with event confilcts
+	 *
+	 * @return boolean
+	 */
+	public function makeAdmin($user_guid = 0, $initial = false) {
 		$result = false;
 		
 		if (empty($user_guid)) {
@@ -308,7 +316,7 @@ class Subsite extends ElggSite {
 			if (!in_array($user_guid, $admin_guids)) {
 				// addition for security tools
 				$new_admin = get_user($user_guid);
-				if (elgg_trigger_event("make_admin", "user", $new_admin)) {
+				if ($initial || elgg_trigger_event("make_admin", "user", $new_admin)) {
 					
 					$admin_guids[] = $user_guid;
 					

@@ -1,5 +1,9 @@
 = Version History =
 
+x.x:
+
+- fixed: issue when assigning subsite admins during creation didn't give them the correct rights
+
 2.4 (2014-02-19):
 
 - added: support for user support staff members

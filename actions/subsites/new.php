@@ -123,7 +123,7 @@
 				if(!empty($admin)){
 					if($user = get_user_by_username($admin)){
 						$site->addUser($user->getGUID());
-						$site->makeAdmin($user->getGUID());
+						$site->makeAdmin($user->getGUID(), true);
 					}
 				}
 				
