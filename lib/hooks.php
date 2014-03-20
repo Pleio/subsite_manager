@@ -1406,6 +1406,9 @@
 					
 					set_input("username", $page[1]);
 					$user = elgg_get_page_owner_entity();
+					if (empty($user)) {
+						$user = elgg_get_logged_in_user_entity();
+					}
 					
 					// set breadcrumb
 					elgg_push_breadcrumb(elgg_echo("groups"), "groups/all");
@@ -1424,7 +1427,34 @@
 					));
 					elgg_set_ignore_access($ia);
 					
-					$content = elgg_view("groups/invitationrequests", array("invitations" => $invitations));
+					// get membership requests
+					$request_options = array(
+						"type" => "group",
+						"relationship" => "membership_request",
+						"relationship_guid" => $user->getGUID(),
+						"limit" => false,
+						"full_view" => false,
+						"pagination" => false
+					);
+					$requests = elgg_get_entities_from_relationship($request_options);
+					
+					// invite by email allowed
+					$invite_email = false;
+					$email_invitations = false;
+					
+					if (elgg_get_plugin_setting("invite_email", "group_tools") == "yes") {
+						$invite_email = true;
+						
+						$email_invitations = group_tools_get_invited_groups_by_email($user->email);
+					}
+					
+					$content = elgg_view("groups/invitationrequests", array(
+						"user" => $user,
+						"invitations" => $invitations,
+						"requests" => $requests,
+						"invite_email" => $invite_email,
+						"email_invitations" => $email_invitations
+					));
 					
 					$params = array(
 						"content" => $content,

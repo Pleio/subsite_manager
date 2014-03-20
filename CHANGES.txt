@@ -3,6 +3,7 @@
 x.x:
 
 - fixed: issue when assigning subsite admins during creation didn't give them the correct rights
+- fixed: missing support for some group_tools options
 
 2.4 (2014-02-19):
 
