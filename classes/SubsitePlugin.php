@@ -570,4 +570,36 @@ class SubsitePlugin extends ElggPlugin {
 			return $this->setStatus(false, $site_guid);
 		}
 	}
+	
+	/**
+	 * Sets the plugin to active or inactive for $site_guid.
+	 *
+	 * ColdTrick: this function is needed because it's private in ElggPlugin
+	 *
+	 * @param bool  $active    Set to active or inactive
+	 * @param mixed $site_guid Int for specific site, null for current site.
+	 *
+	 * @return bool
+	 */
+	private function setStatus($active, $site_guid = null) {
+		if (!$this->guid) {
+			return false;
+		}
+	
+		if ($site_guid) {
+			$site = get_entity($site_guid);
+	
+			if (!($site instanceof ElggSite)) {
+				return false;
+			}
+		} else {
+			$site = get_config('site');
+		}
+	
+		if ($active) {
+			return add_entity_relationship($this->guid, 'active_plugin', $site->guid);
+		} else {
+			return remove_entity_relationship($this->guid, 'active_plugin', $site->guid);
+		}
+	}
 }
