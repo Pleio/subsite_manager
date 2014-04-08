@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 	function subsite_manager_get_subsite_last_activity($site_guid){
 		$result = false;
 		
 		$site_guid = (int) $site_guid;
 		
-		if(!empty($guid)){
+		if(!empty($site_guid)){
 			$sql = "SELECT max(time_updated) as activity";
 			$sql .= " FROM " . get_config("dbprefix") . "entities";
 			$sql .= " WHERE site_guid = " . $site_guid;
@@ -52,9 +52,9 @@
 	
 	/**
 	 * Return whether or not the user is a super admin
-	 * 
+	 *
 	 * Needs a had coded query because of deadloop problems with get_private_setting
-	 * 
+	 *
 	 * @param int $user_guid
 	 * @return boolean
 	 */
@@ -413,7 +413,7 @@
 				
 				$site = elgg_get_site_entity();
 				if(subsite_manager_on_subsite()){
-					$site = $site->getOwnerEntity();	
+					$site = $site->getOwnerEntity();
 				}
 				
 				if($configured_plugins = $site->getPrivateSetting($setting)){
@@ -555,7 +555,7 @@
 	
 	/**
 	 * Function to create a cache file of which crons to run on this subsite
-	 * 
+	 *
 	 */
 	function subsite_manager_make_cron_cache(){
 		
@@ -597,7 +597,7 @@
 	
 	/**
 	 * Cleanup the cron cache file
-	 * 
+	 *
 	 * @param int $site_guid (optional) defaults to current site
 	 */
 	function subsite_manager_remove_cron_cache($site_guid = 0){
@@ -619,7 +619,7 @@
 	
 	/**
 	 * Reset the user in memcache
-	 * 
+	 *
 	 * @param ElggUser $user
 	 */
 	function subsite_manager_login_shutdown_hook(ElggUser $user){
@@ -738,7 +738,7 @@
 				"subtype" => Subsite::SUBTYPE,
 				"limit" => false,
 				"site_guids" => false,
-				"relationship" => "membership_invitation", 
+				"relationship" => "membership_invitation",
 				"relationship_guid" => $user->getGUID()
 			);
 				
