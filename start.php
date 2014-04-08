@@ -334,3 +334,5 @@
 	elgg_register_action("subsite_manager/newest_users/bulk_action", dirname(__FILE__) . "/actions/bulk_action/dummy.php", "admin");
 	elgg_register_action("subsite_manager/bulk_action/user_delete", dirname(__FILE__) . "/actions/bulk_action/user_delete.php", "admin");
 	
+	elgg_register_action("subsites/export_admins", dirname(__FILE__) . "/actions/subsites/export_admins.php", "admin");
+	

@@ -2,9 +2,11 @@
 
 x.x:
 
+- added: CSV export for all the subsite admins
 - fixed: issue when assigning subsite admins during creation didn't give them the correct rights
 - fixed: missing support for some group_tools options
 - fixed: running deactivation scripts could break other subsites
+- changed: subsite admin listing now has pagination
 
 2.4 (2014-02-19):
 
