@@ -83,6 +83,9 @@ if ($batch->valid()) {
 		$contents .= fread($fh, 2048);
 	}
 	
+	// cleanup the temp file
+	fclose($fh);
+	
 	// output the csv
 	header("Content-Type: text/csv");
 	header("Content-Disposition: attachment; filename=\"subsite_admins.csv\"");
