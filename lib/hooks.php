@@ -273,6 +273,7 @@
 					"statistics:overview",
 					"administer_utilities",
 					"administer_utilities:reportedcontent",
+					"site_announcements",
 					"appearance",
 					"appearance:profile_fields",
 					"appearance:template",

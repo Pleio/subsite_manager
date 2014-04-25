@@ -3,6 +3,7 @@
 x.x:
 
 - added: CSV export for all the subsite admins
+- added: support for site_announcements admin menu item
 - fixed: issue when assigning subsite admins during creation didn't give them the correct rights
 - fixed: missing support for some group_tools options
 - fixed: running deactivation scripts could break other subsites
