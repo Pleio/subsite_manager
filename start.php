@@ -245,6 +245,7 @@
 	elgg_register_plugin_hook_handler("route", "groups", "subsite_manager_groups_route_hook");
 	elgg_register_plugin_hook_handler("route", "messages", "subsite_manager_messages_route_hook");
 	elgg_register_plugin_hook_handler("route", "saml", "subsite_manager_saml_route_hook");
+	elgg_register_plugin_hook_handler("route", "translation_editor", "subsite_manager_translation_editor_route_hook");
 	
 	elgg_register_plugin_hook_handler("entity:icon:url", "user", "subsite_manager_usericon_hook", 1000);
 	elgg_register_plugin_hook_handler("entities:get_url", "group", "subsite_manager_entities_get_url_hook");

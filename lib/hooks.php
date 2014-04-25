@@ -1993,3 +1993,19 @@
 		return $result;
 	}
 	
+	/**
+	 * Protect the translation editor from unautherized admins
+	 *
+	 * @param string $hook        'route'
+	 * @param string $type        'translation_editor'
+	 * @param array  $returnvalue page elements
+	 * @param null   $params      null
+	 */
+	function subsite_manager_translation_editor_route_hook($hook, $type, $returnvalue, $params) {
+	
+		if (subsite_manager_on_subsite() && !subsite_manager_is_superadmin_logged_in()) {
+			register_error(elgg_echo("subsite_manager:action:error:on_subsite"));
+			forward(REFERER);
+		}
+	}
+	
