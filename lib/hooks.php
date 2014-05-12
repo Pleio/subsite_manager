@@ -127,7 +127,8 @@
 				"waternet_workorder_manager",
 				"waternet_workorder_planner",
 				"user_support_staff",
-				"entity_tools:admin"
+				"entity_tools:admin",
+				"makesubscribed"
 			);
 			
 			foreach ($return as $index => $menu_item) {
