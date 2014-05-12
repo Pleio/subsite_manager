@@ -683,16 +683,25 @@
 					}
 				}
 				
-				// check if we are executing allowed actions
-				$allowed_actions = array(
-					"admin/user/resetpassword",
-					"werkorder/toggle_planner",
-					"werkorder/toggle_manager"
-				);
-				if(elgg_instanceof($entity, "user", null, "ElggUser") && (in_array(get_input("action"), $allowed_actions))){
-					// check if the user is an admin of the current site and the entity (user) is a member of this site
-					if($site->isAdmin($user->getGUID()) && $site->isUser($entity->getGUID())){
-						return true;
+				// some user->canEdit() are allowed
+				if (elgg_instanceof($entity, "user", null, "ElggUser")) {
+					// check if we are executing allowed actions
+					$allowed_actions = array(
+						"admin/user/resetpassword",
+						"werkorder/toggle_planner",
+						"werkorder/toggle_manager"
+					);
+					
+					// check for allowed context
+					$allowed_contexts = array(
+						"entities"
+					);
+					
+					if (in_array(get_input("action"), $allowed_actions) || in_array(get_context(), $allowed_contexts)) {
+						// check if the user is an admin of the current site and the entity (user) is a member of this site
+						if ($site->isAdmin($user->getGUID()) && $site->isUser($entity->getGUID())) {
+							return true;
+						}
 					}
 				}
 			}
