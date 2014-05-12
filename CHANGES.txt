@@ -8,6 +8,7 @@ x.x:
 - fixed: missing support for some group_tools options
 - fixed: running deactivation scripts could break other subsites
 - fixed: subsite admins could access translation_editor
+- fixed: pagination on online members listing
 - changed: subsite admin listing now has pagination
 
 2.4 (2014-02-19):
