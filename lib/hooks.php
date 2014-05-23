@@ -281,6 +281,7 @@
 					"appearance:group_fields",
 					"appearance:static",
 					"appearance:expages",
+					"appearance:theme_oirschot",
 					"plugins",
 					"widgets",
 					"widgets:manage",
