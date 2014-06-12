@@ -32,7 +32,7 @@ if ($batch->valid()) {
 		"admin email",
 		"admin profile"
 	);
-	fwrite($fh, "\"" . implode("\",\"", $headers) . "\"" . PHP_EOL);
+	fwrite($fh, "\"" . implode("\";\"", $headers) . "\"" . PHP_EOL);
 	
 	foreach ($batch as $subsite) {
 		$member_count = $subsite->getMembers(array("count" => true));
@@ -61,7 +61,7 @@ if ($batch->valid()) {
 					$admin_output[] = $admin->getURL();
 					
 					// write to file
-					fwrite($fh, "\"" . implode("\",\"", $admin_output) . "\"" . PHP_EOL);
+					fwrite($fh, "\"" . implode("\";\"", $admin_output) . "\"" . PHP_EOL);
 					
 					// cache cleanup
 					_elgg_invalidate_cache_for_entity($admin->getGUID());
@@ -69,7 +69,7 @@ if ($batch->valid()) {
 			}
 		} else {
 			// write to file
-			fwrite($fh, "\"" . implode("\",\"", $output) . "\"" . PHP_EOL);
+			fwrite($fh, "\"" . implode("\";\"", $output) . "\"" . PHP_EOL);
 		}
 		
 		// cache cleanup
@@ -92,7 +92,7 @@ if ($batch->valid()) {
 	header("Content-Length: " . strlen($contents));
 	
 	echo $contents;
-	
+	exit();
 } else {
 	forward(REFERER);
 }
