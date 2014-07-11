@@ -16,4 +16,4 @@ Installation
 
 3. Run upgrade.php. The subsite manager should activate itself.
 
-4. The plugin now distinguishes admins and superadmins. To become a superadmin (and to make sure the plugin doesn't reset your current admin rights), add a row to the private_settings with values entity_guid=<guid of admin>, name=superadmin, value=true. 
+4. The plugin now distinguishes admins and superadmins. To become a superadmin (and to make sure the plugin doesn't reset your current admin rights), add a row to the private_settings with values entity_guid=$AdminUserGUID, name="superadmin", value="true". 
