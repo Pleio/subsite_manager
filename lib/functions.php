@@ -119,39 +119,30 @@
 	
 	function subsite_manager_validate_subsite_access(){
 		$site = elgg_get_site_entity();
-		
-		// check non public page and on subsite
-		if(!$site->isPublicPage() && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
+
+		if (elgg_is_logged_in() && 
+			elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") &&
+			!$site->isUser()) {
+
 			$forward = true;
-			
-			if(!elgg_is_logged_in()){
-				// user is not loggedin the page will handle user access
+
+			// Check if page is not a walled garden
+			if ($site->isPublicPage()) {
 				$forward = false;
-			} else {
-				if($site->isUser()){
-					// you are a member so you can see the site
-					$forward = false;
-				} else {
-					// are there any special priviliges? like group membership
-					$page_owner = elgg_get_page_owner_entity();
-					
-					if(elgg_instanceof($page_owner, "group", "", "ElggGroup") && $page_owner->isMember(elgg_get_logged_in_user_entity())){
-						// you're a group member on this site, so you can access parts of the site
-						$forward = false;
-					} else {
-						// you don't have access to the site
-						$_SESSION["no_access_forward_from"] = current_page_url();
-						$forward_url = $site->url . "subsites/no_access";
-					}
-				}
 			}
-				
-			if($forward){
-				if(empty($forward_url)){
-					$default_site_guid = datalist_get("default_site");
-					$site = elgg_get_site_entity($default_site_guid);
-					$forward_url = $site->url;
-				}
+
+			// @todo: check if the content is visible for the user because content is public
+
+			// Allow access to group members
+			$page_owner = elgg_get_page_owner_entity();
+			if(elgg_instanceof($page_owner, "group", "", "ElggGroup") && $page_owner->isMember(elgg_get_logged_in_user_entity())){
+				$forward = false;
+			}
+
+			if ($forward == true) {			
+				$_SESSION["no_access_forward_from"] = current_page_url();
+				$forward_url = $site->url . "subsites/no_access";
+
 				forward($forward_url);
 			}
 		}
