@@ -117,34 +117,16 @@
 		return $result;
 	}
 	
-	function subsite_manager_validate_subsite_access(){
+	function subsite_manager_check_subsite_user(){
 		$site = elgg_get_site_entity();
 
 		if (elgg_is_logged_in() && 
-			elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") &&
-			!$site->isUser()) {
-
-			$forward = true;
-
-			// Check if page is not a walled garden
-			if ($site->isPublicPage()) {
-				$forward = false;
-			}
-
-			// @todo: check if the content is visible for the user because content is public
-
-			// Allow access to group members
-			$page_owner = elgg_get_page_owner_entity();
-			if(elgg_instanceof($page_owner, "group", "", "ElggGroup") && $page_owner->isMember(elgg_get_logged_in_user_entity())){
-				$forward = false;
-			}
-
-			if ($forward == true) {			
-				$_SESSION["no_access_forward_from"] = current_page_url();
-				$forward_url = $site->url . "subsites/no_access";
-
-				forward($forward_url);
-			}
+			elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && 
+			!$site->isUser()) 
+		{
+			
+			system_messages();
+			system_message(elgg_echo("subsite_manager:subsite:wanttojoin") . get_input('action'));
 		}
 	}
 	

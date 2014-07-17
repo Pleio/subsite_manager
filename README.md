@@ -10,7 +10,7 @@ Features
 
 Installation
 ------------
-1. This plugin requires you also to install the [Elgg Modifications](https://githubcom/Pleio/elgg_modifications) plugin.
+1. This plugin requires you also to install the [Elgg Modifications](https://githubcom/Pleio/elgg_modifications) plugin, the Profile plugin and the Profile Manager plugin.
 
 2. After installing and activating the plugin, copy the contents of the mod/subsite_manager/core_files/[version]/ over your Elgg installation.
 
