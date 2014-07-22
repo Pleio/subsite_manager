@@ -88,6 +88,9 @@ $english = array(
 	'subsite_manager:subsite:join' => "Join",
 	'subsite_manager:subsite:request' => "Request membership",
 	'subsite_manager:subsite:validate_domain' => "Request e-mail validation",
+
+	// Subsite - join
+	'subsite_manager:subsite:wanttojoin' => 'U bent geen lid van deze subsite. Wilt u alle inhoud bekijken en inhoud toevoegen? Wordt dan <a href="/subsites/join">hier</a> lid.',
 	
 	'subsite_manager:subsite:remove_user:confirm' => "Are you sure you wish to remove this user from the site?\nOptionaly you can explain to the user why you removed him/her.",
 	'subsite_manager:subsite:remove_user:subject' => "Your membership of the subsite %s was revoked.",
