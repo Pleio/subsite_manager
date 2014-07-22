@@ -672,7 +672,9 @@
 
 		// do not allow write access for non-members
 		if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser()) {
-			if (get_input('action') != "login") {
+			$allowed_actions = array('login', 'usersettings/save');
+
+			if (!in_array(get_input('action'), $allowed_actions) && get_context() != "settings") {
 				return false;
 			}
 		}
