@@ -10,4 +10,4 @@ Features
 
 Installation
 ------------
-For installation instructions see INSTALL.txt
+For installation instructions see [INSTALL.md](INSTALL.md)
