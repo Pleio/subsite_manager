@@ -1,4 +1,5 @@
-= Version History =
+Version History
+---------------
 
 x.x:
 
@@ -12,6 +13,9 @@ x.x:
 - fixed: subsite admins could access translation_editor
 - fixed: pagination on online members listing
 - changed: subsite admin listing now has pagination
+
+2.5 (2014-07-22):
+- changed: non-members of subsites are not forced to join, but can view public content
 
 2.4 (2014-02-19):
 

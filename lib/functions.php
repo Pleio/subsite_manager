@@ -117,43 +117,16 @@
 		return $result;
 	}
 	
-	function subsite_manager_validate_subsite_access(){
+	function subsite_manager_check_subsite_user(){
 		$site = elgg_get_site_entity();
-		
-		// check non public page and on subsite
-		if(!$site->isPublicPage() && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-			$forward = true;
+
+		if (elgg_is_logged_in() && 
+			elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && 
+			!$site->isUser()) 
+		{
 			
-			if(!elgg_is_logged_in()){
-				// user is not loggedin the page will handle user access
-				$forward = false;
-			} else {
-				if($site->isUser()){
-					// you are a member so you can see the site
-					$forward = false;
-				} else {
-					// are there any special priviliges? like group membership
-					$page_owner = elgg_get_page_owner_entity();
-					
-					if(elgg_instanceof($page_owner, "group", "", "ElggGroup") && $page_owner->isMember(elgg_get_logged_in_user_entity())){
-						// you're a group member on this site, so you can access parts of the site
-						$forward = false;
-					} else {
-						// you don't have access to the site
-						$_SESSION["no_access_forward_from"] = current_page_url();
-						$forward_url = $site->url . "subsites/no_access";
-					}
-				}
-			}
-				
-			if($forward){
-				if(empty($forward_url)){
-					$default_site_guid = datalist_get("default_site");
-					$site = elgg_get_site_entity($default_site_guid);
-					$forward_url = $site->url;
-				}
-				forward($forward_url);
-			}
+			system_messages();
+			system_message(elgg_echo("subsite_manager:subsite:wanttojoin") . get_input('action'));
 		}
 	}
 	

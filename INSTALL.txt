@@ -1,9 +1,0 @@
-= Instructions =
-
-This plugin requires you also to install the [Elgg Modifications](https://github.com/Pleio/elgg_modifications) plugin.
-
-After installing the plugin, copy the contents of the mod/subsite_manager/core_files/[version]/ over your Elgg installation.
-
-Subsite Manager should enable itself.
-
-Run upgrade.php.

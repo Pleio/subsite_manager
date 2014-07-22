@@ -668,12 +668,21 @@
 	 * @return boolean
 	 */
 	function subsite_manager_permissions_check_hook($hook, $type, $returnvalue, $params){
+		$site = elgg_get_site_entity();
+
+		// do not allow write access for non-members
+		if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser()) {
+			$allowed_actions = array('login', 'usersettings/save');
+
+			if (!in_array(get_input('action'), $allowed_actions) && get_context() != "settings") {
+				return false;
+			}
+		}
 		
 		// don't do anything if already allowed or not on subsite
 		if(!$returnvalue && subsite_manager_on_subsite()){
 			$entity = elgg_extract("entity", $params);
 			$user = elgg_extract("user", $params);
-			$site = elgg_get_site_entity();
 			
 			if(!empty($entity) && !empty($user)){
 				// check if the entity is on the current site or the current site

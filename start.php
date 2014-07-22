@@ -142,8 +142,8 @@
 			}
 		}
 		
-		// validate access to the site
-		subsite_manager_validate_subsite_access();
+		// Display a message for non-subsite users
+		subsite_manager_check_subsite_user();
 		
 		$context = elgg_get_context();
 		
@@ -219,7 +219,7 @@
 	elgg_register_event_handler("pagesetup", "system", "subsite_manager_pagesetup");
 
 	elgg_register_event_handler("upgrade", "system", "subsite_manager_upgrade_system_handler");
-	
+
 	// plugin hooks
 	elgg_register_plugin_hook_handler("register", "menu:entity", "subsite_manager_entity_menu_handler", 550);
 	elgg_register_plugin_hook_handler("register", "menu:subsite", "subsite_manager_subsite_menu_handler");
