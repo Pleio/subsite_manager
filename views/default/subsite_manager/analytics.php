@@ -48,6 +48,7 @@
 		}
 		
 		echo $gaq . ".push(['_setSiteSpeedSampleRate', 20]);\n";
+		echo $gaq . ".push(['_gat._anonymizeIp']);\n";
 		echo $gaq . ".push(['_trackPageview']);\n";
 		
 		if($load_js){
