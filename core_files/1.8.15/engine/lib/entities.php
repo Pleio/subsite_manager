@@ -1739,7 +1739,11 @@ function delete_entity($guid, $recursive = true) {
 					// @todo there was logic in the original code that ignored
 					// entities with owner or container guids of themselves.
 					// this should probably be prevented in ElggEntity instead of checked for here
-					$options = array("limit" => 0, "order_by" => false);
+					$options = array(
+						"limit" => 0,
+						"order_by" => false,
+						"site_guids" => false
+					);
 					
 					foreach(array("site_guid", "container_guid", "owner_guid") as $column){
 						$options['wheres'] = array("(($column = $guid) AND guid != $guid)");
