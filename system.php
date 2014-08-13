@@ -11,7 +11,7 @@
 		
 		elgg_register_classes(dirname(__FILE__) . "/classes/");
 		
-		if(array_key_exists("HTTPS", $_SERVER)){
+		if(array_key_exists("HTTPS", $_SERVER) | array_key_exists("HTTP_X_HTTPS_SESSION", $_SERVER)){
 			$protocol = "https";
 		} else {
 			$protocol = "http";
