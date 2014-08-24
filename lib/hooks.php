@@ -673,7 +673,7 @@
 
 		// do not allow write access for non-members
 		if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser() && !subsite_manager_is_superadmin()) {
-
+			
 			$allowed_contexts = array(
 				'settings'
 			);
