@@ -695,10 +695,14 @@
 			// difficult to do because the hooks permissions_check and container_permissions_check seem
 			// very site-agnostic.
 
+      if (get_input('access_id')) {
+              $access_collection = get_access_collection(get_input('access_id'));
+      }
+
 			// check if user is not trying to edit something he allready owns
 			if ($entity->owner_guid != $user->guid) {
 				// allow the user to save something for groups (ACL)
-				if (get_input('access_id') != 4) {
+				if (!(isset($access_collection) && get_entity($access_collection->owner_guid) instanceof ElggGroup)) {
 					// allow certain preconfigured actions and contexts
 					if (!in_array(get_input('action'), $allowed_actions) && !in_array(get_context(), $allowed_contexts)) {
 						return false;
