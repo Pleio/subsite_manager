@@ -670,9 +670,11 @@
 	 */
 	function subsite_manager_permissions_check_hook($hook, $type, $returnvalue, $params){
 		$site = elgg_get_site_entity();
+		$user = elgg_extract("user", $params);
+		$entity = elgg_extract("entity", $params);
 
 		// do not allow write access for non-members
-		if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser() && !subsite_manager_is_superadmin()) {
+		if ($user && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser() && !subsite_manager_is_superadmin()) {
 			
 			$allowed_contexts = array(
 				'settings'
@@ -688,9 +690,6 @@
 				'profile/edit'
 			);
 
-			$entity = elgg_extract("entity", $params);
-			$user = elgg_extract("user", $params);
-			
 			// @todo: has to be refactored, this is a very hacky solution. 
 			// difficult to do because the hooks permissions_check and container_permissions_check seem
 			// very site-agnostic.
