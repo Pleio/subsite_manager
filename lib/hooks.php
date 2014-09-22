@@ -659,7 +659,8 @@
 	
 	/**
 	 * Allow subsite admins to edit entities on their own site
-	 * And reset the password of a user on their site
+	 * and reset the password of a user on their site.
+	 * Block write access for non-members, except for some cases.
 	 *
 	 * @param string $hook
 	 * @param string $type
@@ -669,13 +670,43 @@
 	 */
 	function subsite_manager_permissions_check_hook($hook, $type, $returnvalue, $params){
 		$site = elgg_get_site_entity();
+		$user = elgg_extract("user", $params);
+		$entity = elgg_extract("entity", $params);
 
 		// do not allow write access for non-members
-		if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser()) {
-			$allowed_actions = array('login', 'usersettings/save');
+		if ($user && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser() && !subsite_manager_is_superadmin()) {
+			
+			$allowed_contexts = array(
+				'settings'
+			);
+			$allowed_actions = array(
+				'login',
+				'official_validator/official',
+				'avatar/upload',
+				'user/passwordreset',
+				'user/spotlight',
+				'usersettings/save',
+				'plugins/settings/save',
+				'profile/edit'
+			);
 
-			if (!in_array(get_input('action'), $allowed_actions) && get_context() != "settings") {
-				return false;
+			// @todo: has to be refactored, this is a very hacky solution. 
+			// difficult to do because the hooks permissions_check and container_permissions_check seem
+			// very site-agnostic.
+
+      if (get_input('access_id')) {
+              $access_collection = get_access_collection(get_input('access_id'));
+      }
+
+			// check if user is not trying to edit something he allready owns
+			if ($entity->owner_guid != $user->guid) {
+				// allow the user to save something for groups (ACL)
+				if (!(isset($access_collection) && get_entity($access_collection->owner_guid) instanceof ElggGroup)) {
+					// allow certain preconfigured actions and contexts
+					if (!in_array(get_input('action'), $allowed_actions) && !in_array(get_context(), $allowed_contexts)) {
+						return false;
+					}
+				}
 			}
 		}
 		
