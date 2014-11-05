@@ -274,6 +274,7 @@
 					"statistics:overview",
 					"administer_utilities",
 					"administer_utilities:reportedcontent",
+					"administer_utilities:csv_exporter",
 					"site_announcements",
 					"appearance",
 					"appearance:profile_fields",
