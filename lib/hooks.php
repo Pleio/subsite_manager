@@ -691,7 +691,7 @@
 				'profile/edit'
 			);
 
-			// @todo: has to be refactored, this is a very hacky solution. 
+			// @todo: has to be refactored, this is a very hacky solution.
 			// difficult to do because the hooks permissions_check and container_permissions_check seem
 			// very site-agnostic.
 
@@ -1782,30 +1782,39 @@
 	function subsite_manager_object_notification_user_options_hook($hook, $type, $return_value, $params){
 		$result = $return_value;
 		
-		if(!empty($params) && is_array($params)){
+		if (!empty($params) && is_array($params)) {
 			$entity = elgg_extract("entity", $params);
 			$options = elgg_extract("options", $params);
 			
 			// set limit to false
 			$options["limit"] = false;
 			
-			if(($site = elgg_get_site_entity($entity->site_guid)) && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-				// prepare options
-				if(!isset($options["joins"])){
-					$options["joins"] = array();
-				} elseif(!is_array($options["joins"])){
-					$options["joins"] = array($options["joins"]);
-				}
+			// prepare options
+			if (!isset($options["joins"])) {
+				$options["joins"] = array();
+			} elseif (!is_array($options["joins"])) {
+				$options["joins"] = array($options["joins"]);
+			}
+			
+			if (!isset($options["wheres"])) {
+				$options["wheres"] = array();
+			} elseif (!is_array($options["wheres"])) {
+				$options["wheres"] = array($options["wheres"]);
+			}
+			
+			$site = elgg_get_site_entity($entity->site_guid);
+			$container = $entity->getContainerEntity();
+			
+			if (!empty($container) && elgg_instanceof($container, "group")) {
+				// user has to be a member of the group
+				$options["joins"][] = "JOIN " . elgg_get_config("dbprefix") . "entity_relationships r2 ON e.guid = r2.guid_one";
+				$options["wheres"][] = "(r2.relationship = 'member' AND r2.guid_two = " . $container->getGUID() . ")";
 				
-				if(!isset($options["wheres"])){
-					$options["wheres"] = array();
-				} elseif(!is_array($options["wheres"])){
-					$options["wheres"] = array($options["wheres"]);
-				}
-				
-				// now start handling stuff
+			} elseif (!empty($site) && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")) {
+				// user has to be a member of the site
 				$options["joins"][] = "JOIN " . elgg_get_config("dbprefix") . "entity_relationships r2 ON e.guid = r2.guid_one";
 				$options["wheres"][] = "(r2.relationship = 'member_of_site' AND r2.guid_two = " . $site->getGUID() . ")";
+				
 			}
 			
 			// overrule options
