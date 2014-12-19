@@ -120,9 +120,9 @@
 	function subsite_manager_check_subsite_user(){
 		$site = elgg_get_site_entity();
 
-		if (elgg_is_logged_in() && 
-			elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && 
-			!$site->isUser()) 
+		if (elgg_is_logged_in() &&
+			elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") &&
+			!$site->isUser())
 		{
 			if (!isset($_SESSION['msg'])) {
 				$_SESSION['msg'] = array();
@@ -767,5 +767,37 @@
 			}
 		}
 		
+		return $result;
+	}
+	
+	function subsite_manager_simplesaml_check_auto_create_account($source, $auth_attributes) {
+		$result = false;
+	
+		if (!empty($source) && !empty($auth_attributes) && is_array($auth_attributes)) {
+			// is the source enabled
+			if (!subsite_manager_on_subsite() || simplesaml_is_enabled_source($source)) {
+				// check if auto create is enabled for this source
+				if (!subsite_manager_on_subsite() || elgg_get_plugin_setting($source . "_auto_create_accounts", "simplesaml")) {
+					// do we have all the require information
+					$email = elgg_extract("elgg:email", $auth_attributes);
+					$firstname = elgg_extract("elgg:firstname", $auth_attributes);
+					$lastname = elgg_extract("elgg:lastname", $auth_attributes);
+					$external_id = elgg_extract("elgg:external_id", $auth_attributes);
+						
+					if (!empty($email) && (!empty($firstname) || !empty($lastname)) && !empty($external_id)) {
+						$result = true;
+					} else {
+						error_log("SAML: fail 5");
+					}
+				} else {
+					error_log("SAML: fail 4");
+				}
+			} else {
+				error_log("SAML: fail 3");
+			}
+		} else {
+			error_log("SAML: fail 2");
+		}
+	
 		return $result;
 	}

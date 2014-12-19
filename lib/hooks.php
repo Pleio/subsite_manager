@@ -394,6 +394,8 @@
 			$result[] = "action/subsites/join.*";
 		}
 		
+		$result[] = "mod/subsite_manager/procedures/simplesaml/.*";
+		
 		return $result;
 	}
 	

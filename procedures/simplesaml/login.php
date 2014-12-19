@@ -36,7 +36,7 @@
 						));
 					} else {
 						if(get_input("from")){
-							$_SESSION["last_forward_from"] = "entree";
+							$_SESSION["last_forward_from"] = $source;
 						}
 						
 						// not logged in on IDP, so do that
@@ -60,7 +60,7 @@
 						try {
 							login($user);
 							
-							if(!empty($_SESSION["last_forward_from"]) && ($_SESSION["last_forward_from"] == "entree")){
+							if(!empty($_SESSION["last_forward_from"]) && ($_SESSION["last_forward_from"] == $source)){
 								$returnTo = get_input("from");
 								$url_parts = parse_url($returnTo);
 								
@@ -98,7 +98,7 @@
 						// no user found, so forward to a different page
 						
 						// we can from some place else
-						if(!empty($_SESSION["last_forward_from"]) && ($_SESSION["last_forward_from"] == "entree")){
+						if(!empty($_SESSION["last_forward_from"]) && ($_SESSION["last_forward_from"] == $source)){
 							$returnTo = get_input("from");
 							$url_parts = parse_url($returnTo);
 						
@@ -112,11 +112,16 @@
 							$forward_url .= "&forward=saml/no_linked_account/" . $source;
 						
 							unset($_SESSION["last_forward_from"]);
+						} elseif (subsite_manager_simplesaml_check_auto_create_account($source, $saml_attributes)) {
+							// we have enough information to create the account so let's do that
+							$forward_url = "action/simplesaml/register?saml_source=" . $source;
+							$forward_url = elgg_add_action_tokens_to_url($forward_url);
 						} else {
+							// no user found, so forward to a different page
 							$forward_url = "saml/no_linked_account/" . $source;
-						}
 						
-						system_message(elgg_echo("simplesaml:login:no_linked_account", array($label)));
+							system_message(elgg_echo("simplesaml:login:no_linked_account", array($label)));
+						}
 					}
 					
 					// restore hidden settings
