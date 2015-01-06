@@ -275,6 +275,7 @@
 					"administer_utilities",
 					"administer_utilities:reportedcontent",
 					"administer_utilities:csv_exporter",
+					"administer_utilities:group_bulk_delete",
 					"site_announcements",
 					"appearance",
 					"appearance:profile_fields",
