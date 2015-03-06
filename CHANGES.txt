@@ -7,6 +7,7 @@ x.x:
 - added: support for paidsubscriptions admin user menu item
 - added: support for entity_tools on subsites by subsite admins
 - added: group bulk delete for all subsite admins
+- added: ability to move groups to different (sub)site
 - fixed: issue when assigning subsite admins during creation didn't give them the correct rights
 - fixed: missing support for some group_tools options
 - fixed: running deactivation scripts could break other subsites

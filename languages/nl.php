@@ -349,5 +349,18 @@ Voor een bezoek aan de deelsite volg deze link:
   'subsite_manager:action:main_profile_fields:error:save' => 'Er is iets misgegaan tijdens het opslaan van de configuratie',
   'subsite_manager:action:bulk_action:dummy' => 'Selecteer een bulkactie uit te voeren',
   'admin:users:admins' => 'Beheerders',
+  // move groups
+  'subsite_manager:groups:move:title' => "verplaats deze groep naar een andere site",
+  'subsite_manager:groups:move:description' => "Hier kun je ervoor kiezen deze groep te verplaatsen naar een andere (deel)site. Let op, dit verplaatst alle content in deze groep naar de nieuwe site.",
+  'subsite_manager:forms:groups:move:no_subsites' => "Je bent niet lid van een andere site om de groep naar te kunnen verplaatsen.",
+  'subsite_manager:forms:groups:move:select_subsite:default' => "Selecteer een site",
+  'subsite_manager:forms:groups:move:select_subsite' => "Selecteer de nieuwe site",
+  'subsite_manager:forms:groups:move:submit' => "Verplaats de groep",
+  'subsite_manager:forms:groups:move:confirm' => "Weet je zeker dat je deze groep wilt verplaatsen?",
+
+  'subsite_manager:action:groups:move:error:same_site' => "Je kunt de groep niet verplaatsen naar dezelfde site",
+  'subsite_manager:action:groups:move:error:not_a_member' => "Je bent geen lid van de doel site",
+  'subsite_manager:action:groups:move:error:move' => "Er is een fout opgetreden tijdens het verplaatsen",
+  'subsite_manager:action:groups:move:success' => "De groep is verplaatst naar de site %s",
 );
 add_translation("nl", $language);

@@ -497,6 +497,20 @@ To visit the Subsite follow this link:
 	'widget:river_widget:edit:site_selection' => "Activity from site",
 	'widget:river_widget:edit:site_selection:current' => "Current site",
 	'widget:river_widget:edit:site_selection:all' => "All my sites",
+	
+	// move groups
+	'subsite_manager:groups:move:title' => "Move this group to a different site",
+	'subsite_manager:groups:move:description' => "Here you can choose to move this group to a new (sub)site. Please be carefull this will move all the content in this group to the new site.",
+	'subsite_manager:forms:groups:move:no_subsites' => "You're not a member of any other site, so you can't move the group.",
+	'subsite_manager:forms:groups:move:select_subsite:default' => "Please select a site",
+	'subsite_manager:forms:groups:move:select_subsite' => "Select the new site",
+	'subsite_manager:forms:groups:move:submit' => "Move group",
+	'subsite_manager:forms:groups:move:confirm' => "Are you sure you wish to move this group?",
+	
+	'subsite_manager:action:groups:move:error:same_site' => "You can't move the group to the same site",
+	'subsite_manager:action:groups:move:error:not_a_member' => "You're not a member of the targeted site",
+	'subsite_manager:action:groups:move:error:move' => "An error occured during the move",
+	'subsite_manager:action:groups:move:success' => "The group was moved to the site %s",
 );
 	
 add_translation("en", $english);

@@ -801,3 +801,201 @@
 	
 		return $result;
 	}
+	
+	/**
+	 * Move a group to a new (sub)site
+	 *
+	 * @param ElggGroup $group       the group to move
+	 * @param ElggSite  $target_site the target site
+	 *
+	 * @return bool
+	 */
+	function subsite_manager_move_group_to_site(ElggGroup $group, ElggSite $target_site) {
+	
+		if (!elgg_is_admin_logged_in()) {
+			return false;
+		}
+	
+		if (empty($group) || !elgg_instanceof($group, "group")) {
+			return false;
+		}
+	
+		if (empty($target_site) || !elgg_instanceof($target_site, "site")) {
+			return false;
+		}
+	
+		if ($group->site_guid == $target_site->getGUID()) {
+			return false;
+		}
+	
+		return subsite_manager_move_entity_to_site($group, $target_site);
+	}
+	
+	/**
+	 * Move an entity to a new site (can anly be call by subsite_manager_move_group_to_site())
+	 *
+	 * @param ElggEntity $entity      the entity to move
+	 * @param ElggSite   $target_site the target site
+	 *
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	function subsite_manager_move_entity_to_site(ElggEntity $entity, ElggSite $target_site) {
+		static $newentity_cache;
+		
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+		if (!isset($backtrace[1])) {
+			return false;
+		}
+		
+		$function = elgg_extract("function", $backtrace[1]);
+		if (empty($function) || !in_array($function, array("subsite_manager_move_group_to_site", "subsite_manager_move_entity_to_site"))) {
+			// because this is a dangerous function only allow it to be called the correct way
+			return false;
+		}
+		
+		if (empty($entity) || !($entity instanceof ElggEntity)) {
+			return false;
+		}
+		
+		if (empty($target_site) || !elgg_instanceof($target_site, "site")) {
+			return false;
+		}
+		
+		if ($entity->site_guid == $target_site->getGUID()) {
+			return false;
+		}
+		
+		// ignore access and show hidden entities
+		$ia = elgg_set_ignore_access(true);
+		$hidden = access_get_show_hidden_status();
+		access_show_hidden_entities(true);
+		
+		// first move sub entities (eg blogs in group, event registrations, etc)
+		$options = array(
+			"type" => "object",
+			"container_guid" => $entity->getGUID(),
+			"limit" => false
+		);
+		$batch = new ElggBatch("elgg_get_entities", $options);
+		$batch->setIncrementOffset(false);
+		foreach ($batch as $sub_entity) {
+			if (!subsite_manager_move_entity_to_site($sub_entity, $target_site)) {
+				elgg_set_ignore_access($ia);
+				access_show_hidden_entities($hidden);
+				return false;
+			}
+		}
+		
+		// also move owned (sub) entities
+		$options = array(
+			"type" => "object",
+			"owner_guid" => $entity->getGUID(),
+			"wheres" => array("(e.guid <> {$entity->getGUID()})"),
+			"limit" => false
+		);
+		$batch = new ElggBatch("elgg_get_entities", $options);
+		$batch->setIncrementOffset(false);
+		foreach ($batch as $sub_entity) {
+			if (!subsite_manager_move_entity_to_site($sub_entity, $target_site)) {
+				elgg_set_ignore_access($ia);
+				access_show_hidden_entities($hidden);
+				return false;
+			}
+		}
+		
+		$dbprefix = elgg_get_config("dbprefix");
+		
+		// move access collections
+		$query = "UPDATE {$dbprefix}access_collections";
+		$query .= " SET site_guid = {$target_site->getGUID()}";
+		$query .= " WHERE owner_guid = {$entity->getGUID()}";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager move entity({$entity->getGUID()}) access collections: " . $e->getMessage(), "ERROR");
+			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
+		// move annotations
+		$query = "UPDATE {$dbprefix}annotations";
+		$query .= " SET site_guid = {$target_site->getGUID()}";
+		$query .= " WHERE entity_guid = {$entity->getGUID()}";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager move entity({$entity->getGUID()}) annotations: " . $e->getMessage(), "ERROR");
+			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
+		// move river
+		$query = "UPDATE {$dbprefix}river";
+		$query .= " SET site_guid = {$target_site->getGUID()}";
+		$query .= " WHERE subject_guid = {$entity->getGUID()}";
+		$query .= " OR object_guid = {$entity->getGUID()}";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager move entity({$entity->getGUID()}) river: " . $e->getMessage(), "ERROR");
+			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
+		// move metadata
+		$query = "UPDATE {$dbprefix}metadata";
+		$query .= " SET site_guid = {$target_site->getGUID()}";
+		$query .= " WHERE entity_guid = {$entity->getGUID()}";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager move entity({$entity->getGUID()}) metadata: " . $e->getMessage(), "ERROR");
+			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
+		// move entity
+		$query = "UPDATE {$dbprefix}entities";
+		$query .= " SET site_guid = {$target_site->getGUID()}";
+		$query .= " WHERE guid = {$entity->getGUID()}";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager move entity({$entity->getGUID()}) entity: " . $e->getMessage(), "ERROR");
+			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
+		// cache cleanup
+		_elgg_invalidate_cache_for_entity($entity->getGUID());
+		
+		if ((!$newentity_cache) && (is_memcache_available())) {
+			$newentity_cache = new ElggMemcache('new_entity_cache');
+		}
+		if ($newentity_cache) {
+			$newentity_cache->delete($entity->getGUID());
+		}
+		
+		// restore access and hidden status
+		elgg_set_ignore_access($ia);
+		access_show_hidden_entities($hidden);
+		
+		return true;
+	}
