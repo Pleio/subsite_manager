@@ -500,7 +500,7 @@ To visit the Subsite follow this link:
 	
 	// move groups
 	'subsite_manager:groups:move:title' => "Move this group to a different site",
-	'subsite_manager:groups:move:description' => "Here you can choose to move this group to a new (sub)site. Please be carefull this will move all the content in this group to the new site.",
+	'subsite_manager:groups:move:description' => "Here you can choose to move this group to a new (sub)site. Please be carefull, this will move all the content in this group to the new site. NOTE: all access levels above the group access will be reset to group access (eg. Public content will become group content).",
 	'subsite_manager:forms:groups:move:no_subsites' => "You're not a member of any other site, so you can't move the group.",
 	'subsite_manager:forms:groups:move:select_subsite:default' => "Please select a site",
 	'subsite_manager:forms:groups:move:select_subsite' => "Select the new site",

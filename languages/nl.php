@@ -351,7 +351,7 @@ Voor een bezoek aan de deelsite volg deze link:
   'admin:users:admins' => 'Beheerders',
   // move groups
   'subsite_manager:groups:move:title' => "verplaats deze groep naar een andere site",
-  'subsite_manager:groups:move:description' => "Hier kun je ervoor kiezen deze groep te verplaatsen naar een andere (deel)site. Let op, dit verplaatst alle content in deze groep naar de nieuwe site.",
+  'subsite_manager:groups:move:description' => "Hier kun je ervoor kiezen deze groep te verplaatsen naar een andere (deel)site. Let op, dit verplaatst alle content in deze groep naar de nieuwe site. OPMERKING: alle toegangs niveaus boven groepstoegang zullen worden aangepast naar groepstoegang (bijv. Publieke content wordt gelimiteerd tot groepscontent).",
   'subsite_manager:forms:groups:move:no_subsites' => "Je bent niet lid van een andere site om de groep naar te kunnen verplaatsen.",
   'subsite_manager:forms:groups:move:select_subsite:default' => "Selecteer een site",
   'subsite_manager:forms:groups:move:select_subsite' => "Selecteer de nieuwe site",

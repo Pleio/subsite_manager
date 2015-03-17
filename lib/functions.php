@@ -841,7 +841,7 @@
 	 *
 	 * @return bool
 	 */
-	function subsite_manager_move_entity_to_site(ElggEntity $entity, ElggSite $target_site) {
+function subsite_manager_move_entity_to_site(ElggEntity $entity, ElggSite $target_site, array $access_conversion) {
 		static $newentity_cache;
 		
 		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
@@ -867,6 +867,25 @@
 			return false;
 		}
 		
+		// check for access conversion rules
+		if (empty($access_conversion) || !is_array($access_conversion)) {
+			return false;
+		}
+		
+		$group_acl = (int) elgg_extract("group_acl", $access_conversion);
+		if (empty($group_acl)) {
+			return false;
+		}
+		
+		$old_site_acl = (int) elgg_extract("site_acl", $access_conversion);
+		$affected_access = array(
+			ACCESS_PUBLIC,
+			ACCESS_LOGGED_IN
+		);
+		if (!empty($old_site_acl)) {
+			$affected_access[] = $old_site_acl;
+		}
+		
 		// ignore access and show hidden entities
 		$ia = elgg_set_ignore_access(true);
 		$hidden = access_get_show_hidden_status();
@@ -881,7 +900,7 @@
 		$batch = new ElggBatch("elgg_get_entities", $options);
 		$batch->setIncrementOffset(false);
 		foreach ($batch as $sub_entity) {
-			if (!subsite_manager_move_entity_to_site($sub_entity, $target_site)) {
+			if (!subsite_manager_move_entity_to_site($sub_entity, $target_site, $access_conversion)) {
 				elgg_set_ignore_access($ia);
 				access_show_hidden_entities($hidden);
 				return false;
@@ -898,7 +917,7 @@
 		$batch = new ElggBatch("elgg_get_entities", $options);
 		$batch->setIncrementOffset(false);
 		foreach ($batch as $sub_entity) {
-			if (!subsite_manager_move_entity_to_site($sub_entity, $target_site)) {
+			if (!subsite_manager_move_entity_to_site($sub_entity, $target_site, $access_conversion)) {
 				elgg_set_ignore_access($ia);
 				access_show_hidden_entities($hidden);
 				return false;
@@ -937,6 +956,22 @@
 			return false;
 		}
 		
+		// change annotation access
+		$query = "UPDATE {$dbprefix}annotations";
+		$query .= " SET access_id = {$group_acl}";
+		$query .= " WHERE entity_guid = {$entity->getGUID()}";
+		$query .= " AND access_id IN (" . implode(", ", $affected_access) . ")";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager change entity({$entity->getGUID()}) annotation access: " . $e->getMessage(), "ERROR");
+			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
 		// move river
 		$query = "UPDATE {$dbprefix}river";
 		$query .= " SET site_guid = {$target_site->getGUID()}";
@@ -948,6 +983,23 @@
 		} catch (Exception $e) {
 			elgg_log("Subsite manager move entity({$entity->getGUID()}) river: " . $e->getMessage(), "ERROR");
 			
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
+		// change river access
+		$query = "UPDATE {$dbprefix}river";
+		$query .= " SET access_id = {$group_acl}";
+		$query .= " WHERE (subject_guid = {$entity->getGUID()}";
+		$query .= " OR object_guid = {$entity->getGUID()})";
+		$query .= " AND access_id IN (" . implode(", ", $affected_access) . ")";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager change entity({$entity->getGUID()}) river access: " . $e->getMessage(), "ERROR");
+				
 			elgg_set_ignore_access($ia);
 			access_show_hidden_entities($hidden);
 			return false;
@@ -968,6 +1020,22 @@
 			return false;
 		}
 		
+		// change metadata access
+		$query = "UPDATE {$dbprefix}metadata";
+		$query .= " SET access_id = {$group_acl}";
+		$query .= " WHERE entity_guid = {$entity->getGUID()}";
+		$query .= " AND access_id IN (" . implode(", ", $affected_access) . ")";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager change entity({$entity->getGUID()}) metadata access: " . $e->getMessage(), "ERROR");
+				
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
 		// move entity
 		$query = "UPDATE {$dbprefix}entities";
 		$query .= " SET site_guid = {$target_site->getGUID()}";
@@ -983,6 +1051,22 @@
 			return false;
 		}
 		
+		// change entity access
+		$query = "UPDATE {$dbprefix}entities";
+		$query .= " SET access_id = {$group_acl}";
+		$query .= " WHERE guid = {$entity->getGUID()}";
+		$query .= " AND access_id IN (" . implode(", ", $affected_access) . ")";
+		
+		try {
+			update_data($query);
+		} catch (Exception $e) {
+			elgg_log("Subsite manager change entity({$entity->getGUID()}) entity access: " . $e->getMessage(), "ERROR");
+		
+			elgg_set_ignore_access($ia);
+			access_show_hidden_entities($hidden);
+			return false;
+		}
+		
 		// cache cleanup
 		_elgg_invalidate_cache_for_entity($entity->getGUID());
 		
@@ -993,9 +1077,9 @@
 			$newentity_cache->delete($entity->getGUID());
 		}
 		
-		// restore access and hidden status
 		elgg_set_ignore_access($ia);
 		access_show_hidden_entities($hidden);
 		
 		return true;
 	}
+	
