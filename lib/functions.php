@@ -811,23 +811,26 @@
 	 * @return bool
 	 */
 	function subsite_manager_move_group_to_site(ElggGroup $group, ElggSite $target_site) {
-	
+		
 		if (!elgg_is_admin_logged_in()) {
 			return false;
 		}
-	
+		
 		if (empty($group) || !elgg_instanceof($group, "group")) {
 			return false;
 		}
-	
+		
 		if (empty($target_site) || !elgg_instanceof($target_site, "site")) {
 			return false;
 		}
-	
+		
 		if ($group->site_guid == $target_site->getGUID()) {
 			return false;
 		}
-	
+		
+		// this could take a while
+		set_time_limit(0);
+		
 		return subsite_manager_move_entity_to_site($group, $target_site);
 	}
 	
@@ -841,7 +844,7 @@
 	 *
 	 * @return bool
 	 */
-function subsite_manager_move_entity_to_site(ElggEntity $entity, ElggSite $target_site, array $access_conversion) {
+	function subsite_manager_move_entity_to_site(ElggEntity $entity, ElggSite $target_site, array $access_conversion) {
 		static $newentity_cache;
 		
 		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
