@@ -281,7 +281,7 @@
 					"appearance:profile_fields",
 					"appearance:template",
 					"appearance:group_fields",
-					"appearance:static",
+					"static",
 					"appearance:expages",
 					"appearance:theme_oirschot",
 					"plugins",
