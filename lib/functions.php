@@ -828,17 +828,29 @@
 			return false;
 		}
 		
+		// access conversion rules
+		$access = array(
+			"group_acl" => (int) $group->group_acl,
+			"site_acl" => null
+		);
+		
+		$site = elgg_get_site_entity($group->site_guid);
+		if (!empty($site) && elgg_instanceof($site, "site", Subsite::SUBTYPE)) {
+			$access["site_acl"] = (int) $site->getACL();
+		}
+		
 		// this could take a while
 		set_time_limit(0);
 		
-		return subsite_manager_move_entity_to_site($group, $target_site);
+		return subsite_manager_move_entity_to_site($group, $target_site, $access);
 	}
 	
 	/**
 	 * Move an entity to a new site (can anly be call by subsite_manager_move_group_to_site())
 	 *
-	 * @param ElggEntity $entity      the entity to move
-	 * @param ElggSite   $target_site the target site
+	 * @param ElggEntity $entity            the entity to move
+	 * @param ElggSite   $target_site       the target site
+	 * @param array      $access_conversion array with group and site access levels
 	 *
 	 * @access private
 	 *
