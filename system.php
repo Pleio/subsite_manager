@@ -79,101 +79,87 @@
 		$lastcached = datalist_get("sc_lastcached_" . $viewtype . "_" . $site_guid);
 		$CONFIG->lastcache = $lastcached;
 
-		if(subsite_manager_on_subsite()){
-			// make sure we can access everything
-			$old_ia = elgg_set_ignore_access(true);
+		// skip non-subsites
+		if(!subsite_manager_on_subsite()) {
+			return true;
+		}
 
-			// get the current site
-			$site = elgg_get_site_entity();
+		// make sure we can access everything
+		$old_ia = elgg_set_ignore_access(true);
 
-			// check if we need to update plugin order
-			$main_plugin_update = (int) datalist_get("plugin_order_last_update");
-			$site_plugin_order_update = (int) $site->getPrivateSetting("plugin_order_last_update");
+		// get the current site
+		$site = elgg_get_site_entity();
 
-			if($site_plugin_order_update < $main_plugin_update){
-				// reorder of the plugins is needed
-				if($main_plugin_order = subsite_manager_get_main_plugin_order()){
-					// we need to trace an error, so add logging
-					error_log("SUBSITE MANAGER: reorder plugins: " . $site->name . "(" . $site_guid . ")");
+		// check if reorder of the plugins is needed
+		$main_plugin_update = (int) datalist_get("plugin_order_last_update");
+		$site_plugin_order_update = (int) $site->getPrivateSetting("plugin_order_last_update");
 
-					// make sure all plugins are there
-					elgg_generate_plugin_entities();
+		if ($site_plugin_order_update < $main_plugin_update) {
+			if ($main_plugin_order = subsite_manager_get_main_plugin_order()){
+				// we need to trace an error, so add logging
+				error_log("SUBSITE MANAGER: reorder plugins: " . $site->name . "(" . $site_guid . ")");
 
-					elgg_set_plugin_priorities($main_plugin_order);
+				// make sure all plugins are there
+				elgg_generate_plugin_entities();
 
-					$site->setPrivateSetting("plugin_order_last_update", time());
+				elgg_set_plugin_priorities($main_plugin_order);
 
-					elgg_register_event_handler("ready", "system", "subsite_manager_ready_system_handler", 100);
-				}
+				$site->setPrivateSetting("plugin_order_last_update", time());
+
+				elgg_register_event_handler("ready", "system", "subsite_manager_ready_system_handler", 100);
 			}
+		}
 
-			// get currently active plugin
-			$active_plugins = elgg_get_plugins("active");
+		$all_plugins = array_map(function($a) { return $a->getID(); }, elgg_get_plugins("all"));
+		$global_plugins = subsite_manager_get_global_enabled_plugins();
 
-			// make into names
-			$active_plugin_names = array();
-			$activate_plugins = array();
-			if(!empty($active_plugins)){
-				foreach($active_plugins as $plugin){
-					$active_plugin_names[] = $plugin->getID();
-				}
-			}
+		// only try to enable plugins that can be enabled
+		$candidate_plugins = array_intersect($global_plugins, $all_plugins);
 
-			// check if required plugins are active
-			if(($global_plugins = subsite_manager_get_global_enabled_plugins()) && !empty($global_plugins)){
+		// check if required plugins are active
+		$active_plugins = array_map(function($a) { return $a->getID(); }, elgg_get_plugins("active"));
+		$activate_plugins = array_diff($candidate_plugins, $active_plugins);
 
-				// check if required plugins are active
-				foreach($global_plugins as $should_be_active){
+		// check if this is the first run, if so do stuff
+		if($site->getPrivateSetting("firstrun")){
+			$site->removePrivateSetting("firstrun");
+
+			if($enable_on_create = $site->getOwnerEntity()->getPrivateSetting("enabled_for_new_subsites")){
+				$enable_on_create = string_to_tag_array($enable_on_create);
+
+				foreach($enable_on_create as $should_be_active){
 					if(!in_array($should_be_active, $active_plugin_names)){
 						$activate_plugins[] = $should_be_active;
 					}
 				}
 			}
-
-			// check if this is the first run, if so do stuff
-			if($site->getPrivateSetting("firstrun")){
-				$site->removePrivateSetting("firstrun");
-
-				if($enable_on_create = $site->getOwnerEntity()->getPrivateSetting("enabled_for_new_subsites")){
-					$enable_on_create = string_to_tag_array($enable_on_create);
-
-					foreach($enable_on_create as $should_be_active){
-						if(!in_array($should_be_active, $active_plugin_names)){
-							$activate_plugins[] = $should_be_active;
-						}
-					}
-				}
-			}
-
-			// make sure we don't do duplicate plugins
-			$activate_plugins = array_unique($activate_plugins);
-
-			// enable plugins that should be active
-			if (!empty($activate_plugins)) {
-				// check for new plugin entities
-				elgg_generate_plugin_entities();
-
-				set_time_limit(0);
-				$SUBSITE_MANAGER_PLUGINS_BOOT = true;
-
-				$plugins = elgg_get_plugins('any');
-
-				foreach ($plugins as $plugin) {
-					if (in_array($plugin->getID(), $activate_plugins)) {
-						try {
-							$plugin->activate();
-						} catch (Exception $e) {}
-					}
-				}
-
-				$SUBSITE_MANAGER_PLUGINS_BOOT = false;
-
-				elgg_register_event_handler("ready", "system", "subsite_manager_ready_system_handler", 100);
-			}
-
-			// restore access settings
-			elgg_set_ignore_access($old_ia);
 		}
+
+		// make sure we don't do duplicate plugins
+		$activate_plugins = array_unique($activate_plugins);
+
+		// enable plugins that should be active
+		if (count($activate_plugins) > 0) {
+			set_time_limit(0);
+			$SUBSITE_MANAGER_PLUGINS_BOOT = true;
+
+			$plugins = elgg_get_plugins('any');
+
+			foreach ($plugins as $plugin) {
+				if (in_array($plugin->getID(), $activate_plugins)) {
+					try {
+						$plugin->activate();
+					} catch (Exception $e) {}
+				}
+			}
+
+			$SUBSITE_MANAGER_PLUGINS_BOOT = false;
+
+			elgg_register_event_handler("ready", "system", "subsite_manager_ready_system_handler", 100);
+		}
+
+		// restore access settings
+		elgg_set_ignore_access($old_ia);
 	}
 
 	// register hook to get correct site_id
