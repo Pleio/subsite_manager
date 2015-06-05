@@ -30,7 +30,7 @@ $english = array(
 	'subsite_manager:category:description' => "Select the appropriate category. Used for informational purpose only.",
 	'subsite_manager:category:options:thematic' => "Thematic",
 	'subsite_manager:category:options:organizational' => "Organizational",
-	
+
 	// navigation bar
 	'subsite_manager:navigation_bar_position:label' => "Positioning of Subsite navigation bar",
 	'subsite_manager:navigation_bar_position:description' => "Where should the Subsite navigation bar be positioned, at the top of the page or the bottom.",
@@ -39,17 +39,18 @@ $english = array(
 	'subsite_manager:menu:subsites' => "Subsites",
 	'subsite_manager:menu:subsites:request' => "Request a subsite",
 	'subsite_manager:menu:admin:manage' => "Manage Subsites",
-	
+
 	'subsite_manager:menu:subsites:all' => "All Subsites",
 	'subsite_manager:menu:subsites:mine' => "My Subsites",
-	
+
 	'admin:subsites' => "Subsites",
 	'admin:subsites:new' => "New Subsite",
 	'admin:subsites:plugins' => "Manage Plugins",
+	'admin:subsites:update_plugins' => "Update plugins",
 	'admin:subsites:admins' => "Manage admins",
-	
+
 	'admin:settings:access' => "Access settings",
-	
+
 	'admin:users:admins' => "Administrators",
 	'admin:users:membership' => "Membership requests",
 	'admin:users:import' => "Import users",
@@ -59,10 +60,10 @@ $english = array(
 
 	// river
 	'river:join:site:subsite' => "%s joined %s",
-	
+
 	// account dropdown
 	'subsite_manager:account:dropdown:advanced_notifictions' => "Personalized activity",
-	
+
 	// Subsites - List
 	'subsite_manager:subsites:title:all' => "All Subsites",
 	'subsite_manager:subsites:title:featured' => "Featured Subsites",
@@ -71,7 +72,7 @@ $english = array(
 	'subsite_manager:subsites:title:popular' => "Popular Subsites",
 	'subsite_manager:subsites:title:mine' => "My Subsites",
 	'subsite_manager:subsites:title:membership' => "Pending memberships",
-	
+
 	'subsite_manager:subsites:filter:all' => "All",
 	'subsite_manager:subsites:filter:featured' => "Featured",
 	'subsite_manager:subsites:filter:open' => "Open",
@@ -79,7 +80,7 @@ $english = array(
 	'subsite_manager:subsites:filter:popular' => "Popular",
 	'subsite_manager:subsites:filter:mine' => "Mine",
 	'subsite_manager:subsites:filter:membership' => "Pending",
-	
+
 	// Subsite - entity
 	'subsite_manager:subsite:leave' => "Leave",
 	'subsite_manager:subsite:leave:confirm' => "Are you sure you wish to leave this Subsite",
@@ -91,7 +92,7 @@ $english = array(
 
 	// Subsite - join
 	'subsite_manager:subsite:wanttojoin' => 'You are not a member of this subsite. To view all content and add content join <a href="/subsites/join">here</a>.',
-	
+
 	'subsite_manager:subsite:remove_user:confirm' => "Are you sure you wish to remove this user from the site?\nOptionaly you can explain to the user why you removed him/her.",
 	'subsite_manager:subsite:remove_user:subject' => "Your membership of the subsite %s was revoked.",
 	'subsite_manager:subsite:remove_user:message' => "Hi %s,
@@ -99,11 +100,11 @@ $english = array(
 The site administrator %s revoked your membership of the subsite %s.
 
 %s",
-	
+
 	// Subsite - New
 	'subsite_manager:new:general' => "Subsite configuration",
 	'subsite_manager:new:security' => "Subsite security",
-	
+
 	'subsite_manager:new:info' => "Use this form to create a Subsite. Carefully read the descriptions below the configuration options.",
 	'subsite_manager:new:name:label' => "Enter a name for the Subsite",
 	'subsite_manager:new:name:description' => "This name will be used as the Subsite title and will show up in the listing of Subsites.",
@@ -145,25 +146,25 @@ The site administrator %s revoked your membership of the subsite %s.
 	'subsite_manager:new:js:url' => "Please check the site URL",
 	'subsite_manager:new:js:domains' => "Please check the e-mail domains",
 	'subsite_manager:new:js:admin' => "Continue without adding subsite admins?",
-	
+
 	// Subsite - update
 	'subsite_manager:subsites:update:remove_icon' => "Remove the current icon",
-	
+
 	'subsite_manager:update:limit_admins:label' => "Limit main site admins",
 	'subsite_manager:update:limit_admins:description' => "Main site admins can only join based on the same rules as normal users.",
 
 	'subsite_manager:subsites:update:disable_htmlawed:label' => "Disable HTML filtering for admins",
 	'subsite_manager:subsites:update:disable_htmlawed' => "Disable HTML filtering for admin to allow more specialized HTML",
 	'subsite_manager:subsites:update:disable_htmlawed:description' => "WARNING: when checked admins can inject any HTML code. This could currupt your site",
-	
+
 	'subsite_manager:subsites:update:enable_frontpage_indexing:label' => "Indexing",
 	'subsite_manager:subsites:update:enable_frontpage_indexing' => "Enable indexing of the frontpage by search bots",
-		
+
 	// Subsite - admins
 	'subsite_manager:subsites:admins:main_admins' => "Main administrators",
 	'subsite_manager:subsites:admins:subsite_admins' => "Subsite administrators",
 	'subsite_manager:subsites:admins:subsite_admins:none' => "No administrators found",
-	
+
 	// Subsites - Import
 	'subsite_manager:import:step1:description' => "Upload a CSV to import users from. If the users can't be found they will be created, otherwise they will be added to this (Sub)site.<br />
 Some rules for the CSV file:<br />
@@ -174,7 +175,7 @@ Some rules for the CSV file:<br />
 </ul>
 In Step 2 you can select which columns contain which data.",
 	'subsite_manager:import:step1:file' => "Please select the CSV file",
-	
+
 	'subsite_manager:import:step2:description' => "In this step you have to tell us which column of the CSV holds which information. Fields (in the pulldown) marked with a * are required to create an account.<br />
 If no password field is defined a random password will be generated.<br />
 If no username field is defined a username will be created from the e-mail address.<br /><br />
@@ -187,7 +188,7 @@ The newly created users will receive a welcome message with their username and p
 	// Subsite - Import - Notify
 	'subsite_manager:import:notify:new:subject' => "An account was created for you on %s",
 	'subsite_manager:import:notify:new:message' => "Hi %s,
-	
+
 an account was created for you on %s, to visit the site please click on this link:
 %s
 
@@ -196,7 +197,7 @@ an account was created for you on %s, to visit the site please click on this lin
 In order to login you need to user the following credentials:
 Username: %s
 Password: %s",
-		
+
 	'subsite_manager:import:notify:existing:subject' => "You have been joined to the site %s",
 	'subsite_manager:import:notify:existing:message' => "Hi %s,
 
@@ -208,14 +209,14 @@ you have been joined to the site %s, to visit the site please click on this link
 	'subsite_manager:subsites:join:request' => "Request membership",
 	'subsite_manager:subsites:join:request_approval:description' => "Membership to this Subsite has to be approved by the Subsite administrators. To request membership please fill out the form below.",
 	'subsite_manager:subsites:join:request_approval:reason' => "Why do you wish to join (optional)?",
-	
+
 	// subsite - join - validate email domain
 	'subsite_manager:subsites:join:validate_domain' => "E-mail validation for membership",
 	'subsite_manager:subsites:join:validate_domain:error:domains' => "Membership for this domain is not configured correctly",
 	'subsite_manager:subsites:join:validate_domain:description' => "In order for you to join this subsite you need to validate an e-mail address on one of the domains configured for this subsite. Below you'll find a list of the supported domains. Fill in an e-mail address in the form that is on one of the domains to receive a validation link.",
 	'subsite_manager:subsites:join:validate_domain:email_subdomain' => 'Your e-mail address needs to end with: <b>%1$s</b> (example: yourname@sub<b>.%1$s</b>)',
 	'subsite_manager:subsites:join:validate_domain:email_domain' => "Your e-mail address needs to be something like: yourname<b>@%s</b>",
-	
+
 	'subsite_manager:subsites:join:validate_domain:subject' => "E-mail validation for %s",
 	'subsite_manager:subsites:join:validate_domain:message' => "Dear %s,
 you requested to join %s.
@@ -229,7 +230,7 @@ You can't reply to this email.",
 	'subsite_manager:subsites:join_domain:error:code' => "The provided code is invalid",
 	'subsite_manager:subsites:join_domain:error:add_user' => "An unknown error occured while add you to the site",
 	'subsite_manager:subsites:join_domain:success' => "You have successfully joined %s",
-	
+
 	// subsites - join - invitation
 	'subsite_manager:procedures:subsites:invitation:error:code' => "The provided code is invalid",
 	'subsite_manager:procedures:subsites:invitation:error:invitation' => "There is no invitation for you",
@@ -240,7 +241,7 @@ You can't reply to this email.",
 	'subsite_manager:subsites:join:missing_fields' => "Please complete the registration form below",
 	'subsite_manager:subsites:join:missing_fields:title' => "Profile information",
 	'subsite_manager:subsites:join:missing_fields:description' => "Before you can join this subsite you need to fill out this registration form. Fields marked with * are mandatory.",
-	
+
 	// subsites - no access
 	'subsite_manager:subsites:no_access:title' => "No access",
 	'subsite_manager:subsites:no_access' => "You don't have access to content on this Subsite",
@@ -249,26 +250,26 @@ You can't reply to this email.",
 	'subsite_manager:subsites:no_access:approval' => "Membership to this Subsite requires approval by an administrator, to request membership click the button below.",
 	'subsite_manager:subsites:no_access:domain' => "Membership to this Subsite is limited to certain e-mail domains, to validate an e-mail domain please click on the button below.",
 	'subsite_manager:subsites:no_access:invitation' => "Membership to this Subsite is limited to users who have been invited by an administrator.",
-	
+
 	'subsite_manager:subsites:no_access:groups:description' => "You can go directly to one of your groups without requesting membership to the site.",
-	
+
 	// subsites - membership requests
 	'subsite_manager:subsite:request_membership:request:subject' => "A new membership request for %s was received",
 	'subsite_manager:subsite:request_membership:request:message' => "Hi,
-		
+
 %s requested to join your Subsite.
 
 %s
 
 You can manage request here:
 %s",
-	
+
 	'subsite_manager:subsites:membership:description' => "Here you can find all the users who have requested membership to this Subsite. You can eighter approve or decline their request, the user will be notified about eighter action.",
 	'subsite_manager:subsites:membership:list:title' => "Pending membership requests",
-	
+
 	'subsite_manager:request_membership:approve:confirm' => "Are you sure you wish to allow this user access to your Subsite",
 	'subsite_manager:request_membership:decline:confirm' => "Are you sure you wish to decline this user access to your Subsite",
-	
+
 	'subsite_manager:subsite:request_membership:decline:subject' => "Your membership request was declined",
 	'subsite_manager:subsite:request_membership:decline:message' => "Hi,
 
@@ -277,31 +278,31 @@ Your membership request to join the Subsite %s was declined.
 %s
 
 This is an automated message, please don't reply",
-		
+
 	'subsite_manager:subsite:request_membership:approve:subject' => "Your membership request was approved",
 	'subsite_manager:subsite:request_membership:approve:message' => "Hi,
-	
+
 Your membership request to join the Subsite %s was approved. You can now access this Subsite.
 %s
 
 This is an automated message, please don't reply",
-	
+
 	// subsites - remove user
 	'subsite_manager:subsites:remove_user' => "Remove user from this site",
 
 	// subsites - invite
 	'subsite_manager:invite:description' => "Invite users to your Subsite. You can invite users by name, username, email address or CSV upload.",
-	
+
 	'subsite_manager:invite:users:label' => "Find users",
 	'subsite_manager:invite:users:description' => "Please input the name, username or email address of the user you wish to invite. If an existsing user is found that user will be invited. If no user could be found and you entered a valid email address the user will receive an invitation mail with a special link to register your this site.",
-	
+
 	'subsite_manager:invite:csv:tab' => "CSV upload",
 	'subsite_manager:invite:csv:label' => "Please select an CSV file (there will be a step 2)",
 	'subsite_manager:invite:csv:description' => "The CSV file has the following requirements:<br />
 	- no header<br />
 	- column delimiter: ; (semicolon)<br />
 	- text delimiter: \" (double quote)",
-	
+
 	'subsite_manager:invite:message:label' => "A personal message to the users (optional)",
 
 	'subsite_manager:subsite_admin:invite:new_user:subject' => "You have been invited to join %s",
@@ -326,21 +327,21 @@ To accept the invitation click on this link:
 %s
 
 This is an automated message, please don't reply",
-	
+
 	// subsites - invite (csv step 2)
 	'subsite_manager:invite_csv:column:label' => "Please tell us which column hold which information",
 	'subsite_manager:invite_csv:column:description' => "We need to know which column hold the email addresses of the users. Optionaly you can select a column which holds the name of the user.",
 	'subsite_manager:invite_csv:column:select' => "Please select a column",
-	
+
 	// subsites - invitations
 	'subsite_manager:invitations:description' => "Here you can find a list of all the invitations that where send out to the different users",
-	
+
 	'subsite_manager:invitations:users:title' => "Invitations to existing users",
 	'subsite_manager:invitations:email:title' => "Invitations using email addresses",
 	'subsite_manager:invitations:none:title' => "No invitations found",
-	
+
 	'subsite_manager:invitations:revoke:confirm' => "Are you sure you wish to revoke this invitation",
-	
+
 	// manage plugins
 	'subsite_manager:subsite:plugins:description' => "Here you can manage which plugins are active/available on the Subsite. Please be carefull! %sI know what i'm doing%s.",
 	'subsite_manager:subsite:plugins:enable_everywhere' => "Enabled everywhere",
@@ -348,32 +349,33 @@ This is an automated message, please don't reply",
 	'subsite_manager:subsite:plugins:fallback_to_main_settings' => "Fallback to main site plugin settings",
 	'subsite_manager:subsite:plugins:use_global_usersettings' => "Use global user plugin settings",
 	'subsite_manager:subsite:plugins:subsite_default_manageable' => "Manageable on Subsite",
-	
+	'subsite_manager:subsite:plugins:update_subsites' => "Update subsites",
+
 	// plugin list
 	'subsite_manager:plugins:description' => "Use this list to manage the different plugin on this site.",
 	'subsite_manager:plugins:simple:switch' => "Switch to advanced mode",
 	'subsite_manager:plugins:advanced:switch' => "Switch to simple mode",
-	
+
 	// plugin super admin options
 	'subsite_manager:plugins:advanced:description' => "Advanced plugin options, BE CAREFULL!!!!",
 	'subsite_manager:plugins:advanced:disable_all' => "Disable on all Subsites",
 	'subsite_manager:plugins:advanced:disable_all:title' => "Disable all instances of this plugin on every Subsite",
 	'subsite_manager:plugins:advanced:disable_all:confirm' => "Are you sure you wish to disable this plugin on all Subsites?",
-	
+
 	// plugin fallback (on subsite)
 	'subsite_manager:plugins:subsite:fallback' => "Reset to default settings",
 	'subsite_manager:plugins:subsite:fallback:confirm' => "Are you sure you wish to go back to the default plugin settings? This can't be undone!",
-	
+
 	// subsites - widget
 	'subsite_manager:widgets:subsites:title' => "Subsites",
 	'subsite_manager:widgets:subsites:description' => "Show a list of Subsite, choose between latest Subsites and featured Subsites",
 	'subsite_manager:widgets:subsite:show_featured' => "Only show featured Subsites",
-	
+
 	// subsites - no member
 	'subsite_manager:profile:no_member:title' => "%s has an account, but is no member of this subsite",
 	'subsite_manager:profile:no_member:header' => "has an account, but is no member of this subsite",
 	'subsite_manager:profile:no_member:visit' => "To view his/her profile you can go %shere%s",
-	
+
 	// create users on subsites
 	'subsite_manager:create:user:request_membership' => "This user registered on this subsite, however approval was required. Please check if this user can join your subsite.",
 	'subsite_manager:create:user:message:request_membership' => "You have successfully created an account, however membership to this subsite requires approval by the administrator. This request has been made for you.",
@@ -394,25 +396,25 @@ To visit the Subsite follow this link:
 	// main profile fields on subsite
 	'subsite_manager:profile_fields:global:title' => "Manage global profile fields",
 	'subsite_manager:profile_fields:global:description' => "The following profile fields are managed from the main level. You can configure a limited set of options on these fields.",
-	
+
 	// bulk actions
 	// newest users
 	'subsite_manager:newest_users:bulk_action:check_all' => "Select all",
 	'subsite_manager:newest_users:bulk_action:created' => "Account created: %s",
-	
+
 	// actions
 	// general errors
 	'subsite_manager:action:error:input' => "Invalid input, please check the form",
 	'subsite_manager:action:error:on_subsite' => "This action can't be performed on a Subsite",
 	'subsite_manager:action:error:subsite_only' => "This action can only be performed on a Subsite",
 	'subsite_manager:action:subsites:join:error:missing_fields' => "Please check the mandatory profile fields",
-	
+
 	// Subsites - new
 	'subsite_manager:action:subsites:new:error:last_save' => "Error while saving the Subsite data",
 	'subsite_manager:action:subsites:new:error:validate:url:duplicate' => "The provided URL is already in use",
 	'subsite_manager:action:subsites:new:error:validate:url:invalid' => "The provided URL is invalid, please check for http:// or https:// and a trailing /",
 	'subsite_manager:action:subsites:new:success' => "The Subsite was created successfully",
-	
+
 	// Subsites - import - step 1
 	'subsite_manager:action:import:step1:error:csv' => "Please upload a CSV file",
 	'subsite_manager:action:import:step1:error:file' => "The uploaded file couldn't be opened, please try again",
@@ -430,48 +432,48 @@ To visit the Subsite follow this link:
 	'subsite_manager:action:subsites:add_user:error:join' => "%s is not allowed to join %s",
 	'subsite_manager:action:subsites:add_user:error:add' => "An error occured while adding %s to %s",
 	'subsite_manager:action:subsites:add_user:success' => "%s successfully joined %s",
-	
+
 	// Subsites - remvove user
 	'subsite_manager:action:subsites:remove_user:error:remove' => "An unknown error occured while removing %s from %s",
 	'subsite_manager:action:subsites:remove_user:success' => "%s successfully left %s",
-	
+
 	// subsites - join - request approval
 	'subsite_manager:actions:subsites:join:request_approval:error:request' => "An error occured while requesting membership, please try again",
 	'subsite_manager:actions:subsites:join:request_approval:success' => "You've successfully requested membership. You'll be notified when it has been approved.",
-	
+
 	// subsites - join - validate domain
 	'subsite_manager:actions:subsites:join:validate_domain:error:domain' => "The domain of the provided e-mail address isn't valid on this subsite",
 	'subsite_manager:actions:subsites:join:validate_domain:success' => "An e-mail has been sent to you e-mail address, please check your inbox",
-	
+
 	// manage plugins
 	'subsite_manager:action:plugins:manage:success' => "New plugin settings saved successfully",
-	
+
 	// plugin fallback
 	'subsite_manager:actions:plugins:fallback:success' => "This plugin will now use the default settings",
 	'subsite_manager:actions:plugins:fallback:error:unset' => "An unknown error occured while revering to default settings",
 	'subsite_manager:actions:plugins:fallback:error:subsite' => "The action can only be performed on a Subsite",
-	
+
 	// subsite - toggle featured
 	'subsite_manager:actions:subsites:toggle_featured:success:featured' => "Subsite successfully featured",
 	'subsite_manager:actions:subsites:toggle_featured:success:unfeatured' => "Subsite successfully unfeatured",
-	
+
 	// plugins - disable all
 	'subsite_manager:actions:plugins:disable_all:error:no_active' => "This plugin is not active on any Subsite",
 	'subsite_manager:actions:plugins:disable_all:error:some_errors' => "Not all plugins could be disabled",
 	'subsite_manager:actions:plugins:disable_all:success' => "The plugin has successfully been disabled on all Subsites",
-	
+
 	// subsites - membership - approve
 	'subsite_manager:action:subsite:membership:approve:success' => "Membership request approved successfully, the user has been notified",
 	'subsite_manager:action:subsite:membership:approve:error' => "Something went wrong while approving the membership request",
-	
+
 	// subsites - membership - approve
 	'subsite_manager:action:subsite:membership:decline:success' => "Membership request declined successfully, the user has been notified",
 	'subsite_manager:action:subsite:membership:decline:error' => "Something went wrong while declining the membership request",
-	
+
 	// subsites - invite - revoke
 	'subsite_manager:action:invite:revoke:error' => "There was an error while revoking the invitation, please try again",
 	'subsite_manager:action:invite:revoke:success' => "The invitation was successfully revoked",
-	
+
 	// subsites - invite - csv
 	'subsite_manager:action:invite:csv:error:content' => "No CSV was available to invite users from, please upload it again",
 	'subsite_manager:action:invite:csv:error:email_column' => "Please provide an email column",
@@ -479,25 +481,25 @@ To visit the Subsite follow this link:
 	'subsite_manager:action:invite:csv:error:csv' => "There was an error while opening the CSV file",
 	'subsite_manager:action:invite:csv:error:users' => "No (new) users were invited",
 	'subsite_manager:action:invite:csv:success' => "Successfully invited %s users",
-	
+
 	// subsites - invite - invite
 	'subsite_manager:action:invite:error:users' => "No users were invited",
 	'subsite_manager:action:invite:success:csv' => "Please continue with step 2 of the invitation proccess",
 	'subsite_manager:action:invite:success:users' => "Successfully invited %s users",
 	'subsite_manager:action:invite:success:users_csv' => "Successfully invited %s users, continue with step 2 of the invitation proccess",
-	
+
 	// main profile fields configuration
 	'subsite_manager:action:main_profile_fields:success' => "Configuration saved successfully",
 	'subsite_manager:action:main_profile_fields:error:save' => "Something went wrong while saving the configuration",
-	
+
 	// bulk actions
 	'subsite_manager:action:bulk_action:dummy' => "Please select a bulk action to perform",
-	
+
 	// river widget
 	'widget:river_widget:edit:site_selection' => "Activity from site",
 	'widget:river_widget:edit:site_selection:current' => "Current site",
 	'widget:river_widget:edit:site_selection:all' => "All my sites",
-	
+
 	// move groups
 	'subsite_manager:groups:move:title' => "Move this group to a different site",
 	'subsite_manager:groups:move:description' => "Here you can choose to move this group to a new (sub)site. Please be carefull, this will move all the content in this group to the new site. NOTE: all access levels above the group access will be reset to group access (eg. Public content will become group content).",
@@ -506,11 +508,11 @@ To visit the Subsite follow this link:
 	'subsite_manager:forms:groups:move:select_subsite' => "Select the new site",
 	'subsite_manager:forms:groups:move:submit' => "Move group",
 	'subsite_manager:forms:groups:move:confirm' => "Are you sure you wish to move this group?",
-	
+
 	'subsite_manager:action:groups:move:error:same_site' => "You can't move the group to the same site",
 	'subsite_manager:action:groups:move:error:not_a_member' => "You're not a member of the targeted site",
 	'subsite_manager:action:groups:move:error:move' => "An error occured during the move",
 	'subsite_manager:action:groups:move:success' => "The group was moved to the site %s",
 );
-	
+
 add_translation("en", $english);

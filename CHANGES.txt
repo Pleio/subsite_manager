@@ -1,5 +1,8 @@
 = Version History =
 
+2.5 (2015-06-05):
+- changed: replaced plugin sorting trigger on subsite with one central call from main site
+
 x.x:
 
 - added: CSV export for all the subsite admins
@@ -24,7 +27,7 @@ x.x:
 - added: support for user support staff members
 - added: support for plugin manager
 - added: notification when a site administrator removes a user from the site
-- added: personal message when declining membership request 
+- added: personal message when declining membership request
 - added: Dutch translation
 - added: entity to the check if you are currently viewing content that can be indexed
 - added: option to enable indexing of the frontpage
@@ -136,7 +139,7 @@ x.x:
 1.15 (2011-09-28):
 
 - fixed: support for 1.7.11
-	
+
 1.14 (2011-09-23):
 
 - added: if user joins a group on a subsite he/she can join, the user is added to the subsite
@@ -148,15 +151,15 @@ x.x:
 - fixed: bug in widget access hook on subsites
 - fixed: encoding error in group invite form
 - fixed: listing of group invitations
-	
+
 1.13 (2011-08-05):
 
 - added: option to get plugin settings from main site
-- added: option to configure plugin usersettings globaly 
+- added: option to configure plugin usersettings globaly
 - added: support for user_support admin notification
 - changed: import/invite message now a long text (instead of plain text)
 - fixed: now hiding profile types (not supported)
-- fixed: subsite icon check if exists 
+- fixed: subsite icon check if exists
 - fixed: timelimit on import and invite actions
 
 1.12 (2011-07-15):
@@ -165,7 +168,7 @@ x.x:
 - added: option to show navigation bar at top or bottom of a site
 - added: join form for subsite if you miss required profile fields
 - added: dutch translation
-- fixed: create username from email could result in not unique username 
+- fixed: create username from email could result in not unique username
 
 1.11 (2011-07-11):
 
@@ -190,7 +193,7 @@ x.x:
 
 - added: a * to search sql to allow for partial full text search
 - removed: group invite pages/action, are now handled by group_tools
-	
+
 1.7 (2011-06-17):
 
 - added: creation of a complete menu for menu_builder plugin for new subsites
@@ -201,7 +204,7 @@ x.x:
 
 - added: default on for plugins when creating a new subsite
 - added: notification to all subsite admins on a new join request
-- changed: admin link membership request counter in topbar on subsites is a separate link 
+- changed: admin link membership request counter in topbar on subsites is a separate link
 - changed: added share_it to required plugins
 
 1.5 (2011-06-06):
@@ -215,7 +218,7 @@ x.x:
 - fixed: widgets access on subsites
 - fixed: update of caching in engine/start.php now works properly
 - removed: plugins from subsite manage form
-	
+
 1.4.1 (2011-05-19):
 
 - fixed: subsite analytics tracking when no analytics on subsite
@@ -235,7 +238,7 @@ x.x:
 - added: user search listing view
 - fixed: pagination group membership listing fails
 - fixed: strtolower on url when saving a subsite
-	
+
 1.2 (2011-04-04):
 
 - added: confirm on subsite leave action
@@ -268,15 +271,15 @@ x.x:
 - added: listing of all administrators for admins
 - added: listing of subsite admins on subsite for subsite admins
 - added: link to 'My Subsites' in subsite navigation bar (only if you have 1 or more subsitememberships)
-- added: superadmins to manager all sites 
+- added: superadmins to manager all sites
 - changed: caching mechanisme to be able to use ETAG caching when PHP is in CGI mode
 - changed: subsite admins are normal admins now, but their admin rights are limited to their own sites (mantis #52)
 - fixed: subsite admins not able to edit their own site details
 - fixed: email validation link for subsite not working
 - fixed: css of subsite navigation bar to remain the same on every subsite
 - fixed: register user on subsite now listens to site membership setting (mantis #52)
-- removed: join/leave action in subsite navigation bar 
-	
+- removed: join/leave action in subsite navigation bar
+
 0.6 (2011-01-24):
 
 - added: subsites show up in search results (on main website only)
@@ -287,14 +290,14 @@ x.x:
 0.5.1 (2011-01-13):
 
 - fixed: drop down subsite selector not working on some template
-	
+
 0.5 (2011-01-05):
 
 - added: cron handler to allow cron on subsites (mantis #25)
 - changed: topbar no longer extended => changed to prepend of header_contents
 - changed: engine/lib/entities.php ElggEntity->get && ElggEntity->set to handle metadata better (mantis #24)
 - fixed: issue when validating account and logging in on subsite (mantis #24)
-	
+
 0.4 (2010-11-30):
 
 - added: copy plugin settings from main site to subsite (if not alreadey exists)
@@ -326,7 +329,7 @@ x.x:
 
 - added: updating cache when running upgrade.php
 - added: addUser, removeUser and isUser to Subsite class
-- added: add_user and remove_user subsite actions 
+- added: add_user and remove_user subsite actions
 - added: join/leave buttons on subsite object view
 - added: topbar menu with connected Subsites
 - added: page for regular users to select/link/connect subsites available to them
@@ -340,7 +343,7 @@ x.x:
 - fixed: subsites list on subsite
 - fixed: subsite create/edit auto join admins
 - fixed: subsite join acl
-	
+
 0.1:
 
 - first release

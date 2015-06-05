@@ -308,6 +308,7 @@
 	elgg_register_action("subsites/update_advanced", dirname(__FILE__) . "/actions/subsites/update_advanced.php", "admin");
 	elgg_register_action("subsites/delete", dirname(__FILE__) . "/actions/subsites/delete.php", "admin");
 	elgg_register_action("subsites/plugins", dirname(__FILE__) . "/actions/subsites/plugins.php", "admin");
+	elgg_register_action("subsites/update_plugins", dirname(__FILE__) . "/actions/subsites/update_plugins.php", "admin");
 	elgg_register_action("subsites/toggle_featured", dirname(__FILE__) . "/actions/subsites/toggle_featured.php", "admin");
 	elgg_register_action("subsites/import/step1", dirname(__FILE__) . "/actions/subsites/import/step1.php", "admin");
 	elgg_register_action("subsites/import/step2", dirname(__FILE__) . "/actions/subsites/import/step2.php", "admin");
