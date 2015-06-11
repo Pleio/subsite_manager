@@ -13,13 +13,6 @@ if (subsite_manager_on_subsite()) {
     exit();
 }
 
-// this could take a while
-set_time_limit(0);
-
-// stream sites
-ob_implicit_flush(true);
-ob_end_flush();
-
 $old_ia = elgg_set_ignore_access(true);
 
 $site_guid = get_input('site_guid');

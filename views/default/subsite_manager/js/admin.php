@@ -45,9 +45,9 @@ function subsite_manager_autocomplete_format_result(row, elem_id, input_name) {
 }
 
 function subsite_manager_update_plugins() {
-	$('#status').text('Started...');
-
 	var button = $('#subsite-manager-update-plugins');
+
+	$('#status').text('Started...');
 	button.attr('disabled', true);
 
 	sites = button.data('subsites');
@@ -65,18 +65,20 @@ function subsite_manager_update_plugins() {
 					' and activated: ' + response['output']['activated'] +
 					' in ' + response['output']['time']
 				);
+
+				i += 1;
+
+				if (i != sites.length) {
+					get_plugins(i);
+				} else {
+					button.attr('disabled', false);
+
+				}
 			},
 			error: function(response) {
 				setTimeout(function() {
 					get_plugins(i);
 				}, 1000);
-			},
-			complete: function() {
-				i += 1;
-
-				if (i != sites.length) {
-					get_plugins(i);
-				}
 			}
 		});
 	};
