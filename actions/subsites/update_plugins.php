@@ -1,6 +1,6 @@
 <?php
 /**
- * Sync and order plugins of all subsites.
+ * Sync and order plugins of a subsite.
  *
  * @package SubsiteManager
  */
@@ -22,28 +22,21 @@ ob_end_flush();
 
 $old_ia = elgg_set_ignore_access(true);
 
-$options = array(
-    'type' => 'site',
-    'subtype' => Subsite::SUBTYPE,
-    'limit' => false
-);
+$site_guid = get_input('site_guid');
 
-echo '<ul>';
-$batch = new ElggBatch('elgg_get_entities', $options);
-foreach ($batch as $subsite) {
-    $result = subsite_manager_sync_plugins($subsite);
-    echo '<li>';
-    echo '<b>' . $subsite->name . ' (' . $subsite->url . ') ';
-    echo $result[0] . ' sorted ';
-    echo $result[1] . ' added';
-    echo '</b></li>';
+$start = microtime(true);
+$subsite = get_entity((int) get_input('site_guid'));
 
-    ob_flush();
+if (!$subsite instanceof Subsite) {
+    throw new Exception('Not a subsite');
 }
-echo '</ul>';
 
-echo 'Ready, <a href="/admin/">back to admin</a>.';
+$result = subsite_manager_sync_plugins($subsite);
+
+echo json_encode(array(
+    'sorted' => $result[0],
+    'activated' => $result[1],
+    'time' => round(microtime(true) - $start, 2)
+));
 
 elgg_set_ignore_access($old_ia);
-
-exit(); // do not forward

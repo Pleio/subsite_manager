@@ -81,8 +81,7 @@
 		$list .= "<div class='elgg-foot'>";
 		$list .= elgg_view("input/submit", array("value" => elgg_echo("update")));
 		$list .= elgg_view("output/url", array(
-			"href" => "/action/subsites/update_plugins",
-			"is_action" => true,
+			"href" => "/admin/subsites/update_plugins",
 			"class" => "elgg-button elgg-button-action",
 			"text" => elgg_echo("subsite_manager:subsite:plugins:update_subsites")
 		));

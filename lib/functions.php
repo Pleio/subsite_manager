@@ -1123,9 +1123,9 @@
         $plugins = subsite_manager_get_plugins();
 
         foreach ($plugins as $plugin) {
-            $priority = array_search($plugin->getID(), $global_order) + 1;
+            $priority = array_search($plugin->getID(), $global_order)+1;
             if ($priority === false) {
-                $priority = 'latest';
+                $priority = 'last';
             }
 
             $priority_name = elgg_namespace_plugin_private_setting('internal', 'priority');
