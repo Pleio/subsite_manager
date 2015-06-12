@@ -698,9 +698,11 @@
 			// difficult to do because the hooks permissions_check and container_permissions_check seem
 			// very site-agnostic.
 
-      if (get_input('access_id')) {
-              $access_collection = get_access_collection(get_input('access_id'));
-      }
+			if ($entity->access_id) {
+				$access_collection = get_access_collection($entity->access_id);
+			} elseif (get_input('access_id')) {
+				$access_collection = get_access_collection(get_input('access_id'));
+			}
 
 			// check if user is not trying to edit something he allready owns
 			if ($entity->owner_guid != $user->guid) {
