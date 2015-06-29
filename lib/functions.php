@@ -122,7 +122,8 @@
 
         if (elgg_is_logged_in() &&
             elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") &&
-            !$site->isUser())
+            !$site->isUser() &&
+            !subsite_manager_is_superadmin())
         {
             if (!isset($_SESSION['msg'])) {
                 $_SESSION['msg'] = array();
