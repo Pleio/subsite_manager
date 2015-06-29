@@ -287,6 +287,7 @@
 					"static",
 					"appearance:expages",
 					"appearance:theme_oirschot",
+					"appearance:theme_eersel",
 					"plugins",
 					"widgets",
 					"widgets:manage",
