@@ -712,7 +712,7 @@
 				// allow the user to save something for groups (ACL)
 				if (!(isset($access_collection) && get_entity($access_collection->owner_guid) instanceof ElggGroup)) {
 					// allow certain preconfigured actions and contexts
-					if (!in_array(get_input('action'), $allowed_actions) && !in_array(get_context(), $allowed_contexts)) {
+					if (!in_array(get_input('action'), $allowed_actions) && !in_array(elgg_get_context(), $allowed_contexts)) {
 						return false;
 					}
 				}
@@ -747,7 +747,7 @@
 						"entities"
 					);
 					
-					if (in_array(get_input("action"), $allowed_actions) || in_array(get_context(), $allowed_contexts)) {
+					if (in_array(get_input("action"), $allowed_actions) || in_array(elgg_get_context(), $allowed_contexts)) {
 						// check if the user is an admin of the current site and the entity (user) is a member of this site
 						if ($site->isAdmin($user->getGUID()) && $site->isUser($entity->getGUID())) {
 							return true;
