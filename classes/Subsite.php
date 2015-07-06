@@ -114,7 +114,7 @@ class Subsite extends ElggSite {
 
 		if($this->icontime){
 			if(in_array($size, $this->icon_sizes)){
-				$result = $this->url . "subsite_icon/" . $this->getGUID(). "/" . $size . "/" . $this->icontime . ".jpg";
+				$result = elgg_normalize_url("subsite_icon/" . $this->getGUID(). "/" . $size . "/" . $this->icontime . ".jpg");
 			}
 		} else {
 			$result = parent::getIconUrl($size);
