@@ -3,7 +3,7 @@
 	<name>Subsite Manager</name>
 	<author>ColdTrick IT Solutions</author>
 	<version>2.4</version>
-	<description>Manage Subsites</description>
+	<description>This plugin allows the creation of subsites within ELGG.</description>
 	<website>http://www.coldtrick.com/</website>
 	<repository>https://github.com/Pleio/subsite_manager</repository>
 	<bugtracker>https://github.com/Pleio/subsite_manager/issues</bugtracker>
