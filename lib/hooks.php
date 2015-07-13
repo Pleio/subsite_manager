@@ -806,10 +806,7 @@
 				// Widgets have a differtent access level then the rest of the content
 				if(elgg_in_context("widgets") && (elgg_in_context("index") || elgg_in_context("groups"))){
 					if(elgg_in_context("index") && elgg_is_admin_logged_in()){
-						// admins only have the following options for index widgets
-						$result = array(
-							ACCESS_PRIVATE => elgg_echo("access:admin_only")
-						);
+						$result[ACCESS_PRIVATE] = elgg_echo("access:admin_only");
 
 						if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
 							$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
@@ -822,9 +819,7 @@
 					} elseif(elgg_in_context("groups")) {
 						$group = elgg_get_page_owner_entity();
 						if(!empty($group->group_acl)){
-							$result = array(
-								$group->group_acl => elgg_echo("groups:group") . ": " . $group->name
-							);
+							$result[$group->group_acl] = elgg_echo("groups:group") . ": " . $group->name;
 							
 							if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
 								$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
