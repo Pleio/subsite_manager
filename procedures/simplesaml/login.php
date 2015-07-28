@@ -46,13 +46,6 @@
 					// user is authenticated with IDP, so check in Elgg
 					$saml_attributes = simplesaml_get_authentication_attributes($saml_auth, $source);
 					
-					// check for additional authentication rules
-					if (!simplesaml_validate_authentication_attributes($source, $saml_attributes)) {
-						// not authorized
-						register_error(elgg_echo("simplesaml:error:attribute_validation", array($label)));
-						forward();
-					}
-					
 					// save the attributes for further use
 					$_SESSION["saml_attributes"] = $saml_attributes;
 					$_SESSION["saml_source"] = $source;

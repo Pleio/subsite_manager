@@ -42,6 +42,16 @@
 					$forward_url = elgg_add_action_tokens_to_url($forward_url);
 				}
 			}
+			
+			// check for additional authentication rules
+			if (!simplesaml_validate_authentication_attributes($source, $saml_attributes)) {
+				// not authorized
+				$label = simplesaml_get_source_label($source);
+			
+				register_error(elgg_echo("simplesaml:error:attribute_validation", array($label)));
+				$forward_url = '';
+				$valid = false;
+			}
 		}
 	}
 	
