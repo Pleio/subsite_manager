@@ -13,8 +13,6 @@
 
 		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "") {
 			$protocol = "https";
-		} elseif (isset($_SERVER['HTTP_X_HTTPS_SESSION']) && $_SERVER['HTTP_X_HTTPS_SESSION'] != "") {
-			$protocol = "https";
 		} else {
 			$protocol = "http";
 		}
@@ -38,25 +36,6 @@
 			$default_site = get_entity($default_site_guid);
 
 			forward($default_site->url);
-		}
-
-		// check if we have a custom domain
-		if(!empty($site)){
-			$current_cookie_domain = ini_get("session.cookie_domain");
-
-			if(!empty($current_cookie_domain)){
-				$url_parts = parse_url($site->url);
-
-				$offset = 0;
-				if(substr($current_cookie_domain, 0, 1) === "."){
-					$offset = 1;
-				}
-
-				if(substr($url_parts["host"], $offset - strlen($current_cookie_domain)) !== substr($current_cookie_domain, $offset)){
-					ini_set("session.cookie_domain", $url_parts["host"]);
-					$SUBSITE_MANAGER_CUSTOM_DOMAIN = true;
-				}
-			}
 		}
 
 		return $result;
