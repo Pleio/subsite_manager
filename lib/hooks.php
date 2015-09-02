@@ -1396,19 +1396,19 @@
 	* @param unknown_type $params
 	*/
 	function subsite_manager_plugin_action_hook($hook, $action, $return_value, $params){
-		
+
 		// are we on a Subsite, so we can handle cron reset
 		if(subsite_manager_on_subsite() && ($action == "plugins/settings/save")){
 			$site = elgg_get_site_entity();
-			
+
 			// handling of the cron cache reset is done by the event function
 			subsite_manager_remove_cron_cache($site->getGUID());
 		}
-		
-		// handle plugin reorder of main site
-		if(!subsite_manager_on_subsite() && ($action == "admin/plugins/set_priority")){
-			// update plugin order timestamp
-			datalist_set("plugin_order_last_update", time());
+
+		// clear plugin order cache
+		if (is_memcache_available()) {
+			$memcache = new ElggMemcache('subsite_manager');
+			$memcache->delete('plugin_order');
 		}
 	}
 	

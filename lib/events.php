@@ -17,9 +17,6 @@
 	function subsite_manager_upgrade_system_handler($event, $type, $entity){
 		
 		if(get_input("all") == "true"){
-			// update plugin order timestamp
-			datalist_set("plugin_order_last_update", time());
-				
 			// find subsites and do stuff
 			$options = array(
 					"type" => "site",
@@ -71,19 +68,9 @@
 				$sql .= " AND entity_guid = " . $subsite->getGUID();
 		
 				delete_data($sql);
-		
-				// reset plugin order
-				remove_private_setting($subsite->getGUID(), "plugin_order_last_update");
-		
 			}
 		}
 		
-		// force reorder of plugins on subsite
-		if (subsite_manager_on_subsite()) {
-			$site = elgg_get_site_entity();
-		
-			remove_private_setting($site->getGUID(), "plugin_order_last_update");
-		}
 	}
 	
 	/**

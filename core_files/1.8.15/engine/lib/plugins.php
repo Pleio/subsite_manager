@@ -417,6 +417,17 @@ function elgg_get_plugins($status = 'active', $site_guid = null) {
 	$plugins = elgg_get_entities_from_relationship($options);
 	elgg_set_ignore_access($old_ia);
 
+	// apply ordering of main site to plugins
+	if ($site_guid != 1) {
+		include_once(dirname(__FILE__) . '/../../mod/subsite_manager/lib/functions.php');
+
+		$plugin_order = subsite_manager_get_plugin_order();
+		usort($plugins, function($a, $b) use ($plugin_order) {
+			return ($plugin_order[$a->title] < $plugin_order[$b->title]) ? -1 : 1;
+		});
+
+	}
+
 	return $plugins;
 }
 

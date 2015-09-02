@@ -1,5 +1,4 @@
 <?php
-
     function subsite_manager_get_subsite_last_activity($site_guid){
         $result = false;
 
@@ -1155,4 +1154,46 @@
         elgg_set_config('plugins_by_id_map', $plugins_by_id_map);
 
         return array($sorted, $activated);
+    }
+
+    function subsite_manager_get_plugin_order() {
+        if (is_memcache_available()) {
+            $memcache = new ElggMemcache('subsite_manager');
+        }
+
+        if (isset($memcache)) {
+            if ($plugin_order = $memcache->load('plugin_order')) {
+                return $plugin_order;
+            }
+        }
+
+        $db_prefix = get_config('dbprefix');
+        $priority = elgg_namespace_plugin_private_setting('internal', 'priority');
+
+        $options = array(
+            'type' => 'object',
+            'subtype' => 'plugin',
+            'limit' => ELGG_ENTITIES_NO_VALUE,
+            'selects' => array('plugin_oe.*'),
+            'joins' => array(
+                "JOIN {$db_prefix}private_settings ps on ps.entity_guid = e.guid",
+                "JOIN {$db_prefix}objects_entity plugin_oe on plugin_oe.guid = e.guid"
+                ),
+            'wheres' => array("ps.name = '$priority'"),
+            'order_by' => "CAST(ps.value as unsigned), e.guid",
+            'site_guids' => array(1)
+        );
+
+        $plugins = elgg_get_entities_from_relationship($options);
+
+        $plugin_order = array();
+        foreach ($plugins as $i => $plugin) {
+            $plugin_order[$plugin->title] = $i;
+        }
+
+        if (isset($memcache)) {
+            $memcache->save('plugin_order', $plugin_order);
+        }
+
+        return $plugin_order;
     }
