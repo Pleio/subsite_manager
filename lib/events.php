@@ -276,6 +276,8 @@
 				if ($site->hasInvitation($object->getGUID(), $object->email)) {
 					// you were invited so all is good
 					$site->addUser($object->getGUID());
+				} elseif ($SUBSITE_MANAGER_IMPORTING_USERS === true) {
+					// skip check, as we are importing users from batch
 				} else {
 					// check if the user is allowed on this site and add the user to main site
 					switch ($site->getMembership()) {
