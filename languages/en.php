@@ -54,6 +54,7 @@ $english = array(
 	'admin:users:admins' => "Administrators",
 	'admin:users:membership' => "Membership requests",
 	'admin:users:import' => "Import users",
+	'admin:users:bulk_remove' => "Bulk remove users",
 	'admin:users:invite' => "Invite users",
 	'admin:users:invite_csv' => "Invite users by CSV (step 2)",
 	'admin:users:invitations' => "View invitations",
@@ -513,6 +514,12 @@ To visit the Subsite follow this link:
 	'subsite_manager:action:groups:move:error:not_a_member' => "You're not a member of the targeted site",
 	'subsite_manager:action:groups:move:error:move' => "An error occured during the move",
 	'subsite_manager:action:groups:move:success' => "The group was moved to the site %s",
+
+	// bulk remove users
+	'subsite_manager:users:bulk_remove:description' => "This function allows you to permanently remove users in a batch, but only when the user has not accepted the general terms. Insert a text-file with one username or e-mail per line.",
+	'subsite_manager:users:bulk_remove:success' => "%s users are removed, %s users cannot be found and %s users where not removed because they are already active.",
+	'subsite_manager:users:bulk_remove:no_access' => "No access to this page.",
+	'subsite_manager:users:bulk_remove:no_file' => "Could not find a valid CSV file."
 );
 
 add_translation("en", $english);

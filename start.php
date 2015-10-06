@@ -153,6 +153,7 @@
 			if(subsite_manager_is_superadmin_logged_in()){
 				//only for super admins
 				elgg_register_admin_menu_item("administer", "import", "users", 150);
+				elgg_register_admin_menu_item("administer", "bulk_remove", "users", 160);
 			}
 
 			// list subsite administrators
@@ -336,5 +337,7 @@
 	elgg_register_action("subsite_manager/newest_users/bulk_action", dirname(__FILE__) . "/actions/bulk_action/dummy.php", "admin");
 	elgg_register_action("subsite_manager/bulk_action/user_delete", dirname(__FILE__) . "/actions/bulk_action/user_delete.php", "admin");
 	elgg_register_action("subsite_manager/groups/move", dirname(__FILE__) . "/actions/groups/move.php", "admin");
+
+	elgg_register_action("subsite_manager/users/bulk_remove", dirname(__FILE__) . "/actions/users/bulk_remove.php", "admin");
 
 	elgg_register_action("subsites/export_admins", dirname(__FILE__) . "/actions/subsites/export_admins.php", "admin");
