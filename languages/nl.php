@@ -55,6 +55,7 @@ Dit is een automatisch bericht, gelieve niet te reageren',
   'admin:settings:access' => 'Toegang instellingen',
   'admin:users:membership' => 'Lidmaatschaps aanvragen',
   'admin:users:import' => 'Gebruikers importeren',
+  'admin:users:bulk_remove' => 'Bulk gebruikers verwijderen',
   'admin:users:invite' => 'Gebruikers uitnodigen',
   'admin:users:invite_csv' => 'Gebruikers uitnodigen via CSV-bestand (stap 2)',
   'admin:users:invitations' => 'Bekijk uitnodigingen',
@@ -364,5 +365,11 @@ Voor een bezoek aan de deelsite volg deze link:
   'subsite_manager:action:groups:move:error:not_a_member' => "Je bent geen lid van de doel site",
   'subsite_manager:action:groups:move:error:move' => "Er is een fout opgetreden tijdens het verplaatsen",
   'subsite_manager:action:groups:move:success' => "De groep is verplaatst naar de site %s",
+
+  // bulk remove users
+  'subsite_manager:users:bulk_remove:description' => "Met deze functie kan een batch aan gebruikers permanent verwijderd worden van de site, maar alleen wanneer de gebruiker de algemene voorwaarden nog niet heeft geaccepteerd. Voer een tekstbestand in met op iedere regel één e-mailadres of gebruikersnaam.",
+  'subsite_manager:users:bulk_remove:success' => "%s gebruikers zijn verwijderd, %s gebruikers konden niet gevonden worden, %s gebruikers zijn niet verwijderd omdat ze al actief waren.",
+  'subsite_manager:users:bulk_remove:no_access' => "Geen toegang tot deze pagina.",
+  'subsite_manager:users:bulk_remove:no_file' => "Kon geen geldig CSV bestand vinden."
 );
 add_translation("nl", $language);

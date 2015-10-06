@@ -1257,17 +1257,17 @@
 			// get main fields
 			$main_cat_fields = profile_manager_get_categorized_fields($user, $edit, false, $profile_type_limit, $profile_type_guid);
 			
-			
 			if($register){
 				
 				$main_register_fields = subsite_manager_get_main_profile_fields_configuration(true);
-				
+
 				foreach($main_cat_fields["fields"] as $cat_key => $category){
 					foreach($category as $key => $field){
-						if($field->show_on_register !== "yes"){
-							if($main_register_fields && array_key_exists($field->metadata_name, $main_register_fields)){
-								// do nothing
-							} else {
+						if($main_register_fields && array_key_exists($field->metadata_name, $main_register_fields)){
+							$field->setVolatileData("mandatory", $main_register_fields[$field->metadata_name]['mandatory']);
+							$field->setVolatileData("show_on_register", $main_register_fields[$field->metadata_name]['show_on_register']);
+						} else {
+							if($field->show_on_register !== "yes"){
 								unset($main_cat_fields["fields"][$cat_key][$key]);
 							}
 						}
@@ -1317,6 +1317,7 @@
 				
 			$running = false;
 			elgg_set_config("site_guid", $site->getGUID());
+
 		}
 		
 		return $result;
