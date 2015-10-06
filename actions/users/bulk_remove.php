@@ -22,10 +22,10 @@ $removed = 0; // number of removed users
 $not_found = 0; // number of users not found
 $already_activated = 0; // number of users not removed because they where already activated
 
-while (($data = fgetcsv($fh, 0, ";")) !== false) {
+while ($data = fgetcsv($fh, 0, ";")) {
 
     if (!$data[0]) {
-        //continue;
+        continue;
     }
 
     if (strpos($data[0], '@') !== false) {
