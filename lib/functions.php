@@ -682,7 +682,7 @@
                 "limit" => false,
                 "site_guids" => false,
                 "joins" => array("JOIN " . elgg_get_config("dbprefix") . "private_settings s ON e.guid = s.entity_guid"),
-                "wheres" => array("(s.name = 'membership_invitation' AND s.value LIKE '%" . $user->email . "%')")
+                "wheres" => array("(s.name = 'membership_invitation' AND s.value LIKE '%" . sanitise_string($user->email) . "%')")
             );
 
             $subsites_email = elgg_get_entities($options);
