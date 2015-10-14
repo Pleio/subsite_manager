@@ -419,13 +419,14 @@ function elgg_get_plugins($status = 'active', $site_guid = null) {
 
 	// apply ordering of main site to plugins
 	if ($site_guid != 1) {
-		include_once(dirname(__FILE__) . '/../../mod/subsite_manager/lib/functions.php');
-
-		$plugin_order = subsite_manager_get_plugin_order();
-		usort($plugins, function($a, $b) use ($plugin_order) {
-			return ($plugin_order[$a->title] < $plugin_order[$b->title]) ? -1 : 1;
-		});
-
+		if (include_once(dirname(__FILE__) . '/../../mod/subsite_manager/lib/functions.php')) {
+			if (function_exists('subsite_manager_get_plugin_order')) {
+				$plugin_order = subsite_manager_get_plugin_order();
+				usort($plugins, function($a, $b) use ($plugin_order) {
+					return ($plugin_order[$a->title] < $plugin_order[$b->title]) ? -1 : 1;
+				});
+			}
+		}
 	}
 
 	return $plugins;
