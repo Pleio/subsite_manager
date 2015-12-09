@@ -159,7 +159,7 @@ The site administrator %s revoked your membership of the subsite %s.
 	'subsite_manager:subsites:update:disable_htmlawed:description' => "WARNING: when checked admins can inject any HTML code. This could currupt your site",
 
 	'subsite_manager:subsites:update:enable_frontpage_indexing:label' => "Indexing",
-	'subsite_manager:subsites:update:enable_frontpage_indexing' => "Enable indexing of the frontpage by search bots",
+	'subsite_manager:subsites:update:enable_frontpage_indexing' => "Enable indexing of main pages by search engines",
 
 	// Subsite - admins
 	'subsite_manager:subsites:admins:main_admins' => "Main administrators",

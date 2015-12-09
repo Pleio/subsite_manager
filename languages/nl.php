@@ -8,7 +8,7 @@ De deelsite beheerder %s heeft je lidmaatschap van de deelsite %s ingetrokken.
 
 %s',
   'subsite_manager:subsites:update:enable_frontpage_indexing:label' => 'Indexering',
-  'subsite_manager:subsites:update:enable_frontpage_indexing' => 'Mag de index pagina worden geïndexeerd door zoekmachines',
+  'subsite_manager:subsites:update:enable_frontpage_indexing' => 'Hoofdpagina\'s mogen geindexeerd worden door zoekmachines',
   'subsite_manager:subsite:request_membership:decline:message' => 'Hallo,
 
 Uw verzoek om lid te worden van de deelsite %s is geweigerd.
