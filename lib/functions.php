@@ -284,6 +284,7 @@
 
     function subsite_manager_set_missing_subsite_profile_fields($user_guid = 0){
         $result = false;
+        $accesslevel = get_input('accesslevel');
 
         elgg_make_sticky_form("subsite_missing_profile_fields");
 
@@ -309,6 +310,13 @@
                     remove_metadata($user->getGUID(), $key);
 
                     if(!empty($value)){
+
+                        if ($accesslevel && array_key_exists($key, $accesslevel)) {
+                            $access_id = $accesslevel[$key];
+                        } else {
+                            $access_id = get_default_access($user);
+                        }
+
                         if(is_array($value)){
                             foreach($value as $index => $v){
                                 $multiple = false;
@@ -316,10 +324,10 @@
                                     $multiple = true;
                                 }
 
-                                create_metadata($user->getGUID(), $key, $v, "text", $user->getGUID(), get_default_access($user), $multiple);
+                                create_metadata($user->getGUID(), $key, $v, "text", $user->getGUID(), $access_id, $multiple);
                             }
                         } else {
-                            create_metadata($user->getGUID(), $key, $value, "text", $user->getGUID(), get_default_access($user));
+                            create_metadata($user->getGUID(), $key, $value, "text", $user->getGUID(), $access_id);
                         }
                     }
                 }
