@@ -134,15 +134,16 @@
 
 				// enable plugins for new subsites
 				$main_site = elgg_get_site_entity();
+
 				$enable_on_create = $main_site->getPrivateSetting("enabled_for_new_subsites");
-				if ($enable_on_create) {
-					$site->setPrivateSetting('subsite_manager_plugins_activate', serialize(string_to_tag_array($enable_on_create)));
+				$enable_everywhere = $main_site->getPrivateSetting("enabled_everywhere");
+
+				if ($enable_on_create || $enable_everywhere) {
+					$plugins = array_unique(array_merge(string_to_tag_array($enable_on_create), string_to_tag_array($enable_everywhere), array('subsite_manager', 'elgg_modifications')));
+					$site->setPrivateSetting('subsite_manager_plugins_activate', serialize($plugins));
 				}
 
 				if($site->save()){
-
-					// sync globally enabled plugins and order
-					subsite_manager_sync_plugins($site);
 
 					// clear sticky form
 					elgg_clear_sticky_form("subsites_new");
