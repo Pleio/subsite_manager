@@ -1,15 +1,16 @@
-<?php 
+<?php
 
 	$guid = (int) get_input("guid");
 	$user = elgg_get_logged_in_user_entity();
-	
+
 	// delete subsite only some admins
 	$allowed_admins = array(
-		"ziemerink", 
-// 		"jdalsem", 
+		"ziemerink",
+		"bartjeu",
+// 		"jdalsem",
 // 		"jeabakker"
 	);
-	
+
 	if(!in_array($user->username, $allowed_admins)){
 		forward(REFERER);
 	}
@@ -31,5 +32,5 @@
 	} else {
 		register_error(elgg_echo("subsite_manager:action:error:on_subsite"));
 	}
-	
+
 	forward(REFERER);
