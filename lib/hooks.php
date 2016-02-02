@@ -574,35 +574,75 @@
 
 				// we have found some subsites which need this cron interval
 				if(!empty($subsites)){
-					$cron_cli_path = elgg_get_config("plugins_path") . "commandline_cron/procedures/cli.php";
-					$memory_limit = ini_get("memory_limit");
-
-					foreach($subsites as $subsite){
-						$https = false;
-						$host = "";
-
-						$parts = parse_url($subsite->url);
-
-						$host = elgg_extract("host", $parts);
-						if(elgg_extract("scheme", $parts, "") === "https"){
-							$https = true;
-						}
-
-						if(!empty($host) && ($secret = commandline_cron_generate_secret($subsite->getGUID()))){
-							$commandline = $cron_cli_path;
-							$commandline .= " secret=" . $secret;
-							$commandline .= " host=" . $host;
-							$commandline .= " interval=" . $type;
-							$commandline .= " memory_limit=" . $memory_limit;
-
-							if(!empty($https)){
-								$commandline .= " https=On";
-							}
-
-							exec("php " . $commandline . " > /dev/null &");
-						}
+					if (class_exists('Pool')) {
+						subsite_manager_cron_run_async($subsites);
+					} else {
+						subsite_manager_cron_run_sync($subsites);
 					}
 				}
+			}
+		}
+	}
+
+	function subsite_manager_cron_run_async($subsites) {
+		$pool = new Pool(SIMULTANEOUS_CRON_PROCESSES);
+
+		$cron_cli_path = elgg_get_config("plugins_path") . "commandline_cron/procedures/cli.php";
+		$memory_limit = ini_get("memory_limit");
+
+		foreach($subsites as $subsite){
+			$https = false;
+			$host = "";
+
+			$parts = parse_url($subsite->url);
+
+			$host = elgg_extract("host", $parts);
+			if(elgg_extract("scheme", $parts, "") === "https"){
+				$https = true;
+			}
+
+			if(!empty($host) && ($secret = commandline_cron_generate_secret($subsite->getGUID()))){
+				$commandline = $cron_cli_path;
+				$commandline .= " secret=" . $secret;
+				$commandline .= " host=" . $host;
+				$commandline .= " interval=" . $type;
+				$commandline .= " memory_limit=" . $memory_limit;
+
+				if(!empty($https)){
+					$commandline .= " https=On";
+				}
+
+				$pool->submit(new Cronjob($commandline));
+			}
+		}
+
+		$pool->shutdown();
+	}
+
+	function subsite_manager_cron_run_sync($subsites) {
+		foreach($subsites as $subsite){
+			$https = false;
+			$host = "";
+
+			$parts = parse_url($subsite->url);
+
+			$host = elgg_extract("host", $parts);
+			if(elgg_extract("scheme", $parts, "") === "https"){
+				$https = true;
+			}
+
+			if(!empty($host) && ($secret = commandline_cron_generate_secret($subsite->getGUID()))){
+				$commandline = $cron_cli_path;
+				$commandline .= " secret=" . $secret;
+				$commandline .= " host=" . $host;
+				$commandline .= " interval=" . $type;
+				$commandline .= " memory_limit=" . $memory_limit;
+
+				if(!empty($https)){
+					$commandline .= " https=On";
+				}
+
+				exec("php " . $commandline . " > /dev/null &");
 			}
 		}
 	}

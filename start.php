@@ -1,5 +1,7 @@
 <?php
 
+	define("SIMULTANEOUS_CRON_PROCESSES", 10);
+
 	// load libary files
 	require_once(dirname(__FILE__) . "/lib/functions.php");
 	require_once(dirname(__FILE__) . "/lib/hooks.php");
