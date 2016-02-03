@@ -1,6 +1,7 @@
 <?php
 
-	define("SIMULTANEOUS_CRON_PROCESSES", 10);
+	define("SUBSITE_MANAGER_RUN_CRON_ASYNC", true); // When enabled Python is required
+	define("SUBSITE_MANAGER_SIMULTANEOUS_CRON_PROCESSES", 5);
 
 	// load libary files
 	require_once(dirname(__FILE__) . "/lib/functions.php");

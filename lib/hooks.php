@@ -574,49 +574,40 @@
 
 				// we have found some subsites which need this cron interval
 				if(!empty($subsites)){
-					if (class_exists('Pool')) {
-						subsite_manager_cron_run_async($subsites);
+					if (SUBSITE_MANAGER_RUN_CRON_ASYNC) {
+						subsite_manager_cron_run_async($subsites, $type);
 					} else {
-						subsite_manager_cron_run_sync($subsites);
+						subsite_manager_cron_run_sync($subsites, $type);
 					}
 				}
 			}
 		}
 	}
 
-	function subsite_manager_cron_run_async($subsites) {
-		$pool = new Pool(SIMULTANEOUS_CRON_PROCESSES);
-
-		$cron_cli_path = elgg_get_config("plugins_path") . "commandline_cron/procedures/cli.php";
-		$memory_limit = ini_get("memory_limit");
+	function subsite_manager_cron_run_async($subsites, $interval) {
+		$json = array(
+			"interval" => $interval,
+			"no_processes" => SUBSITE_MANAGER_SIMULTANEOUS_CRON_PROCESSES,
+			"memory_limit" => ini_get("memory_limit"),
+			"path" => elgg_get_config("plugins_path") . "commandline_cron/procedures/cli.php",
+			"hosts" => array()
+		);
 
 		foreach($subsites as $subsite){
-			$https = false;
-			$host = "";
+			$url = parse_url($subsite->url);
 
-			$parts = parse_url($subsite->url);
-
-			$host = elgg_extract("host", $parts);
-			if(elgg_extract("scheme", $parts, "") === "https"){
-				$https = true;
-			}
-
-			if(!empty($host) && ($secret = commandline_cron_generate_secret($subsite->getGUID()))){
-				$commandline = $cron_cli_path;
-				$commandline .= " secret=" . $secret;
-				$commandline .= " host=" . $host;
-				$commandline .= " interval=" . $type;
-				$commandline .= " memory_limit=" . $memory_limit;
-
-				if(!empty($https)){
-					$commandline .= " https=On";
-				}
-
-				$pool->submit(new Cronjob($commandline));
+			if(!empty($url) && ($secret = commandline_cron_generate_secret($subsite->getGUID()))){
+				$json['hosts'][] = array(
+					"host" => $url['host'],
+					"secret" => $secret,
+					"https" => $url['scheme'] === 'https' ? true : false
+				);
 			}
 		}
 
-		$pool->shutdown();
+		$script = dirname(__FILE__) . "/../procedures/cronscheduler.py";
+		$command = "python {$script} " . base64_encode(json_encode($json));
+		exec($command);
 	}
 
 	function subsite_manager_cron_run_sync($subsites) {
