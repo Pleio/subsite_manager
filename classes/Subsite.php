@@ -227,37 +227,28 @@ class Subsite extends ElggSite {
 			$result = $this->setPrivateSetting("admin_guids", "");
 		}
 
-		// reset cache
-		unset($this->admin_guids);
-		$this->save();
-
 		return $result;
 	}
 
 	public function getAdminGuids(){
+		// need to bypass security
+		$ia = elgg_get_ignore_access();
+		elgg_set_ignore_access(true);
 
-		if(!isset($this->admin_guids)){
-			$this->admin_guids = false;
-
-			// need to bypass security
-			$ia = elgg_get_ignore_access();
-			elgg_set_ignore_access(true);
-
-			if($user_guids = $this->getPrivateSetting("admin_guids")){
-				$user_guids = explode(",", $user_guids);
-
-				if(!is_array($user_guids)){
-					$user_guids = array($user_guids);
-				}
-
-				$this->admin_guids = $user_guids;
+		$user_guids = $this->getPrivateSetting("admin_guids");
+		if ($user_guids) {
+			$user_guids = explode(",", $user_guids);
+			if(!is_array($user_guids)){
+				$user_guids = array($user_guids);
 			}
-
-			// restore security
-			elgg_set_ignore_access($ia);
+		} else {
+			$user_guids = array();
 		}
 
-		return $this->admin_guids;
+		// restore security
+		elgg_set_ignore_access($ia);
+
+		return $user_guids;
 	}
 
 	public function notifyAdmins($subject = "", $message){

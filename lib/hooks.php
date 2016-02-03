@@ -700,7 +700,6 @@
 	/**
 	 * Allow subsite admins to edit entities on their own site
 	 * and reset the password of a user on their site.
-	 * Block write access for non-members, except for some cases.
 	 *
 	 * @param string $hook
 	 * @param string $type
@@ -708,83 +707,41 @@
 	 * @param mixed $params
 	 * @return boolean
 	 */
-	function subsite_manager_permissions_check_hook($hook, $type, $returnvalue, $params){
-		$site = elgg_get_site_entity();
+	function subsite_manager_permissions_check_hook($hook, $type, $returnvalue, $params) {
 		$user = elgg_extract("user", $params);
 		$entity = elgg_extract("entity", $params);
+		$site = elgg_get_site_entity();
 
-		// do not allow write access for non-members
-		if ($user && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") && !$site->isUser() && !subsite_manager_is_superadmin()) {
-
-			$allowed_contexts = array(
-				'settings'
-			);
-			$allowed_actions = array(
-				'login',
-				'official_validator/official',
-				'avatar/upload',
-				'user/passwordreset',
-				'user/spotlight',
-				'usersettings/save',
-				'plugins/settings/save',
-				'profile/edit'
-			);
-
-			// @todo: has to be refactored, this is a very hacky solution.
-			// difficult to do because the hooks permissions_check and container_permissions_check seem
-			// very site-agnostic.
-
-			if ($entity->access_id) {
-				$access_collection = get_access_collection($entity->access_id);
-			} elseif (get_input('access_id')) {
-				$access_collection = get_access_collection(get_input('access_id'));
-			}
-
-			// check if user is not trying to edit something he allready owns
-			if ($entity->owner_guid != $user->guid) {
-				// allow the user to save something for groups (ACL)
-				if (!(isset($access_collection) && get_entity($access_collection->owner_guid) instanceof ElggGroup)) {
-					// allow certain preconfigured actions and contexts
-					if (!in_array(get_input('action'), $allowed_actions) && !in_array(elgg_get_context(), $allowed_contexts)) {
-						return false;
-					}
-				}
-			}
+		if (!subsite_manager_on_subsite()) {
+			return $returnvalue;
 		}
 
-		// don't do anything if already allowed or not on subsite
-		if(!$returnvalue && subsite_manager_on_subsite()){
-			$entity = elgg_extract("entity", $params);
-			$user = elgg_extract("user", $params);
+		if (!$user || !$entity) {
+			return $returnvalue;
+		}
 
-			if(!empty($entity) && !empty($user)){
-				// check if the entity is on the current site or the current site
-				if(($entity->site_guid == $site->getGUID()) || ($entity->getGUID() == $site->getGUID())){
-					// check if the user is an admin of the current site
-					if($site->isAdmin($user->getGUID())){
-						return true;
-					}
+		if (!$returnvalue) {
+			if ($entity->site_guid == $site->guid || $entity->guid == $site->guid) {
+				if ($site->isAdmin($user->guid)) {
+					return true;
 				}
+			}
 
-				// some user->canEdit() are allowed
-				if (elgg_instanceof($entity, "user", null, "ElggUser")) {
-					// check if we are executing allowed actions
-					$allowed_actions = array(
-						"admin/user/resetpassword",
-						"werkorder/toggle_planner",
-						"werkorder/toggle_manager"
-					);
+			// subsite admins are allowed to apply some actions to ElggUser objects
+			if ($entity instanceof ElggUser) {
+				$allowed_actions = array(
+	                "admin/user/resetpassword",
+	                "werkorder/toggle_planner",
+	                "werkorder/toggle_manager"
+	            );
+				$allowed_contexts = array(
+	                "entities"
+	            );
 
-					// check for allowed context
-					$allowed_contexts = array(
-						"entities"
-					);
-
-					if (in_array(get_input("action"), $allowed_actions) || in_array(elgg_get_context(), $allowed_contexts)) {
-						// check if the user is an admin of the current site and the entity (user) is a member of this site
-						if ($site->isAdmin($user->getGUID()) && $site->isUser($entity->getGUID())) {
-							return true;
-						}
+				if (in_array(get_input("action"), $allowed_actions) || in_array(elgg_get_context(), $allowed_contexts)) {
+					// check if the user is an admin of the current site and the entity (user) is a member of this site
+					if ($site->isAdmin($user->guid) && $site->isUser($entity->guid)) {
+						return true;
 					}
 				}
 			}
@@ -801,17 +758,28 @@
 	 * @param mixed $params
 	 * @return boolean
 	 */
-	function subsite_manager_container_permissions_check_hook($hook, $type, $returnvalue, $params){
+	function subsite_manager_container_permissions_check_hook($hook, $type, $returnvalue, $params) {
+		$user = elgg_extract("user", $params);
+		$container = elgg_extract("container", $params);
+		$type = elgg_extract("type", $params);
+		$site = elgg_get_site_entity();
 
-		if(!$returnvalue){
-			$user = elgg_extract("user", $params);
-			$container = elgg_extract("container", $params);
+		if (!subsite_manager_on_subsite()) {
+			return $returnvalue;
+		}
 
-			if(!empty($user) && !empty($container)){
-				if(($site = elgg_get_site_entity($container->site_guid)) && elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-					if($site->isAdmin($user->getGUID())){
-						return true;
-					}
+		if (!$user || !$container) {
+			return $returnvalue;
+		}
+
+		if (!$returnvalue) {
+			if ($site->isAdmin($user->guid)) {
+				return true;
+			}
+		} else {
+			if (!$site->isUser($user->guid) && !$site->isAdmin($user->guid)) {
+				if (!$container instanceof ElggGroup) {
+					return false;
 				}
 			}
 		}
@@ -826,91 +794,78 @@
 	 * @param mixed $params
 	 * @return mixed
 	 */
-	function subsite_manager_access_write_hook($hook, $type, $returnvalue, $params){
+	function subsite_manager_access_write_hook($hook, $type, $returnvalue, $params) {
 		$result = $returnvalue;
 
 		$user_guid = elgg_extract("user_id", $params);
 		$site_guid = elgg_extract("site_id", $params);
 
-		if(!empty($user_guid) && !empty($site_guid)){
-			if($site = elgg_get_site_entity($site_guid)){
+		if (!$user_guid || !$site_guid) {
+			return $returnvalue;
+		}
 
-				// Widgets have a differtent access level then the rest of the content
-				if(elgg_in_context("widgets") && (elgg_in_context("index") || elgg_in_context("groups"))){
-					if(elgg_in_context("index") && elgg_is_admin_logged_in()){
-						$result[ACCESS_PRIVATE] = elgg_echo("access:admin_only");
+		$site = elgg_get_site_entity($site_guid);
+		if (!$site) {
+			return $returnvalue;
+		}
 
-						if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-							$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
-						}
+		// Widgets have a different access level then the rest of the content
+		if (elgg_in_context("widgets")) {
+			if (elgg_in_context("index") && elgg_is_admin_logged_in()) {
+				$result[ACCESS_PRIVATE] = elgg_echo("access:admin_only");
 
-						$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
-						$result[ACCESS_LOGGED_OUT] = elgg_echo("LOGGED_OUT");
-						$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
-
-					} elseif(elgg_in_context("groups")) {
-						$group = elgg_get_page_owner_entity();
-						if(!empty($group->group_acl)){
-							$result[$group->group_acl] = elgg_echo("groups:group") . ": " . $group->name;
-
-							if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-								$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
-							}
-
-							$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
-							$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
-						}
-					}
-				} else {
-					/**
-					 * 2013-06-12: reordering access list
-					 *
-					 * the list should look like:
-					 * - private
-					 * - friends
-					 * - collections (not enabled)
-					 * - group (optional)
-					 * - subsite (optional)
-					 * - logged in
-					 * - public
-					 *
-					 */
-
-					// put group access in the right place
-					if (($group = elgg_get_page_owner_entity()) && elgg_instanceof($group, "group")) {
-						if (isset($result[$group->group_acl])) {
-							unset($result[$group->group_acl]);
-							$result[$group->group_acl] = elgg_echo("groups:group") . ": " . $group->name;
-						}
-					}
-
-					// are we on main site?
-					if(!elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
-						// 2012-07-11: no longer share with subsite acls on main site
-					} else {
-						// or on a subsite, so add the subsite ACL to the list
-						if($acl = $site->getACL()){
-							$result[$acl] = elgg_echo("members") . " " . $site->name;
-						}
-
-						// check if ACCESS_PUBLIC has been disabled
-						if(!$site->hasPublicACL()){
-							unset($result[ACCESS_PUBLIC]);
-						}
-					}
-
-					// put logged in access in the right place
-					if (isset($result[ACCESS_LOGGED_IN])) {
-						unset($result[ACCESS_LOGGED_IN]);
-						$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
-					}
-
-					// put public access in the right place
-					if (isset($result[ACCESS_PUBLIC])) {
-						unset($result[ACCESS_PUBLIC]);
-						$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
-					}
+				if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
+					$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
 				}
+
+				$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
+				$result[ACCESS_LOGGED_OUT] = elgg_echo("LOGGED_OUT");
+				$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
+
+			} elseif(elgg_in_context("groups")) {
+				$group = elgg_get_page_owner_entity();
+				if(!empty($group->group_acl)){
+					$result[$group->group_acl] = elgg_echo("groups:group") . ": " . $group->name;
+
+					if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
+						$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
+					}
+
+					$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
+					$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
+				}
+			}
+		} else {
+			// put group access in the right place
+			if (($group = elgg_get_page_owner_entity()) && elgg_instanceof($group, "group")) {
+				if (isset($result[$group->group_acl])) {
+					unset($result[$group->group_acl]);
+					$result[$group->group_acl] = elgg_echo("groups:group") . ": " . $group->name;
+				}
+			}
+
+			if (elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")) {
+				// or on a subsite, so add the subsite ACL to the list
+				if ($acl = $site->getACL()) {
+					$result[$acl] = elgg_echo("members") . " " . $site->name;
+				}
+
+				// check if ACCESS_PUBLIC has been disabled
+				if(!$site->hasPublicACL()){
+					unset($result[ACCESS_PUBLIC]);
+				}
+			}
+
+			// put logged in access in the right place
+			if (isset($result[ACCESS_LOGGED_IN])) {
+				unset($result[ACCESS_LOGGED_IN]);
+				$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
+			}
+
+			// put public access in the right place
+			if (isset($result[ACCESS_PUBLIC])) {
+				unset($result[ACCESS_PUBLIC]);
+				$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
 			}
 		}
 
@@ -2104,5 +2059,37 @@
 		if (subsite_manager_on_subsite() && !subsite_manager_is_superadmin_logged_in()) {
 			register_error(elgg_echo("subsite_manager:action:error:on_subsite"));
 			forward(REFERER);
+		}
+	}
+
+	/**
+	 * Determine if a certain user is member of the site and thus can write to it.
+	 *
+	 * @param ElggUser $user
+	 * @param ElggSite $site
+	 *
+	 * @return bool true if write is allowed
+	 */
+	function subsite_manager_can_write_to_site($user, $site) {
+		if (!$user) {
+			return false;
+		}
+
+		if (!$site) {
+			$site = elgg_get_site_entity();
+		}
+
+		if (!elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")) {
+			return true; // not on subsite, write is always allowed on main site
+		}
+
+		if (subsite_manager_is_superadmin()) {
+			return true;
+		}
+
+		if ($site->isUser()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
