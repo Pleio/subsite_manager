@@ -772,16 +772,18 @@
 			return $returnvalue;
 		}
 
-		if (!$returnvalue) {
-			if ($site->isAdmin($user->guid)) {
-				return true;
-			}
+		if (subsite_manager_is_superadmin($user->guid)) {
+			return $returnvalue;
+		}
+
+		if ($site->isAdmin($user->guid)) {
+			return $returnvalue;
+		}
+
+		if (!$site->isUser($user->guid) && !$container instanceof ElggGroup) {
+			return false;
 		} else {
-			if (!$site->isUser($user->guid) && !$site->isAdmin($user->guid)) {
-				if (!$container instanceof ElggGroup) {
-					return false;
-				}
-			}
+			return $returnvalue;
 		}
 	}
 
