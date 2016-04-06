@@ -519,7 +519,8 @@ To visit the Subsite follow this link:
 	'subsite_manager:users:bulk_remove:description' => "This function allows you to permanently remove users in a batch, but only when the user has not accepted the general terms. Insert a text-file with one username or e-mail per line.",
 	'subsite_manager:users:bulk_remove:success' => "%s users are removed, %s users cannot be found and %s users where not removed because they are already active.",
 	'subsite_manager:users:bulk_remove:no_access' => "No access to this page.",
-	'subsite_manager:users:bulk_remove:no_file' => "Could not find a valid CSV file."
+	'subsite_manager:users:bulk_remove:no_file' => "Could not find a valid CSV file.",
+    'subsite_manager:group:could_not_join' => "Could not join the group as you are not member of the subsite",
 );
 
 add_translation("en", $english);

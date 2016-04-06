@@ -2094,3 +2094,34 @@
 			return false;
 		}
 	}
+
+    /**
+	 * Do not allow non-subsite members to join an open group if the subsite is closed
+	 *
+	 * @return bool false if write is not allowed
+	 */
+    function subsite_manager_group_join_action_hook($hook, $type, $returnvalue, $params) {
+		if (!subsite_manager_on_subsite()) {
+			return;
+		}
+
+		$site = elgg_get_site_entity();
+		if ($site->getMembership() == Subsite::MEMBERSHIP_OPEN) {
+			return; // site is open, so everyone can become member of the group
+		}
+
+		$group_guid = get_input('group_guid');
+		$group = get_entity($group_guid);
+		if ($group->canEdit()) {
+			return; // user is admin of the group of subsite, so let the default permission handler do its work
+		}
+
+		if (!$group->isPublicMembership()) {
+			return; // group is closed, so let the default group permission handler do its work
+		}
+
+		if (!$site->isUser()) {
+			register_error(elgg_echo('subsite_manager:group:could_not_join'));
+			return false;
+		}
+    }

@@ -370,6 +370,7 @@ Voor een bezoek aan de deelsite volg deze link:
   'subsite_manager:users:bulk_remove:description' => "Met deze functie kan een batch aan gebruikers permanent verwijderd worden van de site, maar alleen wanneer de gebruiker de algemene voorwaarden nog niet heeft geaccepteerd. Voer een tekstbestand in met op iedere regel één e-mailadres of gebruikersnaam.",
   'subsite_manager:users:bulk_remove:success' => "%s gebruikers zijn verwijderd, %s gebruikers konden niet gevonden worden, %s gebruikers zijn niet verwijderd omdat ze al actief waren.",
   'subsite_manager:users:bulk_remove:no_access' => "Geen toegang tot deze pagina.",
-  'subsite_manager:users:bulk_remove:no_file' => "Kon geen geldig CSV bestand vinden."
+  'subsite_manager:users:bulk_remove:no_file' => "Kon geen geldig CSV bestand vinden.",
+  'subsite_manager:group:could_not_join' => "Kan geen lid worden van de groep omdat je geen lid bent van de deelsite.",
 );
 add_translation("nl", $language);

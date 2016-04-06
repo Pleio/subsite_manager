@@ -236,6 +236,7 @@
 	elgg_register_plugin_hook_handler("cron", "all", "subsite_manager_cron_handler");
 
 	elgg_register_plugin_hook_handler("action", "register", "subsite_manager_action_register_hook");
+	elgg_register_plugin_hook_handler("action", "groups/join", "subsite_manager_group_join_action_hook");
 
 	// access
 	elgg_register_plugin_hook_handler("permissions_check", "all", "subsite_manager_permissions_check_hook");
