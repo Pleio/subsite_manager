@@ -117,31 +117,36 @@
     }
 
     function subsite_manager_check_subsite_user(){
-        $site = elgg_get_site_entity();
+        if (!elgg_is_logged_in()) {
+            return;
+        }
 
-        if (elgg_is_logged_in() &&
-            elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite") &&
-            !$site->isUser() &&
-            !subsite_manager_is_superadmin())
-        {
-            if (!isset($_SESSION['msg'])) {
-                $_SESSION['msg'] = array();
-            }
-            if (!isset($_SESSION['msg']['success'])) {
+        $site = elgg_get_site_entity();
+        if (!elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")) {
+            return;
+        }
+
+        if ($site->isUser() || subsite_manager_is_superadmin()) {
+            return;
+        }
+
+        if (!isset($_SESSION['msg'])) {
+            $_SESSION['msg'] = array();
+        }
+        if (!isset($_SESSION['msg']['success'])) {
+            $_SESSION['msg']['success'] = array();
+        }
+
+        if (elgg_in_context('groups')) {
+            // remove message when viewing group pages
+            $_SESSION['msg']['success'] = array_diff($_SESSION['msg']['success'], array(elgg_echo("subsite_manager:subsite:wanttojoin")));
+        } else {
+            if (!is_array($_SESSION['msg']['success'])) {
                 $_SESSION['msg']['success'] = array();
             }
-
-            if (elgg_get_page_owner_entity() instanceof ElggGroup) {
-                // remove message when viewing group pages
-                $_SESSION['msg']['success'] = array_diff($_SESSION['msg']['success'], array(elgg_echo("subsite_manager:subsite:wanttojoin")));
-            } else {
-                if (!is_array($_SESSION['msg']['success'])) {
-                    $_SESSION['msg']['success'] = array();
-                }
-                // show message for non-members of subsite
-                if (!in_array(elgg_echo("subsite_manager:subsite:wanttojoin"), $_SESSION['msg']['success'])) {
-                    array_push($_SESSION['msg']['success'], elgg_echo("subsite_manager:subsite:wanttojoin"));
-                }
+            // show message for non-members of subsite
+            if (!in_array(elgg_echo("subsite_manager:subsite:wanttojoin"), $_SESSION['msg']['success'])) {
+                array_push($_SESSION['msg']['success'], elgg_echo("subsite_manager:subsite:wanttojoin"));
             }
         }
     }
