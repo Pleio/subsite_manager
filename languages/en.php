@@ -379,7 +379,6 @@ This is an automated message, please don't reply",
 
 	// create users on subsites
 	'subsite_manager:create:user:request_membership' => "This user registered on this subsite, however approval was required. Please check if this user can join your subsite.",
-	'subsite_manager:create:user:message:request_membership' => "You have successfully created an account, however membership to this subsite requires approval by the administrator. This request has been made for you.",
 	'subsite_manager:create:user:message:domain' => "You have successfully created an account, however membership is limited to certain e-mail domain. Your e-mail address didn't match the requirements. Please login and request membership with a valid email.",
 
 	// first login - check invitations

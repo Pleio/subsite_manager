@@ -274,7 +274,6 @@
 							
 							if (empty($SUBSITE_MANAGER_INVITED_GROUPS) && empty($SUBSITE_MANAGER_IMPORTING_USERS)) {
 								$site->requestMembership(elgg_echo("subsite_manager:create:user:request_membership"), $object->getGUID());
-								system_message(elgg_echo("subsite_manager:create:user:message:request_membership"));
 							}
 							break;
 						case Subsite::MEMBERSHIP_DOMAIN:
@@ -295,7 +294,6 @@
 								
 								if (empty($SUBSITE_MANAGER_INVITED_GROUPS) && empty($SUBSITE_MANAGER_IMPORTING_USERS)) {
 									$site->requestMembership(elgg_echo("subsite_manager:create:user:request_membership"), $object->getGUID());
-									system_message(elgg_echo("subsite_manager:create:user:message:request_membership"));
 								}
 							}
 							break;
