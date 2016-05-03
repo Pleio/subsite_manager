@@ -140,8 +140,8 @@ The site administrator %s revoked your membership of the subsite %s.
 	'subsite_manager:new:domains:label' => "Whitelist Email Domains",
 	'subsite_manager:new:domains:description' => "Enter a comma separated list of email domains that will be used for the verification of a membership request.<br />Syntax: domain.com, sub.other_domain.nl",
 
-	'subsite_manager:new:has_public_acl:label' => "Public content available",
-	'subsite_manager:new:has_public_acl:description' => "Select 'Yes' if the Subsite has the option to share content with the public. Selecting 'No' will disable this option.",
+	'subsite_manager:new:has_public_acl:label' => "Share outside subsite",
+	'subsite_manager:new:has_public_acl:description' => "This option allows users to share content outside the subsite.",
 
 	'subsite_manager:new:js:name' => "Please check the site name",
 	'subsite_manager:new:js:url' => "Please check the site URL",

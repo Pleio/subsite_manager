@@ -854,6 +854,7 @@
 				// check if ACCESS_PUBLIC has been disabled
 				if(!$site->hasPublicACL()){
 					unset($result[ACCESS_PUBLIC]);
+					unset($result[ACCESS_LOGGED_IN]);
 				}
 			}
 
