@@ -24,8 +24,6 @@
 					// forward to the main site
 					$forward_url = $subsite->getOwnerEntity()->url . "subsites";
 					
-					var_dump(get_input('action'));
-					exit();
  					system_message(elgg_echo("subsite_manager:actions:subsites:join:request_approval:success"));
 				} else {
 					register_error(elgg_echo("subsite_manager:actions:subsites:join:request_approval:error:request"));
