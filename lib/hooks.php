@@ -825,8 +825,10 @@
 					$result[ACCESS_LOGGED_IN] = elgg_echo("LOGGED_IN");
 					$result[ACCESS_PUBLIC] = elgg_echo("PUBLIC");
 				}
-			} elseif (elgg_is_admin_logged_in()) {
-					$result[ACCESS_PRIVATE] = elgg_echo("access:admin_only");
+			} else {
+					if (elgg_is_admin_logged_in()) {
+						$result[ACCESS_PRIVATE] = elgg_echo("access:admin_only");
+					}
 
 					if(elgg_instanceof($site, "site", Subsite::SUBTYPE, "Subsite")){
 						$result[$site->getACL()] = elgg_echo("members") . " " . $site->name;
