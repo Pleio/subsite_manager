@@ -25,6 +25,8 @@ if ($batch->valid()) {
 	$headers = array(
 		"name",
 		"url",
+		"site time created (unix)",
+		"site time created (YYYY-MM-DD HH:MM:SS)",
 		"member count",
 		"last activity (unix)",
 		"last activity (YYYY-MM-DD HH:MM:SS)",
@@ -44,6 +46,8 @@ if ($batch->valid()) {
 		$output = array(
 			$subsite->name,
 			$subsite->url,
+			$subsite->time_created,
+			date("Y-m-d G:i:s", $subsite->time_created),
 			$member_count,
 			$last_activity,
 			$last_activity_readable
