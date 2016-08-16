@@ -2128,3 +2128,9 @@
 			return false;
 		}
     }
+
+    function subsite_manager_admin_user_delete_hook($hook, $type, $returnvalue, $params) {
+    	if (!subsite_manager_is_superadmin()) {
+    		return false;
+    	}
+    }

@@ -276,6 +276,7 @@
 
 	elgg_register_plugin_hook_handler("action", "plugins/settings/save", "subsite_manager_plugin_action_hook");
 	elgg_register_plugin_hook_handler("action", "admin/plugins/set_priority", "subsite_manager_plugin_action_hook");
+	elgg_register_plugin_hook_handler("action", "admin/user/delete", "subsite_manager_admin_user_delete_hook");
 
 	elgg_register_plugin_hook_handler("find_active_users", "system", "subsite_manager_find_active_users_hook");
 
