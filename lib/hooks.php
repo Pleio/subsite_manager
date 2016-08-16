@@ -119,17 +119,18 @@
 		$user = elgg_extract("entity", $params);
 		$site = elgg_get_site_entity();
 
-		if (elgg_is_admin_logged_in() && subsite_manager_on_subsite() && $site->isUser($user->getGUID())){
+		if (elgg_is_admin_logged_in() && subsite_manager_on_subsite()) {
 
 			// cleanup most admin menu items
 			$allowed_menu_items = array(
-				"resetpassword",
-				"waternet_workorder_manager",
-				"waternet_workorder_planner",
 				"user_support_staff",
 				"entity_tools:admin",
 				"makesubscribed"
 			);
+
+			if (subsite_manager_is_superadmin()) {
+				$allowed_menu_items[] = "resetpassword";
+			}
 
 			foreach ($return as $index => $menu_item) {
 				// echo $menu_item->getName() . "|";
@@ -138,8 +139,12 @@
 				}
 			}
 
+			if (!$site->isUser($user->guid)) {
+				return $return;
+			}
+
 			// add options for admins
-			if(!$site->isAdmin($user->getGUID())){
+			if(!$site->isAdmin($user->getGUID())) {
 				// make subsite admin
 				$menu_options = array(
 					"name" => "subsite_manager_toggle_admin",
@@ -730,9 +735,7 @@
 			// subsite admins are allowed to apply some actions to ElggUser objects
 			if ($entity instanceof ElggUser) {
 				$allowed_actions = array(
-	                "admin/user/resetpassword",
-	                "werkorder/toggle_planner",
-	                "werkorder/toggle_manager"
+	                "admin/user/resetpassword"
 	            );
 				$allowed_contexts = array(
 	                "entities"
