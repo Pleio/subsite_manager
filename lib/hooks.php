@@ -967,7 +967,7 @@
 	* @return mixed
 	*/
 	function subsite_manager_profile_route_hook($hook, $type, $returnvalue, $params){
-		if(subsite_manager_on_subsite()){
+		if(subsite_manager_on_subsite() && $returnvalue){
 			$page = elgg_extract("segments", $returnvalue);
 
 			if(isset($page[0])){
