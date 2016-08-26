@@ -125,12 +125,9 @@
 			$allowed_menu_items = array(
 				"user_support_staff",
 				"entity_tools:admin",
-				"makesubscribed"
+				"makesubscribed",
+				"resetpassword"
 			);
-
-			if (subsite_manager_is_superadmin()) {
-				$allowed_menu_items[] = "resetpassword";
-			}
 
 			foreach ($return as $index => $menu_item) {
 				// echo $menu_item->getName() . "|";
