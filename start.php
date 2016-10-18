@@ -166,6 +166,8 @@
 				elgg_register_admin_menu_item("administer", "new", "subsites", 20);
 				elgg_register_admin_menu_item("administer", "plugins", "subsites", 30);
 				elgg_register_admin_menu_item("administer", "admins", "subsites", 40);
+				elgg_register_admin_menu_item("administer", "move_group", "administer_utilities");
+
 				elgg_register_menu_item("page", array(
 					"name" => "subsites",
 					"href" => "subsites",
@@ -310,6 +312,8 @@
 	elgg_register_event_handler("delete", "annotation", "subsite_manager_delete_annotation_handler");
 
 	// actions
+	elgg_register_action("admin/move_group", dirname(__FILE__) . "/actions/admin/move_group.php", "admin");
+
 	elgg_register_action("subsites/new", dirname(__FILE__) . "/actions/subsites/new.php", "admin");
 	elgg_register_action("subsites/update_advanced", dirname(__FILE__) . "/actions/subsites/update_advanced.php", "admin");
 	elgg_register_action("subsites/delete", dirname(__FILE__) . "/actions/subsites/delete.php", "admin");
