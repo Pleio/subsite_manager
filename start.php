@@ -161,12 +161,12 @@
 
 			// list subsite administrators
 			elgg_register_admin_menu_item("administer", "admins", "users", 110);
+			elgg_register_admin_menu_item("administer", "move_group", "administer_utilities");
 
 			if(!subsite_manager_on_subsite()){
 				elgg_register_admin_menu_item("administer", "new", "subsites", 20);
 				elgg_register_admin_menu_item("administer", "plugins", "subsites", 30);
 				elgg_register_admin_menu_item("administer", "admins", "subsites", 40);
-				elgg_register_admin_menu_item("administer", "move_group", "administer_utilities");
 
 				elgg_register_menu_item("page", array(
 					"name" => "subsites",
