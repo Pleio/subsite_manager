@@ -275,6 +275,7 @@
 					"statistics",
 					"statistics:overview",
 					"administer_utilities",
+					"administer_utilities:move_group",
 					"administer_utilities:reportedcontent",
 					"administer_utilities:csv_exporter",
 					"administer_utilities:group_bulk_delete",
