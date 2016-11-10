@@ -111,11 +111,11 @@
 						// existing user
 						$user = $users[0];
 						$users_already++;
-						
+
 						if (subsite_manager_on_subsite()) {
 							if (!$site->isUser($user->getGUID())) {
 								$site->addUser($user->getGUID());
-								
+
 								// notify user
 								$subject = elgg_echo("subsite_manager:import:notify:existing:subject", array($site->name));
 								$msg = elgg_echo("subsite_manager:import:notify:existing:message", array(
@@ -124,12 +124,33 @@
 									$site->url,
 									$message
 								));
-									
+
 								notify_user($user->getGUID(), $site->getGUID(), $subject, $msg, null, "email");
-									
-								// cache cleanup
-								_elgg_invalidate_cache_for_entity($user->getGUID());
 							}
+
+							// Also overwrite metadata
+							foreach ($columns as $col_id => $metadata_name) {
+								if (!in_array($metadata_name, array("username", "displayname", "email", "password"))) {
+									if ($profile_fields[$metadata_name] == "tags") {
+										$value = string_to_tag_array($data[$col_id]);
+									} else {
+										$value = $data[$col_id];
+									}
+
+									if (!empty($value)) {
+										if (is_array($value)) {
+											foreach ($value as $v) {
+												create_metadata($user->getGUID(), $metadata_name, $v, "text", $user->getGUID(), ACCESS_PRIVATE, true, $site_guid);
+											}
+										} else {
+											create_metadata($user->getGUID(), $metadata_name, $value, "text", $user->getGUID(), ACCESS_PRIVATE, false, $site_guid);
+										}
+									}
+								}
+							}
+
+							// cache cleanup
+							_elgg_invalidate_cache_for_entity($user->getGUID());
 						}
 					}
 				}
