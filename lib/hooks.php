@@ -1043,6 +1043,10 @@
 			$entity_guids[] = $entity_guid;
 		}
 
+		if (!$params["entity_type"] || $params["entity_type"] !== "user") {
+			return $result;
+		}
+
 		if (!empty($entity_guids)) {
 			$site = elgg_get_site_entity();
 
