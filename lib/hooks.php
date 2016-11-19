@@ -1030,6 +1030,7 @@
 	* @return mixed
 	*/
 	function subsite_manager_metastring_objects_get_hook($hook, $type, $returnvalue, $params){
+		global $ENTITY_CACHE;
 		$result = $returnvalue;
 
 		$entity_guids = elgg_extract("guids", $params);
@@ -1062,8 +1063,13 @@
 				// default to current site_guid
 				$metadata_site_guid = $site->getGUID();
 
+				$entity = $ENTITY_CACHE[$entity_guid];
+				if (!$entity) {
+					$entity = get_entity_as_row($entity_guid);
+				}
+
 				// can't use get_entity() because of deadloops
-				if ($entity = get_entity_as_row($entity_guid)) {
+				if ($entity) {
 					if ($entity->type != "user") {
 						// default get metadata from the site of the entity
 						$metadata_site_guid = $entity->site_guid;
