@@ -1115,6 +1115,7 @@
 	}
 
 	function subsite_manager_metastring_objects_get_hook_annotations($hook, $type, $returnvalue, $params){
+		global $ENTITY_CACHE;
 		$result = $returnvalue;
 
 		if ($entity_guid = elgg_extract("guid", $params)) {
@@ -1122,7 +1123,12 @@
 				$result["wheres"] = array();
 			}
 
-			if ($entity = get_entity_as_row($entity_guid)) {
+			$entity = $ENTITY_CACHE[$entity_guid];
+			if (!$entity) {
+				$entity = get_entity_as_row($entity_guid);
+			}
+
+			if ($entity) {
 				$result["site_guids"] = false;
 
 				if ($entity->type != "user") {
