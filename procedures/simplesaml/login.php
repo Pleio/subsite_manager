@@ -2,6 +2,10 @@
 
 	$forward_url = REFERER;
 
+	if (elgg_is_logged_in()) {
+		forward("/");
+	}
+
 	if(!elgg_is_logged_in()){
 		$source = get_input("saml_source");
 		
