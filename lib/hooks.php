@@ -1063,8 +1063,9 @@
 				// default to current site_guid
 				$metadata_site_guid = $site->getGUID();
 
-				$entity = $ENTITY_CACHE[$entity_guid];
-				if (!$entity) {
+				if (array_key_exists($entity_guid, $ENTITY_CACHE)) {
+					$entity = $ENTITY_CACHE[$entity_guid];
+				} else {
 					$entity = get_entity_as_row($entity_guid);
 				}
 
@@ -1123,8 +1124,9 @@
 				$result["wheres"] = array();
 			}
 
-			$entity = $ENTITY_CACHE[$entity_guid];
-			if (!$entity) {
+			if (array_key_exists($entity_guid, $ENTITY_CACHE)) {
+				$entity = $ENTITY_CACHE[$entity_guid];
+			} else {
 				$entity = get_entity_as_row($entity_guid);
 			}
 
