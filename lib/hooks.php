@@ -1073,8 +1073,14 @@
 				if ($entity) {
 					if ($entity->type != "user") {
 						// default get metadata from the site of the entity
-						$metadata_site_guid = $entity->site_guid;
+						if ($entity->site_guid) {
+							$metadata_site_guid = $entity->site_guid;
+						} else {
+							$metadata_site_guid = $site->guid;
+						}
+						
 						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
+
 						$result["site_guids"] = false;
 					} elseif(subsite_manager_on_subsite()) {
 						global $SUBSITE_MANAGER_MAIN_PROFILE_FIELDS;
@@ -1096,13 +1102,16 @@
 							$global_metadata_fields = array_merge($global_metadata_fields, array_keys($SUBSITE_MANAGER_MAIN_PROFILE_FIELDS));
 						}
 
-						$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
+						if ($metadata_site_guid) {
+							$local_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . ") AND n.string NOT IN ('" . implode("', '", $global_metadata_fields) . "'))";
+						}
+
 						$global_wheres = "((n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->getOwnerGUID() . ") AND n.string IN ('" . implode("', '", $global_metadata_fields) . "'))";
 
 						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (" . $local_wheres . " OR " . $global_wheres . "))";
 						$result["site_guids"] = false;
 					} else {
-						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $metadata_site_guid . "))";
+						$metadata_wheres[] = "(n_table.entity_guid = " . $entity_guid . " AND (n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $site->guid . "))";
 					}
 				}
 			}
@@ -1136,7 +1145,9 @@
 				if ($entity->type != "user") {
 					$annotation_site_guid = $entity->site_guid;
 
-					$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
+					if ($annotation_site_guid) {
+						$result["wheres"][] = "(n_table.site_guid IS NULL OR n_table.site_guid = 0 OR n_table.site_guid = " . $annotation_site_guid . ")";
+					}
 				}
 			}
 		}
