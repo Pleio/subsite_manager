@@ -471,25 +471,7 @@ class Subsite extends ElggSite {
 				$this->getMembers(array("count" => true, "force_update_member_count" => true));
 
 				// remove the user from every group on this site
-				$options = array(
-					"relationship" => "member",
-					"relationship_guid" => $user_guid,
-					"type" => "group",
-					"limit" => false,
-					"site_guid" => $this->getGUID()
-				);
-
-				// exclude invited groups
-				global $SUBSITE_MANAGER_INVITED_GROUPS;
-				if (!empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
-					$options["wheres"] = array("e.guid NOT IN (" . implode(",", $SUBSITE_MANAGER_INVITED_GROUPS) . ")");
-				}
-
-				if ($groups = elgg_get_entities_from_relationship($options)) {
-					foreach ($groups as $group) {
-						$group->leave($user);
-					}
-				}
+				$this->removeGroupMemberships($user);
 
 				// remove optional membership requests
 				$this->removeMembershipRequests($user_guid);
@@ -512,6 +494,51 @@ class Subsite extends ElggSite {
 		}
 
 		return $result;
+	}
+	
+	/**
+	 * Cleanup all the group memberships of a user
+	 *
+	 * @param ElggUser $user the user to remove memberships for
+	 *
+	 * @return bool
+	 */
+	protected function removeGroupMemberships(ElggUser $user) {
+		
+		if (!($user instanceof ElggUser)) {
+			return false;
+		}
+		
+		$params = array(
+			'user' => $user,
+			'site' => $this,
+		);
+		$continue = (bool) elgg_trigger_plugin_hook('leave:group_membership', 'site', $params, true);
+		if (!$continue) {
+			return false;
+		}
+		
+		$options = array(
+			"relationship" => "member",
+			"relationship_guid" => $user->getGUID(),
+			"type" => "group",
+			"limit" => false,
+			"site_guid" => $this->getGUID()
+		);
+
+		// exclude invited groups
+		global $SUBSITE_MANAGER_INVITED_GROUPS;
+		if (!empty($SUBSITE_MANAGER_INVITED_GROUPS)) {
+			$options["wheres"] = array("e.guid NOT IN (" . implode(",", $SUBSITE_MANAGER_INVITED_GROUPS) . ")");
+		}
+
+		if ($groups = elgg_get_entities_from_relationship($options)) {
+			foreach ($groups as $group) {
+				$group->leave($user);
+			}
+		}
+		
+		return true;
 	}
 
 	public function createInvitation($user_guid = 0, $email_address = ""){
