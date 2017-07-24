@@ -128,6 +128,12 @@
 								notify_user($user->getGUID(), $site->getGUID(), $subject, $msg, null, "email");
 							}
 
+							$displayname = $data[$name_column];
+							if ($displayname && $user->name != $displayname) {
+								$user->name = $data[$name_column];
+								$user->save();
+							}
+
 							// Also overwrite metadata
 							foreach ($columns as $col_id => $metadata_name) {
 								if (!in_array($metadata_name, array("username", "displayname", "email", "password"))) {
