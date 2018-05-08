@@ -3,9 +3,10 @@ import sys, json, base64
 import queue, threading
 
 try:
-    data = json.loads(base64.b64decode(sys.argv[1]))
-except:
+    data = json.loads(base64.b64decode(sys.argv[1]).decode('utf-8'))
+except json.JSONDecodeError as e:
     print('Could not parse JSON')
+    print(e.msg)
     sys.exit(1)
 
 def worker():
@@ -20,6 +21,7 @@ def worker():
             https_command = ''
 
         command = 'php ' + data['path'] + ' host=' + host['host'] + ' secret=' + host['secret'] + https_command + ' interval=' + data['interval'] + ' memory_limit=' + data['memory_limit']
+        print(command)
 
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         process.wait()
