@@ -1,6 +1,6 @@
 import subprocess
 import sys, json, base64
-import Queue, threading
+import queue, threading
 
 try:
     data = json.loads(base64.b64decode(sys.argv[1]))
@@ -26,7 +26,7 @@ def worker():
 
         q.task_done()
 
-q = Queue.Queue()
+q = queue.Queue()
 threads = []
 
 for i in range(data['no_processes']):
