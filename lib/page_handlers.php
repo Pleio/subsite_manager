@@ -29,15 +29,6 @@
 			
 				include(dirname(dirname(__FILE__)) . "/procedures/subsites/invite_autocomplete.php");
 				break;
-			default:
-				$result = true;
-			
-				if(!empty($page[0])){
-					set_input("filter", $page[0]);
-				}
-			
-				include(dirname(dirname(__FILE__)) . "/pages/subsites/list.php");
-				break;
 		}
 		
 		return $result;

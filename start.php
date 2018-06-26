@@ -193,15 +193,6 @@
 			}
 		}
 
-		if(elgg_is_logged_in() && !subsite_manager_on_subsite()){
-			// site menu
-			elgg_register_menu_item("site", array(
-				"name" => "subsites",
-				"href" => "subsites",
-				"text" => elgg_echo("subsite_manager:menu:subsites")
-			));
-		}
-
 		// disable search engine indexing
 		elgg_extend_view("page/elements/head", "metatags/noindex");
 		elgg_extend_view("page/elements/head", "subsite_manager/remove_rss", 499);
