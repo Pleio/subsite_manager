@@ -31,7 +31,7 @@ def worker():
 q = queue.Queue()
 threads = []
 
-for i in range(data['no_processes']):
+for i in range(6):
     t = threading.Thread(target=worker)
     t.start()
     threads.append(t)
@@ -41,7 +41,7 @@ for host in data['hosts']:
 
 q.join()
 
-for i in range(data['no_processes']):
+for i in range(6):
     q.put(None)
 
 for t in threads:

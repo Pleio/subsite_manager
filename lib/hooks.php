@@ -611,7 +611,7 @@
 		}
 
 		$script = dirname(__FILE__) . "/../procedures/cronscheduler.py";
-		$command = "python {$script} " . base64_encode(json_encode($json));
+		$command = "python3 {$script} " . base64_encode(json_encode($json));
 		exec($command);
 	}
 
