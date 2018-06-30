@@ -21,7 +21,9 @@ def worker():
             https_command = ''
 
         command = 'php ' + data['path'] + ' host=' + host['host'] + ' secret=' + host['secret'] + https_command + ' interval=' + data['interval'] + ' memory_limit=' + data['memory_limit']
+
         print(command)
+        print('------')
 
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         process.wait()

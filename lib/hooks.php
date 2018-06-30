@@ -612,7 +612,10 @@
 
 		$script = dirname(__FILE__) . "/../procedures/cronscheduler.py";
 		$command = "python3 {$script} " . base64_encode(json_encode($json));
-		exec($command);
+		exec($command, $output);
+		foreach ($output as $line) {
+			echo $line . PHP_EOL;
+		}
 	}
 
 	function subsite_manager_cron_run_sync($subsites) {
