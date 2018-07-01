@@ -1,3 +1,4 @@
+import traceback
 import subprocess
 import sys, json, base64
 import queue, threading
@@ -12,22 +13,27 @@ except json.JSONDecodeError as e:
 def worker():
     while True:
         host = q.get()
+
         if host is None:
             break
 
-        if host['https']:
-            https_command = ' https=On'
-        else:
-            https_command = ''
+        try:
+            if host['https']:
+                https_command = ' https=On'
+            else:
+                https_command = ''
 
-        command = 'php ' + data['path'] + ' host=' + host['host'] + ' secret=' + host['secret'] + https_command + ' interval=' + data['interval'] + ' memory_limit=' + data['memory_limit']
+            command = 'php ' + data['path'] + ' host=' + host['host'] + ' secret=' + host['secret'] + https_command + ' interval=' + data['interval'] + ' memory_limit=' + data['memory_limit']
+            print(command)
 
-        print(command)
-        print('------')
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+            process.wait()
+        except Exception as e:
+            print('Some problems during processing task')
+            print(host)
+            print(traceback.format_exc())
 
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-        process.wait()
-
+        print('-----')
         q.task_done()
 
 q = queue.Queue()
